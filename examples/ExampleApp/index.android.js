@@ -15,8 +15,38 @@ var {
 } = React;
 
 class ExampleApp extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {selected: 0};
+  }
   handleClick() {
-    NativeModules.SimpleDialog.showBasicDialog();
+    // NativeModules.SimpleDialog.showBasicDialog({
+    //     title: "Hello World",
+    //     content: "This seems to be working well",
+    //     positiveText: "Cool!",
+    //     negativeText: "Get Lost",
+    //     neutralText: "Hmm"
+    //   },
+    //   () => this.setState({count: this.state.count + 1}),
+    //   () => this.setState({count: this.state.count - 1}),
+    //   (x, op) => console.log(x, op)
+    // );
+
+    NativeModules.SimpleDialog.showItemsDialog({
+      title: "Country",
+      items: [
+        "India",
+        "United States",
+        "China",
+        "Russia",
+      ],
+      choice: true,
+      selectedIndex: this.state.selected,
+    },
+    (i) => this.setState({selected: i}),
+    (x, op) => console.log(x, op)
+    );
   }
 
   render() {
@@ -25,7 +55,7 @@ class ExampleApp extends React.Component {
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
-        <TouchableNativeFeedback onPress={this.handleClick}>
+        <TouchableNativeFeedback onPress={(c) =>this.handleClick(c)}>
           <View>
             <Text style={styles.instructions}>
               To get started, edit index.android.js
@@ -33,7 +63,7 @@ class ExampleApp extends React.Component {
           </View>
         </TouchableNativeFeedback>
         <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
+          {"Selected : " + this.state.selected}
         </Text>
       </View>
     );

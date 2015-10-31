@@ -1,0 +1,23 @@
+{
+  "name": "react-native-dialogs",
+  "version": "0.0.1",
+  "description": "React Native wrappers for https://github.com/afollestad/material-dialogs ",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aakashns/react-native-dialogs.git"
+  },
+  "keywords": [
+    "react-native",
+    "android"
+  ],
+  "author": "Aakash N S",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aakashns/react-native-dialogs/issues"
+  },
+  "homepage": "https://github.com/aakashns/react-native-dialogs#readme"
+}

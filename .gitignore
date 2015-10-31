@@ -53,6 +53,7 @@ project.xcworkspace
 
 # Android/IJ
 #
+react-native-dialogs.iml
 .idea
 .gradle
 local.properties

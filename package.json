@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/aakashns/react-native-dialogs/issues"
   },
-  "homepage": "https://github.com/aakashns/react-native-dialogs#readme"
+  "homepage": "https://github.com/aakashns/react-native-dialogs#readme",
+  "dependencies": {
+    "react-native": "^0.13.2"
+  }
 }

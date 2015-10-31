@@ -21,17 +21,6 @@ class ExampleApp extends React.Component {
     this.state = {selected: 0};
   }
   handleClick() {
-    // NativeModules.SimpleDialog.showBasicDialog({
-    //     title: "Hello World",
-    //     content: "This seems to be working well",
-    //     positiveText: "Cool!",
-    //     negativeText: "Get Lost",
-    //     neutralText: "Hmm"
-    //   },
-    //   () => this.setState({count: this.state.count + 1}),
-    //   () => this.setState({count: this.state.count - 1}),
-    //   (x, op) => console.log(x, op)
-    // );
 
     NativeModules.SimpleDialog.showItemsDialog({
       title: "Country",

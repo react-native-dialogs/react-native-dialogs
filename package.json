@@ -12,7 +12,8 @@
   },
   "keywords": [
     "react-native",
-    "android"
+    "android",
+    "react-component"
   ],
   "author": "Aakash N S",
   "license": "MIT",

@@ -1,5 +1,5 @@
 # react-native-dialogs
-Material Design dialogs for React Native Android apps (wrappers over https://github.com/afollestad/material-dialogs)
+Material Design dialogs for React Native Android apps (wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs))
 
 
 Installation

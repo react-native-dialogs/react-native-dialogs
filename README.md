@@ -113,6 +113,7 @@ Examples
 --------
 
 Simple example project : https://github.com/aakashns/react-native-dialogs-example
+
 Complex example project : [examples/ExampleApp](./examples/ExampleApp)
 
 Try out the following values for option (taken from [examples/ExampleApp/dialogData.js](./examples/ExampleApp/dialogData.js)):

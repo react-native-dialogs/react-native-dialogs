@@ -21,7 +21,7 @@
     "url": "https://github.com/aakashns/react-native-dialogs/issues"
   },
   "homepage": "https://github.com/aakashns/react-native-dialogs#readme",
-  "dependencies": {
+  "peerDependencies": {
     "react-native": "^0.13.2"
   }
 }

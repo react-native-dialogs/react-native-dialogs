@@ -172,6 +172,7 @@ Try out the following values for option (taken from [examples/ExampleApp/dialogD
     "Facebook"
   ],
   "title": "Social Networks",
+  "positiveText": "Choose",
   itemsCallbackMultiChoice: (id, text) => ToastAndroid.show(id + ": " + text, ToastAndroid.SHORT);
 }
 ```

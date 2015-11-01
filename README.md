@@ -1,5 +1,6 @@
 # react-native-dialogs
-React Native wrappers for https://github.com/afollestad/material-dialogs
+Material Design dialogs for React Native Android apps (wrappers over https://github.com/afollestad/material-dialogs)
+
 
 Installation
 ------------
@@ -108,3 +109,80 @@ The following options are currently supported (value type is `String` unless men
   * [`type`](https://github.com/afollestad/material-dialogs#input-dialogs) (int)
   * [`callback`](https://github.com/afollestad/material-dialogs#input-dialogs) (function with 1 argument : user provided input)
 * [`alwaysCallInputCallback`](https://github.com/afollestad/material-dialogs#input-dialogs) (boolean)
+
+Examples
+--------
+
+Try out the following values for option (taken from [examples/ExampleApp/dialogData.js](./examples/ExampleApp/dialogData.js)):
+
+```javascript
+{
+  "title": "Use Google's Location Services?",
+  "content": "This app wants to access your location.",
+  "positiveText": "Agree",
+  "negativeText": "Disagree"
+}
+```
+
+```javascript
+{
+  "title": "Use Google's Location Services?",
+  "content": "Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.",
+  "positiveText": "Agree",
+  "negativeText": "Disagree",
+  "neutralText": "More Info",
+  "onPositive": () => ToastAndroid.show("POSITIVE!", ToastAndroid.SHORT),
+  "onNegative": () => ToastAndroid.show("NEGATIVE!", ToastAndroid.SHORT),
+  "onNeutral": () => ToastAndroid.show("NEUTRAL!", ToastAndroid.SHORT),
+}
+```
+
+```javascript
+"data": {
+  "items": [
+    "Twitter",
+    "Google+",
+    "Instagram",
+    "Facebook"
+  ],
+  "title": "Social Networks",
+  itemsCallback: (id, text) => ToastAndroid.show(id + ": " + text, ToastAndroid.SHORT);
+}
+```
+
+```javascript
+"data": {
+  "items": [
+    "Twitter",
+    "Google+",
+    "Instagram",
+    "Facebook"
+  ],
+  "title": "Social Networks",
+  itemsCallbackSingleChoice: (id, text) => ToastAndroid.show(id + ": " + text, ToastAndroid.SHORT);
+}
+```
+
+```javascript
+"data": {
+  "items": [
+    "Twitter",
+    "Google+",
+    "Instagram",
+    "Facebook"
+  ],
+  "title": "Social Networks",
+  itemsCallbackMultiChoice: (id, text) => ToastAndroid.show(id + ": " + text, ToastAndroid.SHORT);
+}
+```
+
+
+
+Known Issues
+------------
+TODO
+
+Upcoming Features
+-------
+TODO
+

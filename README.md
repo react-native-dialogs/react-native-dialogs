@@ -75,36 +75,36 @@ Creation of a dialog works in 3 steps :
 This library is a thin wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs), which provides builders for showing Material Design dialogs in Android apps. The options provided to `set` map more or less directly to the methods provided in the original library. See [its documentation](https://github.com/afollestad/material-dialogs#basic-dialog) for reference.
 
 The following options are currently supported (value type is `String` unless mentioned otherwise) :
-* `title`
-* `content`
-* `positiveText`
-* `onPositive` (function with no arguments)
-* `negativeText`
-* `onNegative` (function with no arguments)
-* `neutralText`
-* `onNeutral` (function with no arguments)
-* `onAny` (function with no arguments)
-* `items` (array of strings)
-* `itemsCallback` (function with 2 arguments : selectedIndex (int) and selectedItem (string))
-* `itemsCallbackSingleChoice` (function with 2 arguments : selectedIndex (int) and selectedItem (string))
-* `selectedIndex` (int) - set the preselected index for Single Choice List
-* `itemsCallbackMultiChoice` (function with 2 arguments : selected indices (array of ints) and selected items (array of strings)
-* `selectedIndices` (array of ints) - set the preselected indices for Multiple Choice List
+* [`title`](https://github.com/afollestad/material-dialogs#basic-dialog)
+* [`content`](https://github.com/afollestad/material-dialogs#basic-dialog)
+* [`positiveText`](https://github.com/afollestad/material-dialogs#basic-dialog)
+* [`onPositive`](https://github.com/afollestad/material-dialogs#callbacks) (function with no arguments)
+* [`negativeText`](https://github.com/afollestad/material-dialogs#basic-dialog)
+* [`onNegative`](https://github.com/afollestad/material-dialogs#callbacks) (function with no arguments)
+* [`neutralText`](https://github.com/afollestad/material-dialogs#neutral-action-button)
+* [`onNeutral`](https://github.com/afollestad/material-dialogs#callbacks) (function with no arguments)
+* [`onAny`](https://github.com/afollestad/material-dialogs#callbacks) (function with no arguments)
+* [`items`](https://github.com/afollestad/material-dialogs#list-dialogs) (array of strings)
+* [`itemsCallback`](https://github.com/afollestad/material-dialogs#list-dialogs) (function with 2 arguments : selectedIndex (int) and selectedItem (string))
+* [`itemsCallbackSingleChoice`](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs) (function with 2 arguments : selectedIndex (int) and selectedItem (string))
+* [`selectedIndex`](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs) (int) - set the preselected index for Single Choice List
+* [`itemsCallbackMultiChoice`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (function with 2 arguments : selected indices (array of ints) and selected items (array of strings)
+* [`selectedIndices`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (array of ints) - set the preselected indices for Multiple Choice List
 * `multiChoiceClearButton` (boolean) - provide a 'Clear' button in Multiple Choice List
 * `autoDismiss` (boolean)
-* `forceStacking` (boolean)
-* `alwaysCallSingleChoiceCallback` (boolean)
-* `alwaysCallMultipleChoiceCallback` (boolean)
-* `cancelable` (boolean)
-* `showListener` (function)
-* `cancelListener` (function)
-* `dismissListener` (function)
-* `input` - Object containing the following keys (all optional) :
-  * `hint`
-  * `prefill`
-  * `allowEmptyInput` (boolean)
-  * `minLength` (int)
-  * `maxLength` (int)
-  * `type` (int)
-  * `callback` (function with 1 argument : user provided input)
-* `alwaysCallInputCallback` (boolean)
+* [`forceStacking`](https://github.com/afollestad/material-dialogs#stacked-action-buttons) (boolean)
+* [`alwaysCallSingleChoiceCallback`](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs) (boolean)
+* [`alwaysCallMultipleChoiceCallback`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (boolean)
+* [`cancelable`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (boolean)
+* [`showListener`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (function)
+* [`cancelListener`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (function)
+* [`dismissListener`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (function)
+* [`input`](https://github.com/afollestad/material-dialogs#input-dialogs) - Object containing the following keys (all optional except callback) :
+  * [`hint`](https://github.com/afollestad/material-dialogs#input-dialogs)
+  * [`prefill`](https://github.com/afollestad/material-dialogs#input-dialogs)
+  * [`allowEmptyInput`](https://github.com/afollestad/material-dialogs#input-dialogs) (boolean)
+  * [`minLength`](https://github.com/afollestad/material-dialogs#limiting-input-length) (int)
+  * [`maxLength`](https://github.com/afollestad/material-dialogs#limiting-input-length) (int)
+  * [`type`](https://github.com/afollestad/material-dialogs#input-dialogs) (int)
+  * [`callback`](https://github.com/afollestad/material-dialogs#input-dialogs) (function with 1 argument : user provided input)
+* [`alwaysCallInputCallback`](https://github.com/afollestad/material-dialogs#input-dialogs) (boolean)

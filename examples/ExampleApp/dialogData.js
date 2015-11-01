@@ -3,6 +3,12 @@ import { ToastAndroid } from 'react-native';
 
 var toastCallback = (id, text) => ToastAndroid.show(id + ": " + text, ToastAndroid.SHORT);
 
+var toastMultiChoiceCallback = (ids, items) => {
+  ToastAndroid.show(
+    ids.map((id, i) => String(id) + " : " + String(items[i])).toString(),
+    ToastAndroid.SHORT);
+}
+
 var socialNetworks = [
   "Twitter",
   "Google+",
@@ -222,7 +228,7 @@ export default [
           items: socialNetworks,
           positiveText: "Choose",
           title: "Social Networks",
-          itemsCallbackMultiChoice: toastCallback,
+          itemsCallbackMultiChoice: toastMultiChoiceCallback,
           positiveCallback: () => 23,
           "multiChoiceClearButton": true
         }
@@ -233,7 +239,7 @@ export default [
           items: socialNetworksLong,
           positiveText: "Choose",
           title: "Social Networks",
-          itemsCallbackMultiChoice: toastCallback
+          itemsCallbackMultiChoice: toastMultiChoiceCallback
         }
       },
     ]

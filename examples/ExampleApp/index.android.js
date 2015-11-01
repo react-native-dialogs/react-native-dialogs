@@ -6,37 +6,20 @@ var {
   View,
   NativeModules,
   TouchableNativeFeedback,
+  ScrollView,
 } = React;
 
 import DialogAndroid from 'react-native-dialogs';
 
 import dialogData from './dialogData.js';
+import {MKButton } from 'react-native-material-kit';
+
+
 
 
 class ExampleApp extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {selected: 0};
-  }
-
-  handleClick() {
-    var dialog = new DialogAndroid();
-
-    dialog.set({
-      title: "Country",
-      items: [
-        "India",
-        "United States",
-        "China",
-        "Russia",
-      ],
-      positiveText: "Hola",
-      selectedIndex: this.state.selected,
-      itemsCallbackSingleChoice: (i) => this.setState({selected: i}),
-    });
-
-    dialog.show();
   }
 
   showDialog(options) {
@@ -48,19 +31,19 @@ class ExampleApp extends React.Component {
   render() {
 
     var dialogs = dialogData.map((section, i) => {
-      var sectionDialogNodes = section.dialogs.map((op, j) =>
-        <TouchableNativeFeedback
-          key={j}
-          background={TouchableNativeFeedback.SelectableBackground()}
-          onPress={c => this.showDialog(
-            op.data || { title: "NOT IMPLEMENTED!! :-(", positiveText: "OK"})}>
-          <View>
-            <Text>
-              {op.buttonText}
-            </Text>
+      var sectionDialogNodes = section.dialogs.map((op, j) => {
+        const ColoredRaisedButton = MKButton.coloredButton()
+          .withText(op.buttonText)
+          .withOnPress(c => this.showDialog(
+              op.data || { title: "NOT IMPLEMENTED!! :-(", positiveText: "OK"}))
+          .withStyle({width: 200})
+          .build();
+        return (
+          <View style={{padding: 5}}>
+            <ColoredRaisedButton />
           </View>
-        </TouchableNativeFeedback>
-      );
+        );
+      });
 
       return (
         <View key={i}>
@@ -71,22 +54,11 @@ class ExampleApp extends React.Component {
     });
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <TouchableNativeFeedback onPress={(c) =>this.handleClick(c)}>
-          <View>
-            <Text style={styles.instructions}>
-              To get started, edit index.android.js
-            </Text>
-          </View>
-        </TouchableNativeFeedback>
-        <Text style={styles.instructions}>
-          {"Selected : " + this.state.selected}
-        </Text>
-        {dialogs}
-      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          {dialogs}
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -110,7 +82,7 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  },
+  }
 });
 
 AppRegistry.registerComponent('ExampleApp', () => ExampleApp);

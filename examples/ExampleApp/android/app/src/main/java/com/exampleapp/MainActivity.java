@@ -13,6 +13,7 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.aakashns.reactnativedialogs.Test;
+import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
 
@@ -31,6 +32,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
                 .setJSMainModuleName("index.android")
                 .addPackage(new MainReactPackage())
                 .addPackage(new ReactNativeDialogsPackage(this))
+                .addPackage(new ReactMaterialKitPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();

@@ -1,10 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
-'use strict';
-
-var React = require('react-native');
+import React from 'react-native';
 var {
   AppRegistry,
   StyleSheet,
@@ -14,15 +8,22 @@ var {
   TouchableNativeFeedback,
 } = React;
 
+import DialogAndroid from 'react-native-dialogs';
+
+import dialogData from './dialogData.js';
+
+
 class ExampleApp extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {selected: 0};
   }
-  handleClick() {
 
-    NativeModules.SimpleDialog.showItemsDialog({
+  handleClick() {
+    var dialog = new DialogAndroid();
+
+    dialog.set({
       title: "Country",
       items: [
         "India",
@@ -30,15 +31,45 @@ class ExampleApp extends React.Component {
         "China",
         "Russia",
       ],
-      choice: true,
+      positiveText: "Hola",
       selectedIndex: this.state.selected,
-    },
-    (i) => this.setState({selected: i}),
-    (x, op) => console.log(x, op)
-    );
+      itemsCallbackSingleChoice: (i) => this.setState({selected: i}),
+    });
+
+    dialog.show();
+  }
+
+  showDialog(options) {
+    var dialog = new DialogAndroid();
+    dialog.set(options);
+    dialog.show();
   }
 
   render() {
+
+    var dialogs = dialogData.map((section, i) => {
+      var sectionDialogNodes = section.dialogs.map((op, j) =>
+        <TouchableNativeFeedback
+          key={j}
+          background={TouchableNativeFeedback.SelectableBackground()}
+          onPress={c => this.showDialog(
+            op.data || { title: "NOT IMPLEMENTED!! :-(", positiveText: "OK"})}>
+          <View>
+            <Text>
+              {op.buttonText}
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+      );
+
+      return (
+        <View key={i}>
+          <Text style={styles.welcome}>{section.sectionTitle}</Text>
+          {sectionDialogNodes}
+        </View>
+      );
+    });
+
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -54,10 +85,14 @@ class ExampleApp extends React.Component {
         <Text style={styles.instructions}>
           {"Selected : " + this.state.selected}
         </Text>
+        {dialogs}
       </View>
     );
   }
 }
+
+
+
 
 var styles = StyleSheet.create({
   container: {
@@ -79,3 +114,5 @@ var styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('ExampleApp', () => ExampleApp);
+
+

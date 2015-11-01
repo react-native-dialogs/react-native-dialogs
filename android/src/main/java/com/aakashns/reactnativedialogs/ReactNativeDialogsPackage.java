@@ -2,7 +2,7 @@ package com.aakashns.reactnativedialogs;
 
 import android.support.v4.app.FragmentActivity;
 
-import com.aakashns.reactnativedialogs.modules.SimpleDialogModule;
+import com.aakashns.reactnativedialogs.modules.DialogAndroid;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -23,7 +23,7 @@ public class ReactNativeDialogsPackage implements ReactPackage {
     public List<NativeModule> createNativeModules(
             ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new SimpleDialogModule(reactContext, mActivity));
+        modules.add(new DialogAndroid(reactContext, mActivity));
         return modules;
     }
 

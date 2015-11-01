@@ -74,4 +74,37 @@ Creation of a dialog works in 3 steps :
 
 This library is a thin wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs), which provides builders for showing Material Design dialogs in Android apps. The options provided to `set` map more or less directly to the methods provided in the original library. See [its documentation](https://github.com/afollestad/material-dialogs#basic-dialog) for reference.
 
-The following options are currently supported :
+The following options are currently supported (value type is `String` unless mentioned otherwise) :
+* `title`
+* `content`
+* `positiveText`
+* `onPositive` (function with no arguments)
+* `negativeText`
+* `onNegative` (function with no arguments)
+* `neutralText`
+* `onNeutral` (function with no arguments)
+* `onAny` (function with no arguments)
+* `items` (array of strings)
+* `itemsCallback` (function with 2 arguments : selectedIndex (int) and selectedItem (string))
+* `itemsCallbackSingleChoice` (function with 2 arguments : selectedIndex (int) and selectedItem (string))
+* `selectedIndex` (int) - set the preselected index for Single Choice List
+* `itemsCallbackMultiChoice` (function with 2 arguments : selected indices (array of ints) and selected items (array of strings)
+* `selectedIndices` (array of ints) - set the preselected indices for Multiple Choice List
+* `multiChoiceClearButton` (boolean) - provide a 'Clear' button in Multiple Choice List
+* `autoDismiss` (boolean)
+* `forceStacking` (boolean)
+* `alwaysCallSingleChoiceCallback` (boolean)
+* `alwaysCallMultipleChoiceCallback` (boolean)
+* `cancelable` (boolean)
+* `showListener` (function)
+* `cancelListener` (function)
+* `dismissListener` (function)
+* `input` - Object containing the following keys (all optional) :
+  * `hint`
+  * `prefill`
+  * `allowEmptyInput` (boolean)
+  * `minLength` (int)
+  * `maxLength` (int)
+  * `type` (int)
+  * `callback` (function with 1 argument : user provided input)
+* `alwaysCallInputCallback` (boolean)

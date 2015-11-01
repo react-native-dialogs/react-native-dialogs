@@ -7,15 +7,13 @@ var {
   NativeModules,
   TouchableNativeFeedback,
   ScrollView,
+  ToolbarAndroid,
 } = React;
 
 import DialogAndroid from 'react-native-dialogs';
 
 import dialogData from './dialogData.js';
 import {MKButton } from 'react-native-material-kit';
-
-
-
 
 class ExampleApp extends React.Component {
   constructor(props) {
@@ -54,11 +52,14 @@ class ExampleApp extends React.Component {
     });
 
     return (
+      <View style={{flex:1}}>
+      <ToolbarAndroid title="React Native Dialogs" style={styles.toolbar} titleColor="#ddd"/>
       <ScrollView>
         <View style={styles.container}>
           {dialogs}
         </View>
       </ScrollView>
+      </View>
     );
   }
 }
@@ -82,7 +83,11 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  }
+  },
+  toolbar: {
+    backgroundColor: '#311B92',
+    height: 56,
+  },
 });
 
 AppRegistry.registerComponent('ExampleApp', () => ExampleApp);

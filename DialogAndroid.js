@@ -35,6 +35,7 @@ class DialogAndroid {
       error: (err, op) => console.error(err, op),
     }
 
+    // Remove callbacks from the options, and store them separately
     callbackNames.forEach(cb => {
       if (cb in finalOptions) {
         callbacks[cb] = finalOptions[cb];

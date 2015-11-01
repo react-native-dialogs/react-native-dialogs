@@ -16,10 +16,6 @@ import dialogData from './dialogData.js';
 import {MKButton } from 'react-native-material-kit';
 
 class ExampleApp extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   showDialog(options) {
     var dialog = new DialogAndroid();
     dialog.set(options);

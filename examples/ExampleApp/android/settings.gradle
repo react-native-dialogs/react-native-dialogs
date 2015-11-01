@@ -1,5 +1,5 @@
 rootProject.name = 'ExampleApp'
 
 include ':react-native-dialogs', ':RNMaterialKit', ':app'
-project(':react-native-dialogs').projectDir = new File(rootProject.projectDir, '../../../android')
+project(':react-native-dialogs').projectDir = new file('../node_modules/react-native-dialogs/android')
 project(':RNMaterialKit').projectDir = file('../node_modules/react-native-material-kit/android')

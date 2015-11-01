@@ -1,6 +1,5 @@
 package com.exampleapp;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
@@ -12,7 +11,6 @@ import com.facebook.react.ReactRootView;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.aakashns.reactnativedialogs.Test;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
@@ -22,7 +20,6 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println(Test.add(2, 3));
         super.onCreate(savedInstanceState);
         mReactRootView = new ReactRootView(this);
 

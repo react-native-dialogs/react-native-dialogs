@@ -14,7 +14,7 @@ In `android/settings.gradle`, remove the line `include ':app'` and add the follo
 include ':app', ':react-native-dialogs'
 project(':react-native-dialogs').projectDir = file('../node_modules/react-native-dialogs/android')
 ```
-**NOTE** : If you have included other libraries in your project, the `include` line will contain the other dependencies too, apart from `':app'` and `':react-native-dialogs'`
+**NOTE** : If you have included other libraries in your project, the `include` line will contain the other dependencies too.
 
 In `android/app/build.gradle`, add a dependency to `':react-native-dialogs'` and URL of the Jitpack maven repository (to download the library https://github.com/afollestad/material-dialogs) :
 ```

@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/aakashns/react-native-dialogs#readme",
   "peerDependencies": {
-    "react-native": "^0.13.2"
+    "react-native": ">=0.13.0"
   }
 }

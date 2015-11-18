@@ -48,6 +48,7 @@ class DialogAndroid {
       finalOptions.input = Object.assign({}, finalOptions.input);
       var inputCallback = finalOptions.input.callback || (x => console.log(x));
       finalOptions.input.callback = true;
+      callbacks['input'] = inputCallback;
     }
 
     // Parse the result form multiple choice dialog

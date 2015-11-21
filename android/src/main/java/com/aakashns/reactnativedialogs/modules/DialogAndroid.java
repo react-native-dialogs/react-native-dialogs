@@ -12,7 +12,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableMapKeySeyIterator;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -37,7 +37,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             MaterialDialog.Builder builder,
             ReadableMap options
     ) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        ReadableMapKeySeyIterator iterator = options.keySetIterator();
+        ReadableMapKeySetIterator iterator = options.keySetIterator();
         while(iterator.hasNextKey()) {
             String key = iterator.nextKey();
 

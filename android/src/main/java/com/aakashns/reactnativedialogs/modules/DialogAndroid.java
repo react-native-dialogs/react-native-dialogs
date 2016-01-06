@@ -113,17 +113,20 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         return builder;
     }
 
+    MaterialDialog.Builder mBuilder;
+    MaterialDialog mDialog;
+
     @ReactMethod
     public void show(ReadableMap options, final Callback callback) {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(mActivity);
+        mBuilder = new MaterialDialog.Builder(mActivity);
         try {
-            applyOptions(builder, options);
+            applyOptions(mBuilder, options);
         } catch (Exception e) {
             callback.invoke("error", e.getMessage(), options.toString());
         }
 
         if (options.hasKey("onPositive")) {
-            builder.onPositive(new MaterialDialog.SingleButtonCallback() {
+            mBuilder.onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                     callback.invoke("onPositive");
@@ -132,7 +135,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         }
 
         if (options.hasKey("onNegative")) {
-            builder.onNegative(new MaterialDialog.SingleButtonCallback() {
+            mBuilder.onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                     callback.invoke("onNegative");
@@ -141,7 +144,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         }
 
         if (options.hasKey("onNeutral")) {
-            builder.onNeutral(new MaterialDialog.SingleButtonCallback() {
+            mBuilder.onNeutral(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                     callback.invoke("onNeutral");
@@ -150,7 +153,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         }
 
         if (options.hasKey("onAny")) {
-            builder.onAny(new MaterialDialog.SingleButtonCallback() {
+            mBuilder.onAny(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                     callback.invoke("onAny");
@@ -159,7 +162,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         }
 
         if (options.hasKey("itemsCallback")) {
-            builder.itemsCallback(new MaterialDialog.ListCallback() {
+            mBuilder.itemsCallback(new MaterialDialog.ListCallback() {
                 @Override
                 public void onSelection(MaterialDialog materialDialog, View view, int i,
                                         CharSequence charSequence) {
@@ -172,7 +175,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             // Check if there is a preselected index
             int selectedIndex = options.hasKey("selectedIndex") ?
                     options.getInt("selectedIndex") : -1;
-            builder.itemsCallbackSingleChoice(selectedIndex,
+            mBuilder.itemsCallbackSingleChoice(selectedIndex,
                     new MaterialDialog.ListCallbackSingleChoice() {
                 @Override
                 public boolean onSelection(MaterialDialog materialDialog, View view, int i,
@@ -194,7 +197,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 }
             }
 
-            builder.itemsCallbackMultiChoice(selectedIndices,
+            mBuilder.itemsCallbackMultiChoice(selectedIndices,
                     new MaterialDialog.ListCallbackMultiChoice() {
                 @Override
                 public boolean onSelection(MaterialDialog materialDialog,
@@ -217,7 +220,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             // Provide a 'Clear' button to unselect all choices
             if (options.hasKey("multiChoiceClearButton") &&
                     options.getBoolean("multiChoiceClearButton")) {
-                builder.neutralText("Clear").onNeutral(new MaterialDialog.SingleButtonCallback() {
+                mBuilder.neutralText("Clear").onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                         materialDialog.clearSelectedIndices();
@@ -227,7 +230,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         }
 
         if (options.hasKey("showListener")) {
-            builder.showListener(new DialogInterface.OnShowListener() {
+            mBuilder.showListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialog) {
                     callback.invoke("showListener");
@@ -236,7 +239,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         }
 
         if (options.hasKey("cancelListener")) {
-            builder.cancelListener(new DialogInterface.OnCancelListener() {
+            mBuilder.cancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     callback.invoke("cancelListener");
@@ -245,7 +248,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         }
 
         if (options.hasKey("dismissListener")) {
-            builder.dismissListener(new DialogInterface.OnDismissListener() {
+            mBuilder.dismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     callback.invoke("dismissListener");
@@ -266,15 +269,15 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
             // TODO : Provide pre-selected input types in Javascript
             if (input.hasKey("type")) {
-                builder.inputType(input.getInt("type"));
+                mBuilder.inputType(input.getInt("type"));
             }
 
             int minLength = input.hasKey("minLength") ? input.getInt("minLength") : 0;
             int maxLength = input.hasKey("maxLength") ? input.getInt("maxLength") : -1;
 
-            builder.inputRange(minLength, maxLength);
+            mBuilder.inputRange(minLength, maxLength);
 
-            builder.input(hint, prefill, allowEmptyInput, new MaterialDialog.InputCallback() {
+            mBuilder.input(hint, prefill, allowEmptyInput, new MaterialDialog.InputCallback() {
                 @Override
                 public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
                     callback.invoke("input", charSequence.toString());
@@ -282,7 +285,16 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             });
         }
 
-        builder.show();
+        if(mDialog != null)
+          mDialog.dismiss();
+        mDialog = mBuilder.build();
+        mDialog.show();
+    }
+
+    @ReactMethod
+    public void dismiss() {
+      if(mDialog != null)
+        mDialog.dismiss();
     }
 
 }

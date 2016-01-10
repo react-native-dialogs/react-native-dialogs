@@ -66,6 +66,10 @@ class DialogAndroid {
 
     NativeModules.DialogAndroid.show(finalOptions, callbackFunc);
   }
+
+  dismiss() {
+    NativeModules.DialogAndroid.dismiss();
+  }
 }
 
 module.exports = DialogAndroid;

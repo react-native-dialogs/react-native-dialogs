@@ -34,14 +34,13 @@ dependencies {
 ```
 The changes should look like [this](https://github.com/aakashns/react-native-dialogs-example/commit/b58086d8fb9ece99f0e678dd8bf0e689a856bd43).
 
-Next, you need to change the `MainActivity` of your app to extends `FragmentActivity` instead of `Activity` (otherwise dialogs will not be rendered), and register `ReactNativeDialogsPackage` : 
+Next, you need to change the `MainActivity` of your app to register `ReactNativeDialogsPackage` :
 ```java
-import android.support.v4.app.FragmentActivity;
 import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 
-public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
+public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
     //...
-  
+
           mReactInstanceManager = ReactInstanceManager.builder()
                 //...
                 .addPackage(new MainReactPackage())
@@ -194,4 +193,3 @@ TODO
 Upcoming Features
 -------
 TODO
-

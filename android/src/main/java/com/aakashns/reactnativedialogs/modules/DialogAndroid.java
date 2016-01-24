@@ -1,7 +1,7 @@
 package com.aakashns.reactnativedialogs.modules;
 
+import android.app.Activity;
 import android.content.DialogInterface;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -23,13 +23,13 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         return "DialogAndroid";
     }
 
-    FragmentActivity mActivity;
+    Activity mActivity;
 
     public DialogAndroid(
             ReactApplicationContext reactContext,
-            FragmentActivity fragmentActivity) {
+            Activity activity) {
         super(reactContext);
-        mActivity = fragmentActivity;
+        mActivity = activity;
     }
 
     /* Apply the options to the provided builder */

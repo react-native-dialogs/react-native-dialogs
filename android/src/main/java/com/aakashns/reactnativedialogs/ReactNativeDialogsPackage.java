@@ -1,6 +1,6 @@
 package com.aakashns.reactnativedialogs;
 
-import android.support.v4.app.FragmentActivity;
+import android.app.Activity;
 
 import com.aakashns.reactnativedialogs.modules.DialogAndroid;
 import com.facebook.react.ReactPackage;
@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReactNativeDialogsPackage implements ReactPackage {
-    FragmentActivity mActivity;
+    Activity mActivity;
 
-    public ReactNativeDialogsPackage(FragmentActivity fragmentActivity) {
-        mActivity = fragmentActivity;
+    public ReactNativeDialogsPackage(Activity activity) {
+        mActivity = activity;
     }
 
     @Override

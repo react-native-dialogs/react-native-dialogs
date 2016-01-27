@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "react-native": "^0.18.1",
-    "react-native-dialogs": "file:///Users/aakashns/workspace/opensource/react-native-dialogs",
+    "react-native-dialogs": "0.0.11",
     "react-native-material-kit": "^0.2.5"
   }
 }

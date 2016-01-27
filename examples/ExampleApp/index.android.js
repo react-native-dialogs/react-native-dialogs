@@ -23,7 +23,6 @@ class ExampleApp extends React.Component {
   }
 
   render() {
-
     var dialogs = dialogData.map((section, i) => {
       var sectionDialogNodes = section.dialogs.map((op, j) => {
         const ColoredRaisedButton = MKButton.coloredButton()
@@ -33,7 +32,7 @@ class ExampleApp extends React.Component {
           .withStyle({width: 200})
           .build();
         return (
-          <View style={{padding: 5}}>
+          <View style={{padding: 5}} key={j}>
             <ColoredRaisedButton />
           </View>
         );

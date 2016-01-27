@@ -1,6 +1,6 @@
-package com.exampleapp;
+package com.exampleapp2;
 
-//import com.facebook.react.ReactActivity;
+import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 
@@ -15,7 +15,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "ExampleApp";
+        return "ExampleApp2";
     }
 
     /**

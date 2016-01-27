@@ -1,0 +1,13 @@
+{
+  "name": "ExampleApp2",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "react-native": "^0.18.1",
+    "react-native-dialogs": "file:///Users/aakashns/workspace/opensource/react-native-dialogs",
+    "react-native-material-kit": "^0.2.5"
+  }
+}

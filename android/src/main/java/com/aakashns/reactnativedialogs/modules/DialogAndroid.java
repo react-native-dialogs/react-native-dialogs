@@ -284,11 +284,14 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 }
             });
         }
-
-        if(mDialog != null)
-          mDialog.dismiss();
-        mDialog = mBuilder.build();
-        mDialog.show();
+        mActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                if(mDialog != null)
+                  mDialog.dismiss();
+                mDialog = mBuilder.build();
+                mDialog.show();
+            }
+        });
     }
 
     @ReactMethod

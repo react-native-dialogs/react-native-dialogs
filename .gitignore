@@ -31,6 +31,8 @@ npm-debug.log
 #
 .DS_Store
 
+examples/
+
 # Xcode
 #
 build/

@@ -1,3 +1,5 @@
+[![npm version](https://img.shields.io/npm/v/react-native-dialogs.svg?style=flat-square)](https://www.npmjs.com/package/react-native-dialogs)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-dialogs.svg?style=flat-square)](https://www.npmjs.com/package/react-native-dialogs)
 # react-native-dialogs
 Material Design dialogs for React Native Android apps (wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs))
 

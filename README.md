@@ -120,7 +120,7 @@ Examples
 
 Simple example project : https://github.com/aakashns/react-native-dialogs-example
 
-Complex example project : [examples/ExampleApp](./examples/ExampleApp)
+Complex example project : [examples/ExampleApp](https://github.com/aakashns/react-native-dialogs/tree/54d1253213b1a6a453a3ffb1d2dcc65b8dc287fd/examples/ExampleApp)
 
 Try out the following values for option (taken from [examples/ExampleApp/dialogData.js](https://github.com/aakashns/react-native-dialogs/tree/54d1253213b1a6a453a3ffb1d2dcc65b8dc287fd/examples/ExampleApp/dialogData.js)):
 

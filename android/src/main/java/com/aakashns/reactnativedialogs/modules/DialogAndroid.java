@@ -1,6 +1,5 @@
 package com.aakashns.reactnativedialogs.modules;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.view.View;
 
@@ -13,6 +12,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.UiThreadUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -23,13 +23,9 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         return "DialogAndroid";
     }
 
-    Activity mActivity;
 
-    public DialogAndroid(
-            ReactApplicationContext reactContext,
-            Activity activity) {
+    public DialogAndroid(ReactApplicationContext reactContext) {
         super(reactContext);
-        mActivity = activity;
     }
 
     /* Apply the options to the provided builder */
@@ -118,7 +114,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void show(ReadableMap options, final Callback callback) {
-        mBuilder = new MaterialDialog.Builder(mActivity);
+        mBuilder = new MaterialDialog.Builder(getCurrentActivity());
         try {
             applyOptions(mBuilder, options);
         } catch (Exception e) {
@@ -284,10 +280,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 }
             });
         }
-        mActivity.runOnUiThread(new Runnable() {
+        UiThreadUtil.runOnUiThread(new Runnable() {
             public void run() {
-                if(mDialog != null)
-                  mDialog.dismiss();
+                if (mDialog != null)
+                    mDialog.dismiss();
                 mDialog = mBuilder.build();
                 mDialog.show();
             }

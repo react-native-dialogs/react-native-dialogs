@@ -5,6 +5,8 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -173,13 +175,13 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     options.getInt("selectedIndex") : -1;
             mBuilder.itemsCallbackSingleChoice(selectedIndex,
                     new MaterialDialog.ListCallbackSingleChoice() {
-                @Override
-                public boolean onSelection(MaterialDialog materialDialog, View view, int i,
-                                           CharSequence charSequence) {
-                    callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString());
-                    return true;
-                }
-            });
+                        @Override
+                        public boolean onSelection(MaterialDialog materialDialog, View view, int i,
+                                                   CharSequence charSequence) {
+                            callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString());
+                            return true;
+                        }
+                    });
         }
 
         if (options.hasKey("itemsCallbackMultiChoice")) {
@@ -195,23 +197,23 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
             mBuilder.itemsCallbackMultiChoice(selectedIndices,
                     new MaterialDialog.ListCallbackMultiChoice() {
-                @Override
-                public boolean onSelection(MaterialDialog materialDialog,
-                                           Integer[] integers, CharSequence[] charSequences) {
+                        @Override
+                        public boolean onSelection(MaterialDialog materialDialog,
+                                                   Integer[] integers, CharSequence[] charSequences) {
 
-                    // Concatenate selected IDs into a string
-                    StringBuilder selected = new StringBuilder("");
-                    for (int i = 0; i < integers.length - 1; i++) {
-                        selected.append(integers[i]).append(",");
-                    }
-                    if (integers.length > 0) {
-                        selected.append(integers[integers.length - 1]);
-                    }
+                            // Concatenate selected IDs into a string
+                            StringBuilder selected = new StringBuilder("");
+                            for (int i = 0; i < integers.length - 1; i++) {
+                                selected.append(integers[i]).append(",");
+                            }
+                            if (integers.length > 0) {
+                                selected.append(integers[integers.length - 1]);
+                            }
 
-                    callback.invoke("itemsCallbackMultiChoice", selected.toString());
-                    return true;
-                }
-            });
+                            callback.invoke("itemsCallbackMultiChoice", selected.toString());
+                            return true;
+                        }
+                    });
 
             // Provide a 'Clear' button to unselect all choices
             if (options.hasKey("multiChoiceClearButton") &&
@@ -290,10 +292,44 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         });
     }
 
+    MaterialDialog simple;
+    @ReactMethod
+    public void list(ReadableMap options, final Callback callback) {
+        final MaterialSimpleListAdapter simpleListAdapter = new MaterialSimpleListAdapter(getCurrentActivity());
+
+        ReadableArray arr = options.getArray("items");
+        for(int i = 0; i < arr.size(); i++){
+            simpleListAdapter.add(new MaterialSimpleListItem.Builder(getCurrentActivity())
+                    .content(arr.getString(i))
+                    .build());
+        }
+
+        final MaterialDialog.Builder adapter = new MaterialDialog.Builder(getCurrentActivity())
+                .title(options.getString("title"))
+                .adapter(simpleListAdapter, new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+
+                        callback.invoke(which, text);
+                    }
+                })
+                .autoDismiss(true);
+
+        UiThreadUtil.runOnUiThread(new Runnable() {
+            public void run() {
+                if (simple != null) {
+                    simple.dismiss();
+                }
+                simple = adapter.build();
+                adapter.show();
+            }
+        });
+    }
+
     @ReactMethod
     public void dismiss() {
-      if(mDialog != null)
-        mDialog.dismiss();
+        if(mDialog != null)
+            mDialog.dismiss();
     }
 
 }

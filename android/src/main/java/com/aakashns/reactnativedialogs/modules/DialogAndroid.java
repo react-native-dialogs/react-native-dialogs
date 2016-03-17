@@ -309,8 +309,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 .adapter(simpleListAdapter, new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-
                         callback.invoke(which, text);
+                        if (simple != null) {
+                            simple.dismiss();
+                        }
                     }
                 })
                 .autoDismiss(true);
@@ -321,7 +323,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     simple.dismiss();
                 }
                 simple = adapter.build();
-                adapter.show();
+                simple.show();
             }
         });
     }

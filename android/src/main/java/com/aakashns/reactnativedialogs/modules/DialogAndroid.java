@@ -305,7 +305,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         }
 
         final MaterialDialog.Builder adapter = new MaterialDialog.Builder(getCurrentActivity())
-                .title(options.getString("title"))
+                .title(options.hasKey("title") ? options.getString("title") : "")
                 .adapter(simpleListAdapter, new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {

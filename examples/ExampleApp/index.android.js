@@ -85,6 +85,6 @@ var styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('ExampleApp', () => ExampleApp);
+AppRegistry.registerComponent('ExampleApp', () => ExampleApp3);
 
 

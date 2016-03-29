@@ -6,8 +6,9 @@
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
-    "react-native": ">=0.13.2",
-    "react-native-dialogs": "0.0.11",
-    "react-native-material-kit": "^0.2.2"
+    "react-native": "0.22.2",
+    "react-native-dialogs": "0.0.14",
+    "react-native-material-kit": "^0.2.2",
+    "react": "^0.14.5"
   }
 }

@@ -70,6 +70,10 @@ class DialogAndroid {
   dismiss() {
     NativeModules.DialogAndroid.dismiss();
   }
+
+  list(options, cb){
+    NativeModules.DialogAndroid.list(options, cb)
+  }
 }
 
 module.exports = DialogAndroid;

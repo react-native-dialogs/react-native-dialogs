@@ -40,15 +40,18 @@ Next, you need to change the `MainActivity` of your app to register `ReactNative
 ```java
 import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 
-public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
     //...
+public class MainActivity extends ReactActivity {
+          //...
 
-          mReactInstanceManager = ReactInstanceManager.builder()
-                //...
-                .addPackage(new MainReactPackage())
-                .addPackage(new ReactNativeDialogsPackage(this)) // <- ADD THIS LINE!
-                //...
-                .build();
+          @Override
+          protected List<ReactPackage> getPackages() {
+            return Arrays.<ReactPackage>asList(
+                new MainReactPackage(),
+                new ReactNativeDialogsPackage() // add this manager
+            );
+          }
+}
 
 ```
 See [this changelog](https://github.com/aakashns/react-native-dialogs-example/commit/52cac27756963bcd2f4fdcd039e1a78028bb0abd) for reference.
@@ -120,9 +123,9 @@ Examples
 
 Simple example project : https://github.com/aakashns/react-native-dialogs-example
 
-Complex example project : [examples/ExampleApp](./examples/ExampleApp)
+Complex example project : [examples/ExampleApp](https://github.com/aakashns/react-native-dialogs/tree/54d1253213b1a6a453a3ffb1d2dcc65b8dc287fd/examples/ExampleApp)
 
-Try out the following values for option (taken from [examples/ExampleApp/dialogData.js](./examples/ExampleApp/dialogData.js)):
+Try out the following values for option (taken from [examples/ExampleApp/dialogData.js](https://github.com/aakashns/react-native-dialogs/tree/54d1253213b1a6a453a3ffb1d2dcc65b8dc287fd/examples/ExampleApp/dialogData.js)):
 
 ```javascript
 {

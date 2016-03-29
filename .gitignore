@@ -59,3 +59,4 @@ react-native-dialogs.iml
 .idea
 .gradle
 local.properties
+android/*.iml

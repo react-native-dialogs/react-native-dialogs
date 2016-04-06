@@ -20,8 +20,5 @@
   "bugs": {
     "url": "https://github.com/aakashns/react-native-dialogs/issues"
   },
-  "homepage": "https://github.com/aakashns/react-native-dialogs#readme",
-  "peerDependencies": {
-    "react-native": ">=0.13.0"
-  }
+  "homepage": "https://github.com/aakashns/react-native-dialogs#readme"
 }

@@ -57,7 +57,9 @@ class DialogAndroid {
       callbacks.itemsCallbackMultiChoice = selected => {
         var indices = selected.split(',').map(x => parseInt(x));
         var elements = indices.map(ind => (finalOptions.items || [])[ind]);
-
+        if(indices.length === 1 && isNaN(indices[0])){
+          indices=[] // the case of empty selection
+        }
         originalCallback(indices, elements);
       }
     }

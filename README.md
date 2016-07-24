@@ -13,15 +13,9 @@ Installation
 
 Install the npm package [`react-native-dialogs`](https://www.npmjs.com/package/react-native-dialogs). Inside your React Native project, run ([example](https://github.com/aakashns/react-native-dialogs-example/commit/e6b83bf3d2238cf7e4ec3688519f38b2544ccad5)):
 ```bash
-npm install --save react-native-dialogs
+rnpm install --save react-native-dialogs
 ```
 
-In `android/settings.gradle`, remove the line `include ':app'` and add the following lines ([example](https://github.com/aakashns/react-native-dialogs-example/commit/32b4159725601e0ea17e140f0a9b62161d567804)):
-```
-include ':app', ':react-native-dialogs'
-project(':react-native-dialogs').projectDir = file('../node_modules/react-native-dialogs/android')
-```
-**NOTE** : If you have included other libraries in your project, the `include` line will contain the other dependencies too.
 
 In `android/app/build.gradle`, add a dependency to `':react-native-dialogs'` and URL of the Jitpack maven repository (to download the library https://github.com/afollestad/material-dialogs) :
 ```
@@ -29,10 +23,6 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-dependencies {
-    // after other dependencies
-    compile project(':react-native-dialogs')
-}
 ```
 The changes should look like [this](https://github.com/aakashns/react-native-dialogs-example/commit/b58086d8fb9ece99f0e678dd8bf0e689a856bd43).
 

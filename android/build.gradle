@@ -31,5 +31,5 @@ dependencies {
     compile 'com.facebook.react:react-native:0.20.+'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.github.afollestad.material-dialogs:commons:0.8.5.8' // version 0.8.5.8
+    compile 'com.github.afollestad.material-dialogs:commons:0.8.6.2'
 }

@@ -93,7 +93,7 @@ The following options are currently supported (value type is `String` unless men
 * `autoDismiss` (boolean)
 * [`forceStacking`](https://github.com/afollestad/material-dialogs#stacked-action-buttons) (boolean)
 * [`alwaysCallSingleChoiceCallback`](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs) (boolean)
-* [`alwaysCallMultipleChoiceCallback`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (boolean)
+* [`alwaysCallMultiChoiceCallback`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (boolean)
 * [`cancelable`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (boolean)
 * [`showListener`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (function)
 * [`cancelListener`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (function)

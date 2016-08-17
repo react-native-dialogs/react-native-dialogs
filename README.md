@@ -10,10 +10,23 @@ Material Design dialogs for React Native Android apps (wrapper over [afollestad/
 
 Installation
 ------------
+###Installation using RNPM
+
+```rnpm install react-native-dialogs```
+
+In `android/app/build.gradle`, add a dependency to `':react-native-dialogs'` and URL of the Jitpack maven repository (to download the library https://github.com/afollestad/material-dialogs) :
+```
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+```
+
+###Manual installation
 
 Install the npm package [`react-native-dialogs`](https://www.npmjs.com/package/react-native-dialogs). Inside your React Native project, run ([example](https://github.com/aakashns/react-native-dialogs-example/commit/e6b83bf3d2238cf7e4ec3688519f38b2544ccad5)):
 ```bash
-rnpm install --save react-native-dialogs
+npm install --save react-native-dialogs
 ```
 
 
@@ -25,6 +38,12 @@ repositories {
 
 ```
 The changes should look like [this](https://github.com/aakashns/react-native-dialogs-example/commit/b58086d8fb9ece99f0e678dd8bf0e689a856bd43).
+
+You also need to update your ```settings.gradle``` and add:
+```
+include ':react-native-dialogs'
+project(':react-native-dialogs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-dialogs/android')
+```
 
 Next, you need to change the `MainActivity` of your app to register `ReactNativeDialogsPackage` :
 ```java

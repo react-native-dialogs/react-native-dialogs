@@ -58,13 +58,13 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     builder.negativeText(options.getString("negativeText"));
                     break;
                 case "negativeColor":
-                    builder.negativeColor(Color.parseColor(options.getString("positiveColor")));
+                    builder.negativeColor(Color.parseColor(options.getString("negativeColor")));
                     break;
                 case "neutralText":
                     builder.neutralText(options.getString("neutralText"));
                     break;
                 case "neutralColor":
-                    builder.neutralColor(Color.parseColor(options.getString("positiveColor")));
+                    builder.neutralColor(Color.parseColor(options.getString("neutralColor")));
                     break;
                 case "items":
                     ReadableArray arr = options.getArray("items");

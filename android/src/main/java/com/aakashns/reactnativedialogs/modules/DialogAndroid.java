@@ -1,6 +1,7 @@
 package com.aakashns.reactnativedialogs.modules;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -50,11 +51,20 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 case "positiveText":
                     builder.positiveText(options.getString("positiveText"));
                     break;
+                case "positiveColor":
+                    builder.positiveColor(Color.parseColor(options.getString("positiveColor")));
+                    break;
                 case "negativeText":
                     builder.negativeText(options.getString("negativeText"));
                     break;
+                case "negativeColor":
+                    builder.negativeColor(Color.parseColor(options.getString("negativeColor")));
+                    break;
                 case "neutralText":
                     builder.neutralText(options.getString("neutralText"));
+                    break;
+                case "neutralColor":
+                    builder.neutralColor(Color.parseColor(options.getString("neutralColor")));
                     break;
                 case "items":
                     ReadableArray arr = options.getArray("items");

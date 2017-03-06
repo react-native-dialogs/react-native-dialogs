@@ -2,6 +2,7 @@ package com.aakashns.reactnativedialogs.modules;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.text.InputType;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -314,7 +315,36 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
             // TODO : Provide pre-selected input types in Javascript
             if (input.hasKey("type")) {
-                mBuilder.inputType(input.getInt("type"));
+                switch (input.getString("type")) {
+                    case "numeric":
+                    case "numbers-and-punctuation":
+                        mBuilder.inputType(InputType.TYPE_CLASS_NUMBER);
+                        break;
+
+                    case "numeric-password":
+                        mBuilder.inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                        break;
+
+                    case "email-address":
+                        mBuilder.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                        break;
+
+                    case "password":
+                        mBuilder.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        break;
+
+                    case "phone-pad":
+                        mBuilder.inputType(InputType.TYPE_CLASS_PHONE);
+                        break;
+
+                    case "decimal-pad":
+                        mBuilder.inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                        break;
+
+                    default:
+                        mBuilder.inputType(InputType.TYPE_CLASS_TEXT);
+                        break;
+                }
             }
 
             int minLength = input.hasKey("minLength") ? input.getInt("minLength") : 0;
@@ -329,6 +359,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 }
             });
         }
+
         UiThreadUtil.runOnUiThread(new Runnable() {
             public void run() {
                 if (mDialog != null)

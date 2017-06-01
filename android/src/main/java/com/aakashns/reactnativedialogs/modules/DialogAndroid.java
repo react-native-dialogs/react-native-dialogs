@@ -39,7 +39,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             ReadableMap options
     ) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         ReadableMapKeySetIterator iterator = options.keySetIterator();
-        while(iterator.hasNextKey()) {
+        while (iterator.hasNextKey()) {
             String key = iterator.nextKey();
 
             switch (key) {
@@ -105,33 +105,33 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     break;
                 case "buttonsGravity":
                     String bg = options.getString("buttonsGravity");
-                    if( bg.equals("start") )
+                    if (bg.equals("start"))
                         builder.buttonsGravity(GravityEnum.START);
-                    else if( bg.equals("end") )
+                    else if (bg.equals("end"))
                         builder.buttonsGravity(GravityEnum.END);
                     else
                         builder.buttonsGravity(GravityEnum.CENTER);
                     break;
                 case "itemsGravity":
                     String ig = options.getString("itemsGravity");
-                    if( ig.equals("start") )
+                    if (ig.equals("start"))
                         builder.itemsGravity(GravityEnum.START);
-                    else if( ig.equals("end") )
+                    else if (ig.equals("end"))
                         builder.itemsGravity(GravityEnum.END);
                     else
                         builder.itemsGravity(GravityEnum.CENTER);
                     break;
                 case "titleGravity":
                     String tg = options.getString("titleGravity");
-                    if( tg.equals("start") )
+                    if (tg.equals("start"))
                         builder.titleGravity(GravityEnum.START);
-                    else if( tg.equals("end") )
+                    else if (tg.equals("end"))
                         builder.titleGravity(GravityEnum.END);
                     else
                         builder.titleGravity(GravityEnum.CENTER);
                     break;
                 case "rtl":
-                    if( options.getBoolean("rtl") ) {
+                    if (options.getBoolean("rtl")) {
                         builder.titleGravity(GravityEnum.END);
                         builder.itemsGravity(GravityEnum.END);
                         builder.contentGravity(GravityEnum.END);
@@ -164,18 +164,22 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void show(ReadableMap options, final Callback callback) {
-        mBuilder = new MaterialDialog.Builder(getCurrentActivity());
         try {
+            mBuilder = new MaterialDialog.Builder(getCurrentActivity());
             applyOptions(mBuilder, options);
         } catch (Exception e) {
             callback.invoke("error", e.getMessage(), options.toString());
+            return;
         }
 
         if (options.hasKey("onPositive")) {
             mBuilder.onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    callback.invoke("onPositive");
+                    try {
+                        callback.invoke("onPositive");
+                    } catch (Exception e) {
+                    }
                 }
             });
         }
@@ -184,7 +188,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    callback.invoke("onNegative");
+                    try {
+                        callback.invoke("onNegative");
+                    } catch (Exception e) {
+                    }
                 }
             });
         }
@@ -193,7 +200,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.onNeutral(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    callback.invoke("onNeutral");
+                    try {
+                        callback.invoke("onNeutral");
+                    } catch (Exception e) {
+                    }
                 }
             });
         }
@@ -202,7 +212,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.onAny(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    callback.invoke("onAny");
+                    try {
+                        callback.invoke("onAny");
+                    } catch (Exception e) {
+                    }
                 }
             });
         }
@@ -212,7 +225,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 @Override
                 public void onSelection(MaterialDialog materialDialog, View view, int i,
                                         CharSequence charSequence) {
-                    callback.invoke("itemsCallback", i, charSequence == null ? null : charSequence.toString());
+                    try {
+                        callback.invoke("itemsCallback", i, charSequence == null ? null : charSequence.toString());
+                    } catch (Exception e) {
+                    }
                 }
             });
         }
@@ -279,7 +295,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.showListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialog) {
-                    callback.invoke("showListener");
+                    try {
+                        callback.invoke("showListener");
+                    } catch (Exception e) {
+                    }
                 }
             });
         }
@@ -288,7 +307,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.cancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    callback.invoke("cancelListener");
+                    try {
+                        callback.invoke("cancelListener");
+                    } catch (Exception e) {
+                    }
                 }
             });
         }
@@ -297,7 +319,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.dismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    callback.invoke("dismissListener");
+                    try {
+                        callback.invoke("dismissListener");
+                    } catch (Exception e) {
+                    }
                 }
             });
         }
@@ -371,12 +396,13 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
     }
 
     MaterialDialog simple;
+
     @ReactMethod
     public void list(ReadableMap options, final Callback callback) {
         final MaterialSimpleListAdapter simpleListAdapter = new MaterialSimpleListAdapter(getCurrentActivity());
 
         ReadableArray arr = options.getArray("items");
-        for(int i = 0; i < arr.size(); i++){
+        for (int i = 0; i < arr.size(); i++) {
             simpleListAdapter.add(new MaterialSimpleListItem.Builder(getCurrentActivity())
                     .content(arr.getString(i))
                     .build());
@@ -408,7 +434,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void dismiss() {
-        if(mDialog != null)
+        if (mDialog != null)
             mDialog.dismiss();
     }
 

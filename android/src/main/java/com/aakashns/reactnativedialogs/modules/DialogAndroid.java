@@ -3,6 +3,7 @@ package com.aakashns.reactnativedialogs.modules;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -179,6 +180,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     try {
                         callback.invoke("onPositive");
                     } catch (Exception e) {
+                        Log.e("react-native-dialogs", "Unable to invoke the onPositive callback. " + e.getMessage());
                     }
                 }
             });
@@ -191,6 +193,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     try {
                         callback.invoke("onNegative");
                     } catch (Exception e) {
+                        Log.e("react-native-dialogs", "Unable to invoke the onNegative callback. " + e.getMessage());
                     }
                 }
             });
@@ -203,6 +206,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     try {
                         callback.invoke("onNeutral");
                     } catch (Exception e) {
+                        Log.e("react-native-dialogs", "Unable to invoke the onNeutral callback. " + e.getMessage());
                     }
                 }
             });
@@ -215,6 +219,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     try {
                         callback.invoke("onAny");
                     } catch (Exception e) {
+                        Log.e("react-native-dialogs", "Unable to invoke the onAny callback. " + e.getMessage());
                     }
                 }
             });
@@ -228,6 +233,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     try {
                         callback.invoke("itemsCallback", i, charSequence == null ? null : charSequence.toString());
                     } catch (Exception e) {
+                        Log.e("react-native-dialogs", "Unable to invoke the itemsCallback. " + e.getMessage());
                     }
                 }
             });
@@ -242,7 +248,11 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                         @Override
                         public boolean onSelection(MaterialDialog materialDialog, View view, int i,
                                                    CharSequence charSequence) {
-                            callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString());
+                            try {
+                                callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString());
+                            } catch (Exception e) {
+                                Log.e("react-native-dialogs", "Unable to invoke the itemsCallbackSingleChoice. " + e.getMessage());
+                            }
                             return true;
                         }
                     });
@@ -274,7 +284,11 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                                 selected.append(integers[integers.length - 1]);
                             }
 
-                            callback.invoke("itemsCallbackMultiChoice", selected.toString());
+                            try {
+                                callback.invoke("itemsCallbackMultiChoice", selected.toString());
+                            } catch (Exception e) {
+                                Log.e("react-native-dialogs", "Unable to invoke the itemsCallbackMultiChoice. " + e.getMessage());
+                            }
                             return true;
                         }
                     });
@@ -310,6 +324,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     try {
                         callback.invoke("cancelListener");
                     } catch (Exception e) {
+                        Log.e("react-native-dialogs", "Unable to invoke the cancelListener callback. " + e.getMessage());
                     }
                 }
             });
@@ -322,6 +337,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     try {
                         callback.invoke("dismissListener");
                     } catch (Exception e) {
+                        Log.e("react-native-dialogs", "Unable to invoke the dismissListener callback. " + e.getMessage());
                     }
                 }
             });
@@ -380,7 +396,11 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.input(hint, prefill, allowEmptyInput, new MaterialDialog.InputCallback() {
                 @Override
                 public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
-                    callback.invoke("input", charSequence.toString());
+                    try {
+                        callback.invoke("input", charSequence.toString());
+                    } catch (Exception e) {
+                        Log.e("react-native-dialogs", "Unable to invoke the input callback. " + e.getMessage());
+                    }
                 }
             });
         }
@@ -413,7 +433,11 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 .adapter(simpleListAdapter, new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        callback.invoke(which, text);
+                        try {
+                            callback.invoke(which, text);
+                        } catch (Exception e) {
+                            Log.e("react-native-dialogs", "Unable to invoke the adapter callback. " + e.getMessage());
+                        }
                         if (simple != null) {
                             simple.dismiss();
                         }

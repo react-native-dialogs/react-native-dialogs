@@ -25,7 +25,7 @@ public class ReactNativeDialogsPackage implements ReactPackage {
         return Arrays.<NativeModule>asList(new DialogAndroid(reactContext));
     }
 
-    // Depreciated RN 0.47
+    // Deprecated from RN 0.47
     public List<Class<? extends JavaScriptModule>> createJSModules() {
         return Collections.emptyList();
     }

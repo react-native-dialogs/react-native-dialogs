@@ -12,7 +12,15 @@ Installation
 ------------
 ### Installation using RNPM
 
-```rnpm install react-native-dialogs```
+1 . `yarn add react-native-dialogs`
+
+or
+
+`npm i react-native-dialogs --save`
+
+
+
+2 . `react-native link react-native-dialogs`
 
 In `android/app/build.gradle`, add a dependency to `':react-native-dialogs'` and URL of the Jitpack maven repository (to download the library https://github.com/afollestad/material-dialogs) :
 ```
@@ -71,21 +79,22 @@ Now you're finally ready to start using module in your React Native application.
 Usage
 -----
 ```javascript
-var DialogAndroid = require('react-native-dialogs');
+import DialogAndroid from 'react-native-dialogs';
 
-var options = {
+let options = {
   title: 'Hello, World!',
   content: 'I\'m just simple Dialog',
   positiveText: 'OK',
   negativeText: 'Cancel'
 };
 
-var showDialog = function () {
+let showDialog = function () {
   var dialog = new DialogAndroid();
   dialog.set(options);
   dialog.show();
 }
 ```
+
 Creation of a dialog works in 3 steps :
 1. Create a new dialog using `new DialogAndroid()`.
 2. Set some options using `dialog.set(options)`. `set` can be called multiple times, and options from multiple calls will be merged.

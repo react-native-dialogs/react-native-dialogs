@@ -3,9 +3,7 @@
 # react-native-dialogs
 Material Design dialogs for React Native Android apps (wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs))
 
-<img src="https://pbs.twimg.com/media/CSww5lhUAAAE487.png" width="240">
-<img src="https://pbs.twimg.com/media/CSww5hBUYAA7Ijo.png" width="240">
-<img src="https://pbs.twimg.com/media/CSww5pMUcAEry95.png" width="227">
+<img src="https://pbs.twimg.com/media/CSww5lhUAAAE487.png" width="240" hspace="10"><img src="https://pbs.twimg.com/media/CSww5hBUYAA7Ijo.png" width="240" hspace="10"><img src="https://pbs.twimg.com/media/CSww5pMUcAEry95.png" width="227">
 
 
 Installation

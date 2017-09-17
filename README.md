@@ -10,7 +10,7 @@ Material Design dialogs for React Native Android apps (wrapper over [afollestad/
 
 Installation
 ------------
-###Installation using RNPM
+### Installation using RNPM
 
 ```rnpm install react-native-dialogs```
 
@@ -22,7 +22,7 @@ repositories {
 
 ```
 
-###Manual installation
+### Manual installation
 
 Install the npm package [`react-native-dialogs`](https://www.npmjs.com/package/react-native-dialogs). Inside your React Native project, run ([example](https://github.com/aakashns/react-native-dialogs-example/commit/e6b83bf3d2238cf7e4ec3688519f38b2544ccad5)):
 ```bash

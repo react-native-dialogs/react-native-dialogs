@@ -225,6 +225,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                         @Override
                         public boolean onSelection(MaterialDialog materialDialog, View view, int i,
                                                    CharSequence charSequence) {
+                            charSequence = charSequence == null ? "" : charSequence;
                             callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString());
                             return true;
                         }

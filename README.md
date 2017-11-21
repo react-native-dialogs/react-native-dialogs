@@ -119,6 +119,7 @@ The following options are currently supported (value type is `String` unless men
 * [`selectedIndex`](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs) (int) - set the preselected index for Single Choice List
 * [`itemsCallbackMultiChoice`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (function with 2 arguments : selected indices (array of ints) and selected items (array of strings)
 * [`selectedIndices`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (array of ints) - set the preselected indices for Multiple Choice List
+* [`widgetColor`](https://github.com/afollestad/material-dialogs#coloring-radio-buttons) - set the color of Radio Buttons and EditText
 * `multiChoiceClearButton` (boolean) - provide a 'Clear' button in Multiple Choice List
 * `autoDismiss` (boolean)
 * [`forceStacking`](https://github.com/afollestad/material-dialogs#stacked-action-buttons) (boolean)

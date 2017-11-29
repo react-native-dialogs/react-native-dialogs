@@ -86,7 +86,6 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     }
                     builder.items(items);
                     break;
-                
                 case "autoDismiss":
                     builder.autoDismiss(options.getBoolean("autoDismiss"));
                     break;

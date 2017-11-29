@@ -67,16 +67,16 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     builder.neutralColor(Color.parseColor(options.getString("neutralColor")));
                     break;
                 case "titleColor":
-                    builder.widgetColor(Color.parseColor(options.getString("titleColor")));
+                    builder.titleColor(Color.parseColor(options.getString("titleColor")));
                     break;  
                 case "widgetColor":
                     builder.widgetColor(Color.parseColor(options.getString("widgetColor")));
                     break;
                 case "linkColor":
-                    builder.widgetColor(Color.parseColor(options.getString("linkColor")));
+                    builder.linkColor(Color.parseColor(options.getString("linkColor")));
                     break;    
                 case "contentColor":
-                    builder.widgetColor(Color.parseColor(options.getString("contentColor")));
+                    builder.contentColor(Color.parseColor(options.getString("contentColor")));
                     break;    
                 case "items":
                     ReadableArray arr = options.getArray("items");

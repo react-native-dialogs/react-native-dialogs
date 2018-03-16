@@ -51,6 +51,16 @@ include ':react-native-dialogs'
 project(':react-native-dialogs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-dialogs/android')
 ```
 
+update your ```app.gradle``` and add:
+```
+dependencies {
+    compile project(':react-native-dialogs') // <-- Add this line
+    compile "com.android.support:appcompat-v7:23.0.1"
+    compile "com.facebook.react:react-native:+"  // From node_modules
+    //...
+}
+```
+
 Next, you need to change the `MainApplication` of your app to register `ReactNativeDialogsPackage` :
 ```java
 // ... Other imports

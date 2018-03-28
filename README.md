@@ -108,6 +108,7 @@ Creation of a dialog works in 3 steps :
 2. Set some options using `dialog.set(options)`. `set` can be called multiple times, and options from multiple calls will be merged.
 3. Show the dialog using `dialog.show()`.
 4. (optional) dismiss the dialog with `dialog.dismiss()`.
+  * Note: if you do not have a reference to `dialog` instance you can still dismiss any open dialogs with `(new DialogAndroid()).dismiss()`. This works becuase there is only ever one dialog, even if `.show()` was called multiple times for different dialog instances without hiding the previous one.
 
 This library is a thin wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs), which provides builders for showing Material Design dialogs in Android apps. The options provided to `set` map more or less directly to the methods provided in the original library. See [its documentation](https://github.com/afollestad/material-dialogs#basic-dialog) for reference.
 

@@ -107,6 +107,7 @@ Creation of a dialog works in 3 steps :
 1. Create a new dialog using `new DialogAndroid()`.
 2. Set some options using `dialog.set(options)`. `set` can be called multiple times, and options from multiple calls will be merged.
 3. Show the dialog using `dialog.show()`.
+4. (optional) dismiss the dialog with `dialog.dismiss()`.
 
 This library is a thin wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs), which provides builders for showing Material Design dialogs in Android apps. The options provided to `set` map more or less directly to the methods provided in the original library. See [its documentation](https://github.com/afollestad/material-dialogs#basic-dialog) for reference.
 
@@ -151,6 +152,9 @@ The following options are currently supported (value type is `String` unless men
   * [`type`](https://github.com/afollestad/material-dialogs#input-dialogs) (int)
   * [`callback`](https://github.com/afollestad/material-dialogs#input-dialogs) (function with 1 argument : user provided input)
 * [`alwaysCallInputCallback`](https://github.com/afollestad/material-dialogs#input-dialogs) (boolean)
+* [`progress`](https://github.com/afollestad/material-dialogs#progress-dialogs) - Object containing following keys
+  * [`indeterminate`](https://github.com/afollestad/material-dialogs#indeterminate-progress-dialogs) (boolean) - must be true, determinate is not supported
+  * [`style`](https://github.com/afollestad/material-dialogs#make-an-indeterminate-dialog-horizontal) - (string) either 'horizontal' or undefined
 
 Examples
 --------
@@ -223,6 +227,22 @@ Try out the following values for option (taken from [examples/ExampleApp/dialogD
 }
 ```
 
+Progress dialog colored blue, with no buttons, disables hardware back, and dismisses after 5 seconds:
+
+```
+    const dialog = new DialogAndroid();
+    dialog.set({
+        content: 'Downloading...',
+        progress: {
+            indeterminate: true,
+            style: 'horizontal'
+        },
+        widgetColor: 'blue',
+        cancelable: false
+    })
+    dialog.show();
+    setTimeout(dialog.dismiss, 5000);
+```
 
 
 Known Issues

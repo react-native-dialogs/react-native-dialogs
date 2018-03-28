@@ -77,6 +77,17 @@ class DialogAndroid {
   list(options, cb){
     NativeModules.DialogAndroid.list(options, cb)
   }
+  
+  static alert(options) {
+    const dialog = new DialogAndroid();
+    dialog.set(options);
+    dialog.show();
+    return dialog;
+  }
+  
+  static dismissCurrent() {
+    (new DialogAndroid()).dismiss();
+  }
 }
 
 module.exports = DialogAndroid;

@@ -266,7 +266,7 @@ class DialogAndroid {
     static showProgress(message: string) {
         NativeModules.DialogAndroid.show({
             content: message.padStart(5),
-            contentColor: DialogAndroid.defaults.contentColor,
+            contentColor: DialogAndroid.defaults.contentColor ? processColor(DialogAndroid.defaults.contentColor) : undefined,
             progress: {
                 indeterminate: true,
                 // style: 'horizontal'

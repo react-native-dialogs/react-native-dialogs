@@ -2,8 +2,6 @@
 import { NativeModules } from 'react-native'
 import processColor from 'react-native/Libraries/StyleSheet/processColor'
 
-import CONFIG from '../../config'
-
 import type { ColorValue } from 'react-native/Libraries/StyleSheet/StyleSheetTypes'
 
 type ListItem = string | { label:string } | {};
@@ -27,37 +25,37 @@ type BaseOptions = {|
 
 
 type ListType =
-  | typeof MaterialDialog.listCheckbox
-  | typeof MaterialDialog.listPlain
-  | typeof MaterialDialog.listRadio;
+  | typeof AndroidDialog.listCheckbox
+  | typeof AndroidDialog.listPlain
+  | typeof AndroidDialog.listRadio;
 
 type ActionType =
-  | typeof MaterialDialog.actionDismiss
-  | typeof MaterialDialog.actionNegative
-  | typeof MaterialDialog.actionNeutral
-  | typeof MaterialDialog.actionPositive
-  | typeof MaterialDialog.actionSelect;
+  | typeof AndroidDialog.actionDismiss
+  | typeof AndroidDialog.actionNegative
+  | typeof AndroidDialog.actionNeutral
+  | typeof AndroidDialog.actionPositive
+  | typeof AndroidDialog.actionSelect;
 
 type Options = BaseOptions | {|
     // plain list
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string, // required if items is array of objects without key of "label"
-    listType?: typeof MaterialDialog.listPlain
+    listType?: typeof AndroidDialog.listPlain
 |} | {|
     // radio list
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string,
     widgetColor?: ColorValue, // radio color
-    listType: typeof MaterialDialog.listRadio,
+    listType: typeof AndroidDialog.listRadio,
     selectedIndex?: number
 |} | {|
     // radio list - automatic accept on item select
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string,
-    listType: typeof MaterialDialog.listRadio,
+    listType: typeof AndroidDialog.listRadio,
     widgetColor?: ColorValue,
     selectedIndex?: number,
     positiveText: null // this causes a press on the item to fire "select" action and close dialog
@@ -66,7 +64,7 @@ type Options = BaseOptions | {|
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string,
-    listType: typeof MaterialDialog.listCheckbox,
+    listType: typeof AndroidDialog.listCheckbox,
     widgetColor?: ColorValue, // checkbox color
     selectedIndices?: number[]
 |} | {|
@@ -74,7 +72,7 @@ type Options = BaseOptions | {|
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string,
-    listType: typeof MaterialDialog.listCheckbox,
+    listType: typeof AndroidDialog.listCheckbox,
     widgetColor?: ColorValue,
     selectedIndices?: number[],
     neutralText: string, // must set a text string here. like "Clear". before it used to force set "Clear" but this was not language-localization-internationalization friendly
@@ -105,13 +103,13 @@ type AlertArgs =
 type AlertReturn = Promise<{
       action: ActionType
 } | {
-    action: typeof MaterialDialog.actionSelect, // even if hit positive button, it comes in as select i think
+    action: typeof AndroidDialog.actionSelect, // even if hit positive button, it comes in as select i think
     selectedItem: ListItem
 } | {
-    action: typeof MaterialDialog.actionPositive,
+    action: typeof AndroidDialog.actionPositive,
     selectedItems: ListItem[]
 } | {
-    action: typeof MaterialDialog.actionPositive,
+    action: typeof AndroidDialog.actionPositive,
     text: string
 }>
 
@@ -127,7 +125,7 @@ type NativeConfig = {|
     }
 |}
 
-class MaterialDialog {
+class AndroidDialog {
     static listPlain = 'listPlain'
     static listRadio = 'listRadio'
     static listCheckbox = 'listCheckbox'
@@ -203,8 +201,8 @@ class MaterialDialog {
                     }
                 })
                 switch (nativeConfig.listType) {
-                    case MaterialDialog.listCheckbox: nativeConfig.itemsCallbackMultiChoice = true; break;
-                    case MaterialDialog.listRadio: nativeConfig.itemsCallbackSingleChoice = true; break;
+                    case AndroidDialog.listCheckbox: nativeConfig.itemsCallbackMultiChoice = true; break;
+                    case AndroidDialog.listRadio: nativeConfig.itemsCallbackSingleChoice = true; break;
                     default: nativeConfig.itemsCallback = true;
                 }
             }
@@ -229,32 +227,32 @@ class MaterialDialog {
                         } else {
                             selectedItems =  selectedIndices.map(index => options.items[index]);
                         }
-                        return resolve({ action:MaterialDialog.actionPositive, selectedItems });
+                        return resolve({ action:AndroidDialog.actionPositive, selectedItems });
                     }
                     case 'itemsCallback':
                     case 'itemsCallbackSingleChoice': {
                         const [ selectedIndex ] = rest;
                         const selectedItem = options.items[selectedIndex];
-                        return resolve({ action:MaterialDialog.actionSelect, selectedItem });
+                        return resolve({ action:AndroidDialog.actionSelect, selectedItem });
                     }
                     case 'onAny': {
                         const [ dialogAction ] = rest;
                         switch (dialogAction) {
-                            case 0: return resolve({ action:MaterialDialog.actionPositive });
-                            case 1: return resolve({ action:MaterialDialog.actionNeutral });
-                            case 2: return resolve({ action:MaterialDialog.actionNegative });
+                            case 0: return resolve({ action:AndroidDialog.actionPositive });
+                            case 1: return resolve({ action:AndroidDialog.actionNeutral });
+                            case 2: return resolve({ action:AndroidDialog.actionNegative });
                         }
                     }
                     case 'dismissListener': {
-                        return resolve({ action:MaterialDialog.actionDismiss });
+                        return resolve({ action:AndroidDialog.actionDismiss });
                     }
                     case 'input': {
                         const [ text ] = rest;
-                        return resolve({ action:MaterialDialog.actionPositive, text });
+                        return resolve({ action:AndroidDialog.actionPositive, text });
                     }
                     case 'cancelListener': {
                         // fires when input text field is there and hit back or in back to dismiss
-                        return resolve({ action:MaterialDialog.actionDismiss });
+                        return resolve({ action:AndroidDialog.actionDismiss });
                     }
                     default: {
                         return reject(`Unknown callback kind: "${kind}"`);
@@ -267,25 +265,15 @@ class MaterialDialog {
     static showProgress(message: string) {
         NativeModules.DialogAndroid.show({
             content: message.padStart(5),
-            contentColor: processColor(CONFIG.blackish),
+            contentColor: DialogAndroid.defaults.contentColor,
             progress: {
                 indeterminate: true,
                 // style: 'horizontal'
             },
-            widgetColor: processColor(CONFIG.backcolor),
+            widgetColor: DialogAndroid.defaults.widgetColor ? processColor(DialogAndroid.defaults.widgetColor) : undefined,
             cancelable: false
         }, () => null);
     }
 }
 
-// (async function() {
-//     console.log(await MaterialDialog.alert('Create Folder', 'Folder Name', {
-//         input: {
-//             allowEmptyInput: false
-//         }
-//     }));
-// })()
-// MaterialDialog.showProgress('loading...');
-// setTimeout(MaterialDialog.dismiss, 5000);
-
-export default MaterialDialog
+export default AndroidDialog

@@ -246,10 +246,13 @@ Hides the currently showing dialog.
 ##### `prompt`
 
 >     static prompt(
->         title?: Title,
+>         title?: null | string,
 >         content?: null | string,
->         options: OptionsInput
->     ): Promise<AlertReturn>
+>         options: OptionsPrompt
+>     ): Promise<
+>         {| action: "actionNegative" | "actionNeutral" | "actionDismiss" |} |
+>         {| action: "actionPositive", text: string |}
+>     >
 
 Shows a dialog with a text input field.
 
@@ -265,7 +268,11 @@ Shows a dialog with a text input field.
 >         title?: null | string,
 >         content?: null | string,
 >         options: OptionsPicker
->     ): void
+>     ): Promise<
+>         {| action: "actionNegative" | "actionNeutral" | "actionDismiss" |} |
+>         {| action: "actionSelect", selectedItem: ListItem |} |
+>         {| action: "actionSelect", selectedItems: ListItem[] |}
+>     >
 
 Shows a progress dialog. By default no buttons are shown, and hardware back button does not close it. You must close it with `DialogAndroid.dismiss()`.
 
@@ -280,7 +287,7 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >     static showProgress(
 >         content?: null | string,
 >         options: OptionsProgress
->     ): void
+>     ): Promise<{| action:"actionDismiss" |}>
 
 Shows a progress dialog. By default no buttons are shown, and hardware back button does not close it. You must close it with `DialogAndroid.dismiss()`.
 

@@ -145,18 +145,24 @@ Hides the currently showing dialog.
 #### `alert`
 
 >     static alert(
->         title: null | string,
->         content?: null | string,
+>         title: Title,
+>         content: Content,
 >         options: Options
 >     ): Promise<AlertReturn>
 
 Shows the dialog and resolves the promise with [`AlertReturn`](#type-alertreturn).
 
+| Parameter | Type                       | Default     | Required | Description                    |
+|-----------|----------------------------|-------------|----------|--------------------------------|
+| title     | [`Title`](#type-title)     |             |          | Title of dialog                |
+| content   | [`Content`](#type-content) |             |          | Message of dialog              |
+| options   | [`Options`](#type-options) | `undefined` |          | See [`Options`](#type-options) |
+
 > ##### Alternative shorthand signatures
 >
 > * Two argument signature
 >
->   >     static alert(title: null | string, options: Options): Promise<AlertReturn>
+>   >     static alert(title: Title, options: Options): Promise<AlertReturn>
 >
 > * One string argument signature
 >
@@ -166,11 +172,44 @@ Shows the dialog and resolves the promise with [`AlertReturn`](#type-alertreturn
 >
 >   >     static alert(option: Options): Promise<AlertReturn>
 
+#### `prompt`
+
+>     static prompt(
+>         title: Title,
+>         content?: null | string,
+>         options: OptionsInput
+>     ): Promise<AlertReturn>
+
+Shows a dialog with a text input field.
+
+| Parameter | Type                                   | Default     | Required | Description                                |
+|-----------|----------------------------------------|-------------|----------|--------------------------------------------|
+| title     | [`Title`](#type-title)                 |             |          | Title of dialog                            |
+| content   | [`Content`](#type-content)             |             |          | Message of dialog                          |
+| options   | [`OptionsPrompt`](#type-optionsprompt) | `undefined` |          | See [`OptionsPrompt`](#type-optionsprompt) |
+
+#### `showProgress`
+
+>     static showProgress(
+>         content?: null | string,
+>         options: OptionsProgress
+>     ): void
+
+Shows a progress dialog. By default no buttons are shown, and hardware back button does not close it. You must close it with `DialogAndroid.dismiss()`.
+
 ### Types
 
 [Flow](http://flow.org/) is used as the typing system.
 
 #### Internal Types
+
+#### `type Title`
+
+>     string | null | void
+
+#### `type Content`
+
+>     string | null | void
 
 #### `type ListItem`
 
@@ -179,6 +218,25 @@ Shows the dialog and resolves the promise with [`AlertReturn`](#type-alertreturn
 #### `type ListType`
 
 >     "listPlain" | "listRadio" | "listCheckbox"
+
+#### `type Options`
+
+>     {
+>         cancelable?: boolean,
+>         content?: Content,
+>         contentIsHtml?: boolean,
+>         negativeColor?: boolean,
+>         negativeText?: boolean,
+>         neutralColor?: boolean,
+>         neutralText?: boolean,
+>         positiveColor?: boolean,
+>         positiveText?: boolean,
+>         title?: Title
+>     }
+
+| Key      | Type         | Default     | Required | Description                                                                                                                                                                                                                          |
+|----------|--------------|-------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| onCancel | `() => void` | `undefined` |          | A callback that triggered by user when he dismisses the popup due to (1) hits the hardware back button, or (2) presses outside of the popup menu. This callback is also triggered if an error occurs in trying to display the popup. |
 
 #### `type ActionType`
 

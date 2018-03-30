@@ -25,37 +25,37 @@ type BaseOptions = {|
 
 
 type ListType =
-  | typeof AndroidDialog.listCheckbox
-  | typeof AndroidDialog.listPlain
-  | typeof AndroidDialog.listRadio;
+  | typeof DialogAndroid.listCheckbox
+  | typeof DialogAndroid.listPlain
+  | typeof DialogAndroid.listRadio;
 
 type ActionType =
-  | typeof AndroidDialog.actionDismiss
-  | typeof AndroidDialog.actionNegative
-  | typeof AndroidDialog.actionNeutral
-  | typeof AndroidDialog.actionPositive
-  | typeof AndroidDialog.actionSelect;
+  | typeof DialogAndroid.actionDismiss
+  | typeof DialogAndroid.actionNegative
+  | typeof DialogAndroid.actionNeutral
+  | typeof DialogAndroid.actionPositive
+  | typeof DialogAndroid.actionSelect;
 
 type Options = BaseOptions | {|
     // plain list
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string, // required if items is array of objects without key of "label"
-    listType?: typeof AndroidDialog.listPlain
+    listType?: typeof DialogAndroid.listPlain
 |} | {|
     // radio list
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string,
     widgetColor?: ColorValue, // radio color
-    listType: typeof AndroidDialog.listRadio,
+    listType: typeof DialogAndroid.listRadio,
     selectedIndex?: number
 |} | {|
     // radio list - automatic accept on item select
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string,
-    listType: typeof AndroidDialog.listRadio,
+    listType: typeof DialogAndroid.listRadio,
     widgetColor?: ColorValue,
     selectedIndex?: number,
     positiveText: null // this causes a press on the item to fire "select" action and close dialog
@@ -64,7 +64,7 @@ type Options = BaseOptions | {|
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string,
-    listType: typeof AndroidDialog.listCheckbox,
+    listType: typeof DialogAndroid.listCheckbox,
     widgetColor?: ColorValue, // checkbox color
     selectedIndices?: number[]
 |} | {|
@@ -72,7 +72,7 @@ type Options = BaseOptions | {|
     ...BaseOptions,
     items: ListItem[],
     labelKey?: string,
-    listType: typeof AndroidDialog.listCheckbox,
+    listType: typeof DialogAndroid.listCheckbox,
     widgetColor?: ColorValue,
     selectedIndices?: number[],
     neutralText: string, // must set a text string here. like "Clear". before it used to force set "Clear" but this was not language-localization-internationalization friendly
@@ -103,13 +103,13 @@ type AlertArgs =
 type AlertReturn = Promise<{
       action: ActionType
 } | {
-    action: typeof AndroidDialog.actionSelect, // even if hit positive button, it comes in as select i think
+    action: typeof DialogAndroid.actionSelect, // even if hit positive button, it comes in as select i think
     selectedItem: ListItem
 } | {
-    action: typeof AndroidDialog.actionPositive,
+    action: typeof DialogAndroid.actionPositive,
     selectedItems: ListItem[]
 } | {
-    action: typeof AndroidDialog.actionPositive,
+    action: typeof DialogAndroid.actionPositive,
     text: string
 }>
 
@@ -125,7 +125,7 @@ type NativeConfig = {|
     }
 |}
 
-class AndroidDialog {
+class DialogAndroid {
     static listPlain = 'listPlain'
     static listRadio = 'listRadio'
     static listCheckbox = 'listCheckbox'
@@ -135,14 +135,17 @@ class AndroidDialog {
     static actionPositive = 'actionPositive'
     static actionSelect = 'actionSelect'
 
+    static defaults = {
+        negativeText: 'Cancel',
+        positiveText: 'OK'
+    }
+
     static dismiss() {
         NativeModules.DialogAndroid.dismiss();
     }
 
-    static defaults = {}
-
-    static setDefaults(defaults: { title?:Title, content?:Content, ...Options }) {
-        this.defaults = defaults;
+    static assignDefaults(defaults: { title?:Title, content?:Content, ...Options }) {
+        Object.assign(this.defaults, defaults);
     }
     static alert(...args: AlertArgs): Promise<AlertReturn> {
         return new Promise((resolve, reject) => {
@@ -162,16 +165,14 @@ class AndroidDialog {
             }
 
             const nativeConfig: NativeConfig = {
-                title,
-                content,
-                negativeText: 'Cancel',
-                positiveText: 'OK',
                 ...this.defaults,
                 ...options,
                 onAny: true,
                 dismissListener: true,
                 cancelListener: true
             };
+            if (title !== undefined) nativeConfig.title = title;
+            if (content !== undefined) nativeConfig.content = content;
             // omit null?
 
             // process colors
@@ -201,8 +202,8 @@ class AndroidDialog {
                     }
                 })
                 switch (nativeConfig.listType) {
-                    case AndroidDialog.listCheckbox: nativeConfig.itemsCallbackMultiChoice = true; break;
-                    case AndroidDialog.listRadio: nativeConfig.itemsCallbackSingleChoice = true; break;
+                    case DialogAndroid.listCheckbox: nativeConfig.itemsCallbackMultiChoice = true; break;
+                    case DialogAndroid.listRadio: nativeConfig.itemsCallbackSingleChoice = true; break;
                     default: nativeConfig.itemsCallback = true;
                 }
             }
@@ -227,32 +228,32 @@ class AndroidDialog {
                         } else {
                             selectedItems =  selectedIndices.map(index => options.items[index]);
                         }
-                        return resolve({ action:AndroidDialog.actionPositive, selectedItems });
+                        return resolve({ action:DialogAndroid.actionPositive, selectedItems });
                     }
                     case 'itemsCallback':
                     case 'itemsCallbackSingleChoice': {
                         const [ selectedIndex ] = rest;
                         const selectedItem = options.items[selectedIndex];
-                        return resolve({ action:AndroidDialog.actionSelect, selectedItem });
+                        return resolve({ action:DialogAndroid.actionSelect, selectedItem });
                     }
                     case 'onAny': {
                         const [ dialogAction ] = rest;
                         switch (dialogAction) {
-                            case 0: return resolve({ action:AndroidDialog.actionPositive });
-                            case 1: return resolve({ action:AndroidDialog.actionNeutral });
-                            case 2: return resolve({ action:AndroidDialog.actionNegative });
+                            case 0: return resolve({ action:DialogAndroid.actionPositive });
+                            case 1: return resolve({ action:DialogAndroid.actionNeutral });
+                            case 2: return resolve({ action:DialogAndroid.actionNegative });
                         }
                     }
                     case 'dismissListener': {
-                        return resolve({ action:AndroidDialog.actionDismiss });
+                        return resolve({ action:DialogAndroid.actionDismiss });
                     }
                     case 'input': {
                         const [ text ] = rest;
-                        return resolve({ action:AndroidDialog.actionPositive, text });
+                        return resolve({ action:DialogAndroid.actionPositive, text });
                     }
                     case 'cancelListener': {
                         // fires when input text field is there and hit back or in back to dismiss
-                        return resolve({ action:AndroidDialog.actionDismiss });
+                        return resolve({ action:DialogAndroid.actionDismiss });
                     }
                     default: {
                         return reject(`Unknown callback kind: "${kind}"`);
@@ -276,4 +277,4 @@ class AndroidDialog {
     }
 }
 
-export default AndroidDialog
+export default DialogAndroid

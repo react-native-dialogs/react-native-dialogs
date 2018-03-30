@@ -224,13 +224,16 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >     {
 >         cancelable?: boolean,
 >         content?: Content,
+>         contentColor?: ColorValue,
 >         contentIsHtml?: boolean,
->         negativeColor?: boolean,
+>         negativeColor?: ColorValue,
 >         negativeText?: boolean,
->         neutralColor?: boolean,
+>         neutralColor?: ColorValue,
 >         neutralText?: boolean,
->         positiveColor?: boolean,
+>         positiveColor?: ColorValue,
 >         positiveText?: boolean,
+>         forceStacking?: boolean,
+>         linkColor?: ColorValue,
 >         title?: Title
 >     }
 
@@ -283,7 +286,6 @@ If we want the first press on an item to close and accept the dialog, we pass `n
 We can make the neutral button be a special button. Pressing it will clear the list and close the dialog.
 
     const { selectedItems } = await DialogAndroid.alert('Title', null, {
-        positiveText: null,
         items: [
             { label:'Apple', id:'apple' },
             { label:'Orange', id:'orange' },

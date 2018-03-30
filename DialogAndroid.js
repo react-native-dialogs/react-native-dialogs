@@ -4,7 +4,9 @@ import processColor from 'react-native/Libraries/StyleSheet/processColor'
 
 import type { ColorValue } from 'react-native/Libraries/StyleSheet/StyleSheetTypes'
 
-type ListItem = string | { label:string } | {};
+type IdKey = string | 'id';
+type LabelKey = string | 'label';
+type ListItem = { label:string, id?:any };
 
 type BaseOptions = {|
     title?: null | string,
@@ -40,41 +42,45 @@ type Options = BaseOptions | {|
     // plain list
     ...BaseOptions,
     items: ListItem[],
-    labelKey?: string, // required if items is array of objects without key of "label"
+    labelKey?: LabelKey, // required if items is array of objects without key of "label"
     listType?: typeof DialogAndroid.listPlain
 |} | {|
     // radio list
     ...BaseOptions,
     items: ListItem[],
-    labelKey?: string,
+    labelKey?: LabelKey,
+    idKey?: IdKey,
     widgetColor?: ColorValue, // radio color
     listType: typeof DialogAndroid.listRadio,
-    selectedIndex?: number
+    selectedId?: any
 |} | {|
     // radio list - automatic accept on item select
     ...BaseOptions,
     items: ListItem[],
-    labelKey?: string,
+    labelKey?: LabelKey,
+    idKey?: IdKey,
     listType: typeof DialogAndroid.listRadio,
     widgetColor?: ColorValue,
-    selectedIndex?: number,
+    selectedId?: any,
     positiveText: null // this causes a press on the item to fire "select" action and close dialog
 |} | {|
     // check list
     ...BaseOptions,
     items: ListItem[],
-    labelKey?: string,
+    labelKey?: LabelKey,
+    idKey?: IdKey,
     listType: typeof DialogAndroid.listCheckbox,
     widgetColor?: ColorValue, // checkbox color
-    selectedIndices?: number[]
+    selectedIds?: number[]
 |} | {|
     // check list with clear button
     ...BaseOptions,
     items: ListItem[],
-    labelKey?: string,
+    labelKey?: LabelKey,
+    idKey?: IdKey,
     listType: typeof DialogAndroid.listCheckbox,
     widgetColor?: ColorValue,
-    selectedIndices?: number[],
+    selectedIds?: number[],
     neutralText: string, // must set a text string here. like "Clear". before it used to force set "Clear" but this was not language-localization-internationalization friendly
     shouldNeutralClear?: boolean // causes neutral button to trigger actionSelect with selectedItems being an empty array
 |} | {|
@@ -111,7 +117,7 @@ type AlertReturn = {
 } | {
     action: typeof DialogAndroid.actionPositive,
     text: string
-}>
+}
 
 type NativeConfig = {|
     ...BaseOptions,
@@ -164,6 +170,9 @@ class DialogAndroid {
                 }
             }
 
+            let contentIsHtml, idKey, items, labelKey, listType, neutralIsClear, selectedId, selectedIds;
+            ({ contentIsHtml, idKey='id', items, labelKey='label', listType=DialogAndroid.listPlain, neutralIsClear, selectedId, selectedIds, ...options} = options);
+
             const nativeConfig: NativeConfig = {
                 ...this.defaults,
                 ...options,
@@ -171,8 +180,8 @@ class DialogAndroid {
                 dismissListener: true,
                 cancelListener: true
             };
-            if (title !== undefined) nativeConfig.title = title;
-            if (content !== undefined) nativeConfig.content = content;
+            if (title) nativeConfig.title = title;
+            if (content) nativeConfig.content = content;
             // omit null?
 
             // process colors
@@ -183,28 +192,25 @@ class DialogAndroid {
             }
 
             // turn non-native properties to native properties
-            if (nativeConfig.items) {
-                const labelKey = nativeConfig.labelKey;
-                delete nativeConfig.labelKey;
-                nativeConfig.items = nativeConfig.items.map((item: ListItem) => {
-                    if (typeof item === 'string') {
-                        return item;
-                    } else {
-                        if (item.hasOwnProperty('label')) {
-                            return item.label;
-                        } else {
-                            if (!labelKey) {
-                                reject('DialogAndroid TypeError: labelKey is required because an object without key of "label" was found in items.');
-                                throw new Error('DialogAndroid TypeError: labelKey is required because an object without key of "label" was found in items.');
+            if (items) {
+                nativeConfig.items = items.map(item => item[labelKey]);
+                switch (listType) {
+                    case DialogAndroid.listCheckbox: {
+                            nativeConfig.itemsCallbackMultiChoice = true;
+                            if (selectedIds) {
+                                nativeConfig.selectedIndices = selectedIds.map(id => items.findIndex(item => item[idKey] === id));
                             }
-                            return item[labelKey];
-                        }
+                        break;
                     }
-                })
-                switch (nativeConfig.listType) {
-                    case DialogAndroid.listCheckbox: nativeConfig.itemsCallbackMultiChoice = true; break;
-                    case DialogAndroid.listRadio: nativeConfig.itemsCallbackSingleChoice = true; break;
-                    default: nativeConfig.itemsCallback = true;
+                    case DialogAndroid.listRadio: {
+                            nativeConfig.itemsCallbackSingleChoice = true;
+                            if (selectedId !== undefined) {
+                                nativeConfig.selectedIndex = items.findIndex(item => item[idKey] === selectedId);
+                            }
+                        break;
+                    }
+                    default:
+                        nativeConfig.itemsCallback = true;
                 }
             }
             if (nativeConfig.shouldNeutralClear) {
@@ -224,16 +230,16 @@ class DialogAndroid {
                         let selectedItems;
                         if (selectedIndices.length === 1 && isNaN(selectedIndices[0])) {
                             // the case of empty selection
-                            selectedItems =  [];
+                            selectedItems = [];
                         } else {
-                            selectedItems =  selectedIndices.map(index => options.items[index]);
+                            selectedItems = selectedIndices.map(index => items[index]);
                         }
                         return resolve({ action:DialogAndroid.actionPositive, selectedItems });
                     }
                     case 'itemsCallback':
                     case 'itemsCallbackSingleChoice': {
                         const [ selectedIndex ] = rest;
-                        const selectedItem = options.items[selectedIndex];
+                        const selectedItem = items[selectedIndex];
                         return resolve({ action:DialogAndroid.actionSelect, selectedItem });
                     }
                     case 'onAny': {

@@ -3,7 +3,44 @@
 An Android only module for Material Design dialogs. This is a wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs). This module is designed for Android only with no plans to support iOS.
 
 ### Table of Contents
-- TODO:
+- [Installation](#installation)
+  - [Manual Linking](#manual-linking)
+- [Usage](#usage)
+- [API](#api)
+  - [Properties](#properties)
+    - [`defaults`](#defaults)
+    - [`actionDismiss`](#actiondismiss)
+    - [`actionNegative`](#actionnegative)
+    - [`actionNeutral`](#actionneutral)
+    - [`actionPositive`](#actionpositive)
+    - [`listPlain`](#listplain)
+    - [`listRadio`](#listradio)
+    - [`listCheckbox`](#listcheckbox)
+    - [`progressHorizontal`](#progresshorizontal)
+  - [Methods](#methods)
+    - [`assignDefaults`](#assigndefaults)
+    - [`dismiss`](#dismiss)
+    - [`alert`](#alert)
+    - [`prompt`](#prompt)
+    - [`showPicker`](#showpicker)
+    - [`showProgress`](#showprogress)
+- [Types](#types)
+  - [Internal Types](#internal-types)
+    - [`type ActionType`](#type-actiontype)
+    - [`type ListItem`](#type-listitem)
+    - [`type ListType`](#type-listtype)
+    - [`type OptionsCommon`](#type-optionscommon)
+    - [`type OptionsProgress`](#type-optionsprogress)
+    - [`type OptionsPicker`](#type-optionspicker)
+    - [`type OptionsPrompt`](#type-optionsprompt)
+    - [`type ProgressStyle`](#type-progressstyle)
+- [Examples](#examples)
+  - [Progress overlay](#progress-overlay)
+  - [List of radio items dismissed on press](#list-of-radio-items-dismissed-on-press)
+  - [Checklist with clear button](#checklist-with-clear-button)
+  - [Prompt](#prompt)
+  - [HTML](#html)
+  - [assignDefaults](#assigndefaults)
 
 ### Installation
 
@@ -126,37 +163,84 @@ Follow these steps if automatic linking (`react-native link`) failed.
 
 ### API
 
-#### `setDefaults`
+#### Properties
 
->     static setDefaults({
->         title?: string | null | void,
->         content?: string | null | void,
->         ...options
+##### `defaults`
+
+>    {
+>        positiveText: 'OK'
+>    }
+
+The default options to be used by all methods. To modify this, either directly manipulate with `DialogAndroid.defaults = { ... }` or use [`assignDefaults`](#assigndefaults)
+
+##### `actionDismiss`
+
+> static actionDismiss = "actionDismiss"
+
+##### `actionNegative`
+
+> static actionNegative = "actionNegative"
+
+##### `actionNeutral`
+
+> static actionNeutral = "actionNeutral"
+
+##### `actionPositive`
+
+> static actionPositive = "actionPositive"
+
+##### `listPlain`
+
+> static listPlain = "listPlain"
+
+##### `listRadio`
+
+> static listRadio = "listRadio"
+
+##### `listCheckbox`
+
+> static listCheckbox = "listCheckbox"
+
+##### `progressHorizontal`
+
+> static progressHorizontal = "progressHorizontal"
+
+#### Methods
+##### `assignDefaults`
+
+>     static assignDefaults({
+>         [string]: value
 >     ): void
 
 Set default colors for example, so you don't have to provide it on alert.
 
-#### `dismiss`
+>    {
+>        positiveText: 'OK'
+>    }
+
+##### `dismiss`
 
 >     static dismiss(): void
 
 Hides the currently showing dialog.
 
-#### `alert`
+##### `alert`
 
 >     static alert(
 >         title: Title,
 >         content: Content,
 >         options: Options
->     ): Promise<AlertReturn>
+>     ): Promise<{|
+>         action: "actionDismiss" | "actionNegative" | "actionNeutral" | "actionPositive"
+>     |}>
 
-Shows the dialog and resolves the promise with [`AlertReturn`](#type-alertreturn).
+Shows a dialog.
 
-| Parameter | Type                       | Default     | Required | Description                    |
-|-----------|----------------------------|-------------|----------|--------------------------------|
-| title     | [`Title`](#type-title)     |             |          | Title of dialog                |
-| content   | [`Content`](#type-content) |             |          | Message of dialog              |
-| options   | [`Options`](#type-options) | `undefined` |          | See [`Options`](#type-options) |
+| Parameter | Type                                   | Default | Required | Description                          |
+|-----------|----------------------------------------|---------|----------|--------------------------------------|
+| title     | `string, null, void`                   |         |          | Title of dialog                      |
+| content   | `string, null, void`                   |         |          | Message of dialog                    |
+| options   | [`OptionsCommon`](#type-optionscommon) |         |          | See [`Options`](#type-optionscommon) |
 
 > ##### Alternative shorthand signatures
 >
@@ -172,23 +256,39 @@ Shows the dialog and resolves the promise with [`AlertReturn`](#type-alertreturn
 >
 >   >     static alert(option: Options): Promise<AlertReturn>
 
-#### `prompt`
+##### `prompt`
 
 >     static prompt(
->         title: Title,
+>         title?: Title,
 >         content?: null | string,
 >         options: OptionsInput
 >     ): Promise<AlertReturn>
 
 Shows a dialog with a text input field.
 
-| Parameter | Type                                   | Default     | Required | Description                                |
-|-----------|----------------------------------------|-------------|----------|--------------------------------------------|
-| title     | [`Title`](#type-title)                 |             |          | Title of dialog                            |
-| content   | [`Content`](#type-content)             |             |          | Message of dialog                          |
-| options   | [`OptionsPrompt`](#type-optionsprompt) | `undefined` |          | See [`OptionsPrompt`](#type-optionsprompt) |
+| Parameter | Type                                   | Default | Required | Description                                |
+|-----------|----------------------------------------|---------|----------|--------------------------------------------|
+| title     | `string, null, void`                   |         |          | Title of dialog                            |
+| content   | `string, null, void`                   |         |          | Message of dialog                          |
+| options   | [`OptionsPrompt`](#type-optionsprompt) |         |          | See [`OptionsPrompt`](#type-optionsprompt) |
 
-#### `showProgress`
+##### `showPicker`
+
+>     static showProgress(
+>         title?: null | string,
+>         content?: null | string,
+>         options: OptionsPicker
+>     ): void
+
+Shows a progress dialog. By default no buttons are shown, and hardware back button does not close it. You must close it with `DialogAndroid.dismiss()`.
+
+| Parameter | Type                                     | Default | Required | Description                                |
+|-----------|------------------------------------------|---------|----------|--------------------------------------------|
+| title     | `string, null, void`                     |         |          | Title of dialog                            |
+| content   | `string, null, void`                     |         |          | Message of dialog                          |
+| options   | [`OptionsPicker`](#type-optionsprogress) |         |          | See [`OptionsPrompt`](#type-optionspicker) |
+
+##### `showProgress`
 
 >     static showProgress(
 >         content?: null | string,
@@ -197,61 +297,136 @@ Shows a dialog with a text input field.
 
 Shows a progress dialog. By default no buttons are shown, and hardware back button does not close it. You must close it with `DialogAndroid.dismiss()`.
 
+| Parameter | Type                                       | Default | Required | Description                                  |
+|-----------|--------------------------------------------|---------|----------|----------------------------------------------|
+| content   | `string, null, void`                       |         |          | Message of dialog                            |
+| options   | [`OptionsProgress`](#type-optionsprogress) |         |          | See [`OptionsPrompt`](#type-optionsprogress) |
+
 ### Types
 
 [Flow](http://flow.org/) is used as the typing system.
 
 #### Internal Types
 
-#### `type Title`
-
->     string | null | void
-
-#### `type Content`
-
->     string | null | void
-
-#### `type ListItem`
-
->     string | { label:string } | {}
-
-#### `type ListType`
-
->     "listPlain" | "listRadio" | "listCheckbox"
-
-#### `type Options`
-
->     {
->         cancelable?: boolean,
->         content?: Content,
->         contentColor?: ColorValue,
->         contentIsHtml?: boolean,
->         negativeColor?: ColorValue,
->         negativeText?: boolean,
->         neutralColor?: ColorValue,
->         neutralText?: boolean,
->         positiveColor?: ColorValue,
->         positiveText?: boolean,
->         forceStacking?: boolean,
->         linkColor?: ColorValue,
->         title?: Title
->     }
-
-| Key      | Type         | Default     | Required | Description                                                                                                                                                                                                                          |
-|----------|--------------|-------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| onCancel | `() => void` | `undefined` |          | A callback that triggered by user when he dismisses the popup due to (1) hits the hardware back button, or (2) presses outside of the popup menu. This callback is also triggered if an error occurs in trying to display the popup. |
-
-#### `type ActionType`
+##### `type ActionType`
 
 >     "actionDismiss" | "actionNegative" | "actionNeutral" | "actionPositive" | "actionSelect"
 
-##### `type AlertReturn`
+##### `type ListItem`
 
->     type AlertReturn =
->       | { action: "actionPostive" | "actionNegative" | "actioNeutral" | "actionDismiss" }
->       | { action: "actionSelect", selectedItem: ListItem } // When listType is "plain"/undefined or "radio" and item is pressed
->       | { action: "actionPositive", selectedItems: ListItem[] } // When listType is "checklist" and "clear" or actionPositive is pressed
->       | { action: "actionPositive", text: string } // When prompt
+>     { label:string } | { label:string, id:any } | {}
+
+**Notes**
+
+* If `label` key does not exist, specify which key should be used as the label with `labelKey` property of [`OptionsPicker`](#type-optionspicker).
+* `id` is only required if `selectedId`/`selectedIds` needs to be used.
+  * If `id` key does not exist, specify which key should be used as the id with `idKey` property of [`OptionsPicker`](#type-optionspicker).
+
+##### `type ListType`
+
+>     "listCheckbox" | "listPlain" | "listRadio"
+
+##### `type OptionsCommon`
+
+>     {
+>         cancelable?: boolean,
+>         content?: string,
+>         contentColor?: string,
+>         contentIsHtml?: boolean,
+>         forceStacking?: boolean
+>         linkColor?: ColorValue,
+>         negativeColor?: ColorValue,
+>         negativeText?: string,
+>         neutralColor?: ColorValue,
+>         neutralText?: string,
+>         positiveColor?: ColorValue,
+>         positiveText?: string, // default "OK"
+>         title?: string,
+>         titleColor?: ColorValue,
+>     }
+
+| Key           | Type                                                                       | Default | Required | Description                                                                                                                                     |
+|---------------|----------------------------------------------------------------------------|---------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| cancelable    | `boolean`                                                                  |         |          | If tapping outside of dialog area, or hardware back button, should dismiss dialog.                                                              |
+| content       | `string`                                                                   |         |          | Dialog message                                                                                                                                  |
+| contentColor  | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | Color of dialog message                                                                                                                         |
+| contentIsHtml | `boolean`                                                                  |         |          | If dialog message should be parsed as html. (supported tags include: `<a>`, `<img>`, etc)                                                       |
+| forceStacking | `boolean`                                                                  |         |          | If you have multiple action buttons that together are too wide to fit on one line, the dialog will stack the buttons to be vertically oriented. |
+| linkColor     | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | If `contentIsHtml` is true, and `content` contains `<a>` tags, these are colored with this color                                                |
+| negativeColor | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          |                                                                                                                                                 |
+| negativeText  | `string`                                                                   |         |          | If falsy, button is not shown.                                                                                                                  |
+| neutralColor  | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          |                                                                                                                                                 |
+| neutralText   | `string`                                                                   |         |          | Shows button in far left with this string as label. If falsy, button is not shown.                                                              |
+| positiveColor | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          |                                                                                                                                                 |
+| positiveText  | `string`                                                                   |         |          | If falsy, button is not shown.                                                                                                                  |
+| title         | `string`                                                                   |         |          | Title of dialog                                                                                                                                 |
+| titleColor    | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | Color of title                                                                                                                                  |
+
+##### `type OptionsProgress`
+
+>     {
+>         contentColor: $PropertyType<OptionsCommon, 'contentColor'>,
+>         contentIsHtml: $PropertyType<OptionsCommon, 'contentIsHtml'>,
+>         linkColor: $PropertyType<OptionsCommon, 'linkColor'>,
+>         style?: ProgressStyle,
+>         title: $PropertyType<OptionsCommon, 'title'>,
+>         titleColor: $PropertyType<OptionsCommon, 'titleColor'>',
+>         widgetColor: $PropertyType<OptionsCommon, 'widgetColor'>
+>         widgetColor?: ColorValue
+>     }
+
+| Key           | Type                                                                       | Default | Required | Description                                              |
+|---------------|----------------------------------------------------------------------------|---------|----------|----------------------------------------------------------|
+| contentColor  | [`OptionsCommon#contentColor`](#type-optionscommon)                        |         |          | See [`OptionsCommon#contentColor`](#type-optionscommon)  |
+| contentIsHtml | [`OptionsCommon#contentIsHtml`](#type-optionscommon)                       |         |          | See [`OptionsCommon#contentIsHtml`](#type-optionscommon) |
+| linkColor     | [`OptionsCommon#linkColor`](#type-optionscommon)                           |         |          | See [`OptionsCommon#linkColor`](#type-optionscommon)     |
+| style         | [`ProgressStyle`](#type-ProgressStyle)                                     |         |          | See [`ProgressStyle`](#type-progressstyle)               |
+| title         | [`OptionsCommon#title`](#type-optionscommon)                               |         |          | See [`OptionsCommon#title`](#type-optionscommon)         |
+| titleColor    | [`OptionsCommon#titleColor`](#type-optionscommon)                          |         |          | See [`OptionsCommon#titleColor`](#type-optionscommon)    |
+| widgetColor   | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | Color of progress indicator                              |
+
+##### `type OptionsPicker`
+
+>     {
+>         ...OptionsCommon,
+>         idKey?: string,
+>         items: ListItem[],
+>         labelKey?: string,
+>         neutralIsClear?: boolean,
+>         selectedId?: any,
+>         selectedIds?: any[],
+>         type?: string,
+>         widgetColor?: ColorValue
+>     }
+
+| Key            | Type                                                                       | Default                   | Required | Description                                                                                                                                                                                                                            |
+|----------------|----------------------------------------------------------------------------|---------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| OptionsCommon  | [`OptionsCommon`](#type-optionscommon)                                     |                           |          | See [`OptionsCommon`](#type-optionscommon)                                                                                                                                                                                             |
+| idKey          | `string`                                                                   | "id"                      |          |                                                                                                                                                                                                                                        |
+| items          | [`ListItem`](#type-listitem)[]                                             |                           | Yes      | See [`ListItem`](#type-listitem)                                                                                                                                                                                                       |
+| labelKey       | `string`                                                                   | "label"                   |          |                                                                                                                                                                                                                                        |
+| neutralIsClear | `boolean`                                                                  |                           |          | Pressing the neutral button causes the dialog to be closed and `selectedItems` to be an empty array. Only works if `neutralText` is also supplied.                                                                                     |
+| selectedId     | `any`                                                                      |                           |          | The respective radio will be selected on dialog show. If no such id is found, then nothing is selected. Only applicable if `type` is `DialogAndroid.listRadio`. Requires that `items[]` contain key described by `idKey`.              |
+| selectedIds    | `any[]`                                                                    |                           |          | The respective checkbox will be selected on dialog show. If no such id is found, nothing is selected for that id. Only applicable if `type` is `DialogAndroid.listCheckbox`. Requires that `items[]` contain key described by `idKey`. |
+| type           | [`ListType`](#type-listtype)                                               | `DialogAndroid.listPlain` |          | See [`ListType`](#type-listtype)                                                                                                                                                                                                       |
+| widgetColor    | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |                           |          | Color of radio or checkbox                                                                                                                                                                                                             |
+
+##### `type OptionsPrompt`
+
+>     {
+>         ...OptionsCommon,
+>
+>         widgetColor?: ColorValue
+>     }
+
+| Key           | Type                                                                       | Default | Required | Description                                |
+|---------------|----------------------------------------------------------------------------|---------|----------|--------------------------------------------|
+| OptionsCommon | [`OptionsCommon`](#type-optionscommon)                                     |         |          | See [`OptionsCommon`](#type-optionscommon) |
+| widgetColor   | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | Color of field underline and cursor        |
+
+##### `type ProgressStyle`
+
+>     "progressHorizontal"
 
 ### Examples
 
@@ -266,76 +441,86 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 
 If we want the first press on an item to close and accept the dialog, we pass `null` to `positiveText`:
 
-
-    const { selectedItem } = await DialogAndroid.alert('Title', null, {
-        positiveText: null,
-        items: [
-            { label:'Apple', id:'apple' },
-            { label:'Orange', id:'orange' },
-            { label:'Pear', id:'pear' }
-        ],
-        selectedId: 'apple' // or if objects with "id" not used, can use selectedIndex
-    });
-    if (selectedItem) {
-        console.log('You selected item:', item);
-    }
+```js
+const { selectedItem } = await DialogAndroid.alert('Title', null, {
+    positiveText: null,
+    items: [
+        { label:'Apple', id:'apple' },
+        { label:'Orange', id:'orange' },
+        { label:'Pear', id:'pear' }
+    ],
+    selectedId: 'apple'
+});
+if (selectedItem) {
+    console.log('You selected item:', item);
+}
+```
 
 
 #### Checklist with clear button
 
 We can make the neutral button be a special button. Pressing it will clear the list and close the dialog.
 
-    const { selectedItems } = await DialogAndroid.alert('Title', null, {
-        items: [
-            { label:'Apple', id:'apple' },
-            { label:'Orange', id:'orange' },
-            { label:'Pear', id:'pear' }
-        ],
-        selectedIds: ['apple', 'orange'], // or if is not array of objects with "id" can use selectedIndices
-        neutralIsClear: true,
-        neutralText: 'Empty List'
-    });
-    if (selectedItems) {
-        if (!selectedItems.length) {
-            console.log('You emptied the list');
-        } else {
-            console.log('You selected items:', selectedItems);
-        }
+```js
+const { selectedItems } = await DialogAndroid.alert('Title', null, {
+    items: [
+        { label:'Apple', id:'apple' },
+        { label:'Orange', id:'orange' },
+        { label:'Pear', id:'pear' }
+    ],
+    selectedIds: ['apple', 'orange'], // or if is not array of objects with "id" can use selectedIndices
+    neutralIsClear: true,
+    neutralText: 'Empty List'
+});
+if (selectedItems) {
+    if (!selectedItems.length) {
+        console.log('You emptied the list');
+    } else {
+        console.log('You selected items:', selectedItems);
     }
+}
+```
 
 
 #### Prompt
 
-    const { action, text } = await DialogAndroid.prompt('Title', 'Message', {
-        isHorizontal:true
-    });
-    if (action === DialogAndroid.actionPositive) {
-        alert(`You submitted: ${text}`)
-    }
+```js
+const { action, text } = await DialogAndroid.prompt('Title', 'Message', {
+    isHorizontal:true
+});
+if (action === DialogAndroid.actionPositive) {
+    alert(`You submitted: ${text}`)
+}
+```
 
 #### HTML
 
-    DialogAndroid.alert('Title', `This is a link <a href="https://www.duckduckgo.com/">DuckDuckGo</a>`, {
-        contentIsHtml: true
-    });
+```js
+DialogAndroid.alert('Title', `This is a link <a href="https://www.duckduckgo.com/">DuckDuckGo</a>`, {
+    contentIsHtml: true
+});
+```
 
 #### assignDefaults
 
 You can set some defaults so you don't have to change it everytime.
 
-    DialogAndroid.assignDefaults({
-        title: 'Default Title',
-        negativeText: null,
-        contentColor: 'rgba(0, 0, 0, 0.2)',
-        widgetColor: 'blue'
-    })
+```js
+DialogAndroid.assignDefaults({
+    title: 'Default Title',
+    contentColor: 'rgba(0, 0, 0, 0.2)',
+    widgetColor: 'blue'
+})
+```
 
 
 Now any time you supply `undefined` to title, it will use the default assigned above.
 
-    DialogAndroid.alert(undefined, 'message here')
+```js
+DialogAndroid.alert(undefined, 'message here')
+```
 
-This will show title "Default Title", with no negative button, and the color of the message will be 20% black.
+This will show title "Default Title", with no negative button, and the color of the message will be 20% black. If you did `Dialog.showProgress`, the progress indicator would be blue. etc.
 
 
 

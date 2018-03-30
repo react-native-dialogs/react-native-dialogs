@@ -8,23 +8,126 @@ type IdKey = string | 'id';
 type LabelKey = string | 'label';
 type ListItem = { label:string, id?:any };
 
-type BaseOptions = {|
+type OptionsCommon = {|
     title?: null | string,
     titleColor?: ColorValue,
     content?: null | string,
-    isContentHtml?: boolean,
+    contentIsHtml?: boolean,
     contentColor?: string,
-    positiveText?: null | string, // default "OK"
-    negativeText?: null | string, // default "CANCEL"
+    positiveText?: string, // default "OK"
+    negativeText?: string,
     neutralText?: string,
     positiveColor?: ColorValue,
     negativeColor?: ColorValue,
     neutralColor?: ColorValue,
     cancelable?: boolean,
-    linkColor?: ColorValue, // applies if isContentHtml is true, and there are <a> elements in content string
+    linkColor?: ColorValue, // applies if contentIsHtml is true, and there are <a> elements in content string
     forceStacking?: boolean
 |}
 
+type ListItemJustLabel = { label:string };
+type ListItemJustId = { id:string };
+type ListItemFull = { label:string, id:any };
+type ListItemBare = {};
+
+type OptionsRadio = {|
+    type: typeof ListType.listRadio,
+    widgetColor?: ColorValue // radio color
+|}
+type OptionsCheckbox = {|
+    type: typeof ListType.listCheckbox,
+    neutralIsClear?: boolean,
+    widgetColor?: ColorValue // checkbox color
+|}
+
+type OptionsPicker = {|
+    ...OptionsCommon,
+    type?: typeof ListType.listPlain,
+    items: ListItemJustLabel[],
+|} | {|
+    ...OptionsCommon,
+    type?: typeof ListType.listPlain,
+    items: ListItemBare[],
+    labelKey: string
+|} | {|
+    // radio - no preselected
+    ...OptionsCommon,
+    ...OptionsRadio,
+    items: ListItemJustLabel[],
+|} | {|
+    // radio - no preselected
+    ...OptionsCommon,
+    ...OptionsRadio,
+    items: ListItemBare[],
+    labelKey: string
+|} | {|
+    // radio - preselected - ListItemFull
+    ...OptionsCommon,
+    ...OptionsRadio,
+    items: ListItemFull[],
+    selectedId: any
+|} | {|
+    // radio - preselected - ListItemJustlabel
+    ...OptionsCommon,
+    ...OptionsRadio,
+    items: ListItemJustLabel[],
+    idKey: string,
+    selectedId: any
+|} | {|
+    // radio - preselected - ListItemJustId
+    ...OptionsCommon,
+    ...OptionsRadio,
+    items: ListItemJustId[],
+    labelKey: string,
+    selectedId: any
+|} | {|
+    // radio - preselected - ListItemBare
+    ...OptionsCommon,
+    ...OptionsRadio,
+    items: ListItemBare[],
+    idKey: string,
+    labelKey: string,
+    selectedId: any
+|} | {|
+    // checklist - no preselected - ListItemJustLabel
+    ...OptionsCommon,
+    ...OptionsCheckbox,
+    items: ListItemJustLabel[]
+|} | {|
+    // checklist - no preselected - ListItemBare
+    ...OptionsCommon,
+    ...OptionsCheckbox,
+    items: ListItemBare[],
+    labelKey: string
+|} | {|
+    // checklist - preselected - ListItemFull
+    ...OptionsCommon,
+    ...OptionsCheckbox,
+    items: ListItemFull[],
+    selectedIds: any[]
+|} | {|
+    // checklist - preselected - ListItemJustlabel
+    ...OptionsCommon,
+    ...OptionsCheckbox
+    items: ListItemJustLabel[],
+    idKey: string,
+    selectedIds: any
+|} | {|
+    // checklist - preselected - ListItemJustId
+    ...OptionsCommon,
+    ...OptionsCheckbox,
+    items: ListItemJustId[],
+    labelKey: string,
+    selectedIds: any
+|} | {|
+    // checklist - preselected - ListItemBare
+    ...OptionsCommon,
+    ...OptionsCheckbox,
+    items: ListItemBare[],
+    idKey: string,
+    labelKey: string,
+    selectedIds: any
+|}
 
 type ListType =
   | typeof DialogAndroid.listCheckbox
@@ -38,54 +141,54 @@ type ActionType =
   | typeof DialogAndroid.actionPositive
   | typeof DialogAndroid.actionSelect;
 
-type Options = BaseOptions | {|
+type Options = OptionsCommon | OptionsPicker{|
     // plain list
-    ...BaseOptions,
+    ...OptionsCommon,
     items: ListItem[],
     labelKey?: LabelKey, // required if items is array of objects without key of "label"
-    listType?: typeof DialogAndroid.listPlain
+    type?: typeof DialogAndroid.listPlain
 |} | {|
     // radio list
-    ...BaseOptions,
+    ...OptionsCommon,
     items: ListItem[],
     labelKey?: LabelKey,
     idKey?: IdKey,
     widgetColor?: ColorValue, // radio color
-    listType: typeof DialogAndroid.listRadio,
+    type: typeof DialogAndroid.listRadio,
     selectedId?: any
 |} | {|
     // radio list - automatic accept on item select
-    ...BaseOptions,
+    ...OptionsCommon,
     items: ListItem[],
     labelKey?: LabelKey,
     idKey?: IdKey,
-    listType: typeof DialogAndroid.listRadio,
+    type: typeof DialogAndroid.listRadio,
     widgetColor?: ColorValue,
     selectedId?: any,
     positiveText: null // this causes a press on the item to fire "select" action and close dialog
 |} | {|
     // check list
-    ...BaseOptions,
+    ...OptionsCommon,
     items: ListItem[],
     labelKey?: LabelKey,
     idKey?: IdKey,
-    listType: typeof DialogAndroid.listCheckbox,
+    type: typeof DialogAndroid.listCheckbox,
     widgetColor?: ColorValue, // checkbox color
     selectedIds?: number[]
 |} | {|
     // check list with clear button
-    ...BaseOptions,
+    ...OptionsCommon,
     items: ListItem[],
     labelKey?: LabelKey,
     idKey?: IdKey,
-    listType: typeof DialogAndroid.listCheckbox,
+    type: typeof DialogAndroid.listCheckbox,
     widgetColor?: ColorValue,
     selectedIds?: number[],
     neutralText: string, // must set a text string here. like "Clear". before it used to force set "Clear" but this was not language-localization-internationalization friendly
-    shouldNeutralClear?: boolean // causes neutral button to trigger actionSelect with selectedItems being an empty array
+    neutralIsClear?: boolean // causes neutral button to trigger actionSelect with selectedItems being an empty array
 |} | {|
     // input text
-    ...BaseOptions,
+    ...OptionsCommon,
     input: {
         hint?: string,
         prefill?: string,
@@ -97,30 +200,34 @@ type Options = BaseOptions | {|
     widgetColor?: ColorValue // underline color, cursor color
 |}
 
+type OptionsProgress = {|
+    contentColor?: $PropertyType<OptionsCommon, 'contentColor'>,
+    contentIsHtml?: $PropertyType<OptionsCommon, 'contentIsHtml'>,
+    linkColor?: $PropertyType<OptionsCommon, 'linkColor'>,
+    style?: ProgressStyle,
+    title?: $PropertyType<OptionsCommon, 'title'>,
+    titleColor?: $PropertyType<OptionsCommon, 'titleColor'>',
+    widgetColor?: $PropertyType<OptionsCommon, 'widgetColor'>
+|}
+
+type ProgressStyle = typeof DialogAndroid.progressHorizontal;
+
+type OptionsInput = {|
+    ...OptionsCommon,
+    keyboardType?: 'numeric' | 'numbers-and-punctuation' | 'numeric-password' | 'email-address' | 'password' | 'phone-pad' | 'decimal-pad',
+    defaultValue?: string,
+    placeholder?: string,
+    allowEmptyInput?: boolean,
+    minLength?: number,
+    maxLength?: number
+|}
+
 type Title = void | null | string;
 type Content = void | null | string;
 
-type AlertArgs =
-  | [ Title, Content, Options ]
-  | [ Title, Options ]
-  | [ Content ]
-  | [ Options ]
-
-type AlertReturn = {
-      action: ActionType
-} | {
-    action: typeof DialogAndroid.actionSelect, // even if hit positive button, it comes in as select i think
-    selectedItem: ListItem
-} | {
-    action: typeof DialogAndroid.actionPositive,
-    selectedItems: ListItem[]
-} | {
-    action: typeof DialogAndroid.actionPositive,
-    text: string
-}
 
 type NativeConfig = {|
-    ...BaseOptions,
+    ...OptionsCommon,
     items: string[],
     widgetColor?: ColorValue,
     selectedIndices?: number[],
@@ -131,6 +238,23 @@ type NativeConfig = {|
     }
 |}
 
+function processColors(nativeConfig: {}) {
+    for (const prop of Object.keys(nativeConfig)) {
+        if (prop.endsWith('Color')) {
+            nativeConfig[prop] = processColor(nativeConfig[prop]);
+        }
+    }
+}
+
+function pick(source, ...keys) {
+    const target = {};
+    for (const key of keys) {
+        if (source.hasOwnProperty(key)) {
+            target[key] = source[key];
+        }
+    }
+}
+
 class DialogAndroid {
     static listPlain = 'listPlain'
     static listRadio = 'listRadio'
@@ -140,61 +264,95 @@ class DialogAndroid {
     static actionNeutral = 'actionNeutral'
     static actionPositive = 'actionPositive'
     static actionSelect = 'actionSelect'
+    static progressHorizontal = 'progressHorizontal'
 
     static defaults = {
-        negativeText: 'Cancel',
         positiveText: 'OK'
     }
 
-    static dismiss() {
+    static dismiss(): void {
         NativeModules.DialogAndroid.dismiss();
     }
 
-    static assignDefaults(defaults: { title?:Title, content?:Content, ...Options }) {
-        Object.assign(this.defaults, defaults);
+    static assignDefaults(defaults: { title?:Title, content?:Content, ...Options }): void {
+        Object.assign(DialogAndroid.defaults, defaults);
     }
-    static alert(...args: AlertArgs): Promise<AlertReturn> {
+
+    static alert(title: Title, content: Content, options={}): Promise<
+        {|
+            action: typeof DialogAndroid.actionPositive | typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral | typeof DialogAndroid.actionDismiss
+        |}
+    > {
         return new Promise((resolve, reject) => {
-
-            let title, content, options;
-            if (args.length === 3) {
-                ([title, content, options={}] = args);
-            } else if (args.length === 2) {
-                ([title, options={}] = args);
-            } else if (args.length === 1) {
-                if (typeof args[0] === 'string') {
-                    content = args[0];
-                    options = {};
-                } else {
-                    options = args[0];
-                }
-            }
-
-            let contentIsHtml, idKey, items, labelKey, listType, neutralIsClear, selectedId, selectedIds;
-            ({ contentIsHtml, idKey='id', items, labelKey='label', listType=DialogAndroid.listPlain, neutralIsClear, selectedId, selectedIds, ...options} = options);
-
             const nativeConfig: NativeConfig = {
-                ...this.defaults,
+                ...DialogAndroid.defaults,
                 ...options,
                 onAny: true,
-                dismissListener: true,
-                cancelListener: true
+                dismissListener: true
             };
             if (title) nativeConfig.title = title;
             if (content) nativeConfig.content = content;
-            // omit null?
 
-            // process colors
-            for (const prop of Object.keys(nativeConfig)) {
-                if (prop.endsWith('Color')) {
-                    nativeConfig[prop] = processColor(nativeConfig[prop]);
+            processColors(nativeConfig);
+
+            NativeModules.DialogAndroid.show(nativeConfig, (kind: string, ...rest) => {
+                switch (kind) {
+                    case 'error': {
+                        const [ error, nativeConfig ] = rest;
+                        return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
+                    }
+                    case 'onAny': {
+                        const [ dialogAction ] = rest;
+                        switch (dialogAction) {
+                            case 0: return resolve({ action:DialogAndroid.actionPositive });
+                            case 1: return resolve({ action:DialogAndroid.actionNeutral });
+                            case 2: return resolve({ action:DialogAndroid.actionNegative });
+                        }
+                    }
+                    default: {
+                        return reject(`Unknown callback kind: "${kind}"`);
+                    }
                 }
-            }
+            });
+        });
+    }
 
-            // turn non-native properties to native properties
+    static showPicker(title: Title, content: Content, options: OptionsPicker): Promise<
+        {|
+            action: typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral | typeof DialogAndroid.actionDismiss
+        |} | {|
+            action: typeof DialogAndroid.actionSelect,
+            selectedItem: ListItem
+        |} | {|
+            action: typeof DialogAndroid.actionSelect,
+            selectedItems: ListItem[]
+        |}
+    > {
+        return new Promise((resolve, reject) => {
+
+            const = {
+                idKey='id',
+                items,
+                labelKey='label',
+                type,
+                neutralIsClear,
+                selectedId,
+                selectedIds,
+                ...filteredOptions
+            } = options;
+
+            const nativeConfig: NativeConfig = {
+                ...DialogAndroid.defaults,
+                ...filteredOptions,
+                onAny: true,
+                dismissListener: true
+            };
+            if (title) nativeConfig.title = title;
+            if (content) nativeConfig.content = content;
+
             if (items) {
                 nativeConfig.items = items.map(item => item[labelKey]);
-                switch (listType) {
+                switch (type) {
                     case DialogAndroid.listCheckbox: {
                             nativeConfig.itemsCallbackMultiChoice = true;
                             if (selectedIds) {
@@ -213,10 +371,8 @@ class DialogAndroid {
                         nativeConfig.itemsCallback = true;
                 }
             }
-            if (nativeConfig.shouldNeutralClear) {
-                delete nativeConfig.shouldNeutralClear;
-                nativeConfig.multiChoiceClearButton = true;
-            }
+
+            if (neutralIsClear) nativeConfig.multiChoiceClearButton = true;
 
             NativeModules.DialogAndroid.show(nativeConfig, (kind: string, ...rest) => {
                 switch (kind) {
@@ -253,9 +409,121 @@ class DialogAndroid {
                     case 'dismissListener': {
                         return resolve({ action:DialogAndroid.actionDismiss });
                     }
+                    default: {
+                        return reject(`Unknown callback kind: "${kind}"`);
+                    }
+                }
+            });
+        })
+    }
+
+    static showProgress(content: string, options:OptionsProgress={}): Promise<
+        {|
+            action: typeof DialogAndroid.actionDismiss
+        |}
+    > {
+
+        return new Promise((resolve, reject) => {
+            const defaults = pick(DialogAndroid.defaults,
+                'contentColor',
+                'contentIsHtml'
+                'linkColor'
+                'title'
+                'widgetColor',
+                'titleColor'
+            )
+
+            const {
+                style,
+                ...finalOptions
+            } = options;
+
+            const nativeConfig = {
+                ...defaults,
+                progress: {
+                    indeterminate: true,
+                    style: style === DialogAndroid.progressHorizontal ? 'horizontal' : undefined
+                },
+                cancelable: false,
+                ...finalOptions,
+                dismissListener: true
+            }
+            if (content) nativeConfig.content = content.padStart(5);
+
+            processColors(nativeConfig);
+
+            NativeModules.DialogAndroid.show(nativeConfig, (kind: string, ...rest) => {
+                switch (kind) {
+                    case 'error': {
+                        const [ error, nativeConfig ] = rest;
+                        return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
+                    }
+                    case 'dismissListener': {
+                        return resolve({ action:DialogAndroid.actionDismiss });
+                    }
+                }
+            });
+        })
+    }
+
+    static prompt(title: Title, content: Content, options:OptionsPrompt={}): Promise<
+        {|
+            action: typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral | typeof DialogAndroid.actionDismiss
+        |} | {|
+            action: typeof DialogAndroid.actionPositive,
+            text: string
+        |}
+    > {
+        return new Promise((resolve, reject) => {
+
+            const {
+                keyboardType,
+                defaultValue,
+                placeholder,
+                allowEmptyInput,
+                minLength,
+                maxLength,
+                ...finalOptions
+            } = options;
+
+            const inputConfig = {};
+            if (defaultValue) inputConfig.prefill = defaultValue;
+            if (placeholder) inputConfig.hint = placeholder;
+            if (allowEmptyInput) inputConfig.allowEmptyInput = allowEmptyInput;
+            if (minLength) inputConfig.minLength = minLength;
+            if (maxLength) inputConfig.maxLength = maxLength;
+            // if (keyboardType) inputConfig.keyboardType = keyboardType; // TODO: support this on native side - https://github.com/aakashns/react-native-dialogs/pull/55
+
+            const nativeConfig = {
+                ...DialogAndroid.defaults,
+                input: inputConfig,
+                ...finalOptions,
+                onAny: true,
+                dismissListener: true
+            }
+            if (title) nativeConfig.title = title;
+            if (content) nativeConfig.content = content;
+
+            NativeModules.DialogAndroid.show(nativeConfig, (kind: string, ...rest) => {
+                switch (kind) {
+                    case 'error': {
+                        const [ error, nativeConfig ] = rest;
+                        return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
+                    }
+                    case 'onAny': {
+                        const [ dialogAction ] = rest;
+                        switch (dialogAction) {
+                            case 1: return resolve({ action:DialogAndroid.actionNeutral });
+                            case 2: return resolve({ action:DialogAndroid.actionNegative });
+                        }
+                    }
                     case 'input': {
                         const [ text ] = rest;
                         return resolve({ action:DialogAndroid.actionPositive, text });
+                    }
+
+                    case 'dismissListener': {
+                        return resolve({ action:DialogAndroid.actionDismiss });
                     }
                     case 'cancelListener': {
                         // fires when input text field is there and hit back or in back to dismiss
@@ -266,20 +534,8 @@ class DialogAndroid {
                     }
                 }
             });
-        });
-    }
 
-    static showProgress(message: string) {
-        NativeModules.DialogAndroid.show({
-            content: message.padStart(5),
-            contentColor: DialogAndroid.defaults.contentColor ? processColor(DialogAndroid.defaults.contentColor) : undefined,
-            progress: {
-                indeterminate: true,
-                // style: 'horizontal'
-            },
-            widgetColor: DialogAndroid.defaults.widgetColor ? processColor(DialogAndroid.defaults.widgetColor) : undefined,
-            cancelable: false
-        }, () => null);
+        })
     }
 }
 

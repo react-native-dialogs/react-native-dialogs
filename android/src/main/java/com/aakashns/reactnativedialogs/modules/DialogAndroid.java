@@ -48,7 +48,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     builder.title(options.getString("title"));
                     break;
                 case "content":
-                    if(options.hasKey("isContentHtml") && options.getBoolean("isContentHtml")) {
+                    if(options.hasKey("contentIsHtml") && options.getBoolean("contentIsHtml")) {
                         // // i have no idea how to get this to work, it seems its all api level 24 stuff
                         // // requires buildToolsVersion >= "24.0.1"
                         // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

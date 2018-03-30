@@ -212,9 +212,7 @@ The default options to be used by all methods. To modify this, either directly m
 >         title: Title,
 >         content: Content,
 >         options: Options
->     ): Promise<{|
->         action: "actionDismiss" | "actionNegative" | "actionNeutral" | "actionPositive"
->     |}>
+>     ): Promise<{| action: "actionDismiss" | "actionNegative" | "actionNeutral" | "actionPositive" |}>
 
 Shows a dialog.
 
@@ -274,7 +272,7 @@ Shows a dialog with a text input field.
 >         {| action: "actionSelect", selectedItems: ListItem[] |}
 >     >
 
-Shows a progress dialog. By default no buttons are shown, and hardware back button does not close it. You must close it with `DialogAndroid.dismiss()`.
+Shows a regular alert, but also with items that can be selected.
 
 | Parameter | Type                                     | Default | Required | Description                                |
 |-----------|------------------------------------------|---------|----------|--------------------------------------------|
@@ -343,18 +341,18 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 |---------------|----------------------------------------------------------------------------|---------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------|
 | cancelable    | `boolean`                                                                  |         |          | If tapping outside of dialog area, or hardware back button, should dismiss dialog.                                                              |
 | content       | `string`                                                                   |         |          | Dialog message                                                                                                                                  |
-| contentColor  | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | Color of dialog message                                                                                                                         |
+| contentColor  | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of dialog message                                                                                                                         |
 | contentIsHtml | `boolean`                                                                  |         |          | If dialog message should be parsed as html. (supported tags include: `<a>`, `<img>`, etc)                                                       |
 | forceStacking | `boolean`                                                                  |         |          | If you have multiple action buttons that together are too wide to fit on one line, the dialog will stack the buttons to be vertically oriented. |
-| linkColor     | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | If `contentIsHtml` is true, and `content` contains `<a>` tags, these are colored with this color                                                |
-| negativeColor | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          |                                                                                                                                                 |
+| linkColor     | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | If `contentIsHtml` is true, and `content` contains `<a>` tags, these are colored with this color                                                |
+| negativeColor | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
 | negativeText  | `string`                                                                   |         |          | If falsy, button is not shown.                                                                                                                  |
-| neutralColor  | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          |                                                                                                                                                 |
+| neutralColor  | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
 | neutralText   | `string`                                                                   |         |          | Shows button in far left with this string as label. If falsy, button is not shown.                                                              |
-| positiveColor | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          |                                                                                                                                                 |
+| positiveColor | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
 | positiveText  | `string`                                                                   |         |          | If falsy, button is not shown.                                                                                                                  |
 | title         | `string`                                                                   |         |          | Title of dialog                                                                                                                                 |
-| titleColor    | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | Color of title                                                                                                                                  |
+| titleColor    | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of title                                                                                                                                  |
 
 ##### `type OptionsProgress`
 
@@ -377,7 +375,7 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 | style         | [`ProgressStyle`](#type-ProgressStyle)                                     |         |          | See [`ProgressStyle`](#type-progressstyle)               |
 | title         | [`OptionsCommon#title`](#type-optionscommon)                               |         |          | See [`OptionsCommon#title`](#type-optionscommon)         |
 | titleColor    | [`OptionsCommon#titleColor`](#type-optionscommon)                          |         |          | See [`OptionsCommon#titleColor`](#type-optionscommon)    |
-| widgetColor   | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | Color of progress indicator                              |
+| widgetColor   | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of progress indicator                              |
 
 ##### `type OptionsPicker`
 
@@ -403,7 +401,7 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 | selectedId     | `any`                                                                      |                           |          | The respective radio will be selected on dialog show. If no such id is found, then nothing is selected. Only applicable if `type` is `DialogAndroid.listRadio`. Requires that `items[]` contain key described by `idKey`.              |
 | selectedIds    | `any[]`                                                                    |                           |          | The respective checkbox will be selected on dialog show. If no such id is found, nothing is selected for that id. Only applicable if `type` is `DialogAndroid.listCheckbox`. Requires that `items[]` contain key described by `idKey`. |
 | type           | [`ListType`](#type-listtype)                                               | `DialogAndroid.listPlain` |          | See [`ListType`](#type-listtype)                                                                                                                                                                                                       |
-| widgetColor    | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |                           |          | Color of radio or checkbox                                                                                                                                                                                                             |
+| widgetColor    | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |                           |          | Color of radio or checkbox                                                                                                                                                                                                             |
 
 ##### `type OptionsPrompt`
 
@@ -416,7 +414,7 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 | Key           | Type                                                                       | Default | Required | Description                                |
 |---------------|----------------------------------------------------------------------------|---------|----------|--------------------------------------------|
 | OptionsCommon | [`OptionsCommon`](#type-optionscommon)                                     |         |          | See [`OptionsCommon`](#type-optionscommon) |
-| widgetColor   | [`ColorValue`]((https://facebook.github.io/react-native/docs/colors.html)) |         |          | Color of field underline and cursor        |
+| widgetColor   | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of field underline and cursor        |
 
 ##### `type ProgressStyle`
 

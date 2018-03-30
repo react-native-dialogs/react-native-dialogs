@@ -199,17 +199,66 @@ Shows the dialog and resolves the promise with [`AlertReturn`](#type-alertreturn
 
 #### Progress overlay
 
+    DialogAndroid.showProgress(null, 'Downloading...', {
+        style:DialogAndroid.progressHorizontal
+    });
+    setTimeout(DialogAndroid.dismiss, 5000);
 
 #### List of radio items dismissed on press
 
 If we want the first press on an item to close and accept the dialog, we pass `null` to `positiveText`:
 
 
+    const { selectedItem } = await DialogAndroid.alert('Title', null, {
+        positiveText: null,
+        items: [
+            { label:'Apple', id:'apple' },
+            { label:'Orange', id:'orange' },
+            { label:'Pear', id:'pear' }
+        ],
+        selectedId: 'apple' // or if objects with "id" not used, can use selectedIndex
+    });
+    if (selectedItem) {
+        console.log('You selected item:', item);
+    }
 
-### Checklist with clear button
+
+#### Checklist with clear button
 
 We can make the neutral button be a special button. Pressing it will clear the list and close the dialog.
 
+    const { selectedItems } = await DialogAndroid.alert('Title', null, {
+        positiveText: null,
+        items: [
+            { label:'Apple', id:'apple' },
+            { label:'Orange', id:'orange' },
+            { label:'Pear', id:'pear' }
+        ],
+        selectedIds: ['apple', 'orange'], // or if is not array of objects with "id" can use selectedIndices
+        neutralIsClear: true,
+        neutralText: 'Empty List'
+    });
+    if (selectedItems) {
+        if (!selectedItems.length) {
+            console.log('You emptied the list');
+        } else {
+            console.log('You selected items:', selectedItems);
+        }
+    }
 
-### Input field
+
+#### Prompt
+
+    const { action, text } = await DialogAndroid.prompt('Title', 'Message', {
+        isHorizontal:true
+    });
+    if (action === DialogAndroid.actionPositive) {
+        alert(`You submitted: ${text}`)
+    }
+
+#### HTML
+
+    DialogAndroid.alert('Title', `This is a link <a href="https://www.duckduckgo.com/">DuckDuckGo</a>`, {
+        contentIsHtml: true
+    });
 

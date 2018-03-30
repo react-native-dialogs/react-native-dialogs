@@ -18,9 +18,9 @@ An Android only module for Material Design dialogs. This is a wrapper over [afol
     - [`listCheckbox`](#listcheckbox)
     - [`progressHorizontal`](#progresshorizontal)
   - [Methods](#methods)
+    - [`alert`](#alert)
     - [`assignDefaults`](#assigndefaults)
     - [`dismiss`](#dismiss)
-    - [`alert`](#alert)
     - [`prompt`](#prompt)
     - [`showPicker`](#showpicker)
     - [`showProgress`](#showprogress)
@@ -206,24 +206,6 @@ The default options to be used by all methods. To modify this, either directly m
 > static progressHorizontal = "progressHorizontal"
 
 #### Methods
-##### `assignDefaults`
-
->     static assignDefaults({
->         [string]: value
->     ): void
-
-Set default colors for example, so you don't have to provide it on alert.
-
->    {
->        positiveText: 'OK'
->    }
-
-##### `dismiss`
-
->     static dismiss(): void
-
-Hides the currently showing dialog.
-
 ##### `alert`
 
 >     static alert(
@@ -236,25 +218,30 @@ Hides the currently showing dialog.
 
 Shows a dialog.
 
-| Parameter | Type                                   | Default | Required | Description                          |
-|-----------|----------------------------------------|---------|----------|--------------------------------------|
-| title     | `string, null, void`                   |         |          | Title of dialog                      |
-| content   | `string, null, void`                   |         |          | Message of dialog                    |
-| options   | [`OptionsCommon`](#type-optionscommon) |         |          | See [`Options`](#type-optionscommon) |
+| Parameter | Type                                   | Default | Required | Description                                |
+|-----------|----------------------------------------|---------|----------|--------------------------------------------|
+| title     | `string, null, void`                   |         |          | Title of dialog                            |
+| content   | `string, null, void`                   |         |          | Message of dialog                          |
+| options   | [`OptionsCommon`](#type-optionscommon) |         |          | See [`OptionsCommon`](#type-optionscommon) |
 
-> ##### Alternative shorthand signatures
->
-> * Two argument signature
->
->   >     static alert(title: Title, options: Options): Promise<AlertReturn>
->
-> * One string argument signature
->
->   >     static alert(content: null | string): Promise<AlertReturn>
->
-> * One object argument signature
->
->   >     static alert(option: Options): Promise<AlertReturn>
+##### `assignDefaults`
+
+>     static assignDefaults({
+>         [string]: value
+>     ): void
+
+Set default colors for example, so you don't have to provide it on every method call.
+
+>    {
+>        positiveText: 'OK'
+>    }
+
+
+##### `dismiss`
+
+>     static dismiss(): void
+
+Hides the currently showing dialog.
 
 ##### `prompt`
 

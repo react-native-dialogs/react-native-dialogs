@@ -144,30 +144,27 @@ Hides the currently showing dialog.
 
 #### `alert`
 
-##### Full signature
 >     static alert(
 >         title: null | string,
 >         content?: null | string,
 >         options: Options
 >     ): Promise<AlertReturn>
 
-##### Two argument signature
->     static alert(
->         title: null | string,
->         options: Options
->     ): Promise<AlertReturn>
-
-##### One string argument signature
->     static alert(
->         content: null | string,
->     ): Promise<AlertReturn>
-
-##### One object argument signature
->     static alert(
->         option: Options
->     ): Promise<AlertReturn>
-
 Shows the dialog and resolves the promise with [`AlertReturn`](#type-alertreturn).
+
+> ##### Alternative shorthand signatures
+>
+> * Two argument signature
+>
+>   >     static alert(title: null | string, options: Options): Promise<AlertReturn>
+>
+> * One string argument signature
+>
+>   >     static alert(content: null | string): Promise<AlertReturn>
+>
+> * One object argument signature
+>
+>   >     static alert(option: Options): Promise<AlertReturn>
 
 ### Types
 

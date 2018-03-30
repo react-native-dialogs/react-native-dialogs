@@ -100,7 +100,7 @@ type AlertArgs =
   | [ Content ]
   | [ Options ]
 
-type AlertReturn = Promise<{
+type AlertReturn = {
       action: ActionType
 } | {
     action: typeof DialogAndroid.actionSelect, // even if hit positive button, it comes in as select i think

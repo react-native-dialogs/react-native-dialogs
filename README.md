@@ -99,24 +99,27 @@ Follow these steps if automatic linking (`react-native link`) failed.
 2. Call API:
 
    ```js
-   async function() {
-       const { action } = await DialogAndroid.alert('Title', 'Message', {
-           neutralText: 'Ask Later'
-       });
+   class Blah extends Component {
+       render() {
+           return <Button title="Show DialogAndroid" onPress={this.showDialogAndroid} />
+       }
 
-       switch (action) {
-           case DialogAndroid.actionPositive:
-               console.log('positive!')
-               break;
-           case DialogAndroid.actionNegative:
-               console.log('negative!')
-               break;
-           case DialogAndroid.actionNeutral:
-               console.log('netural!')
-               break;
-           case DialogAndroid.actionDismiss:
-               console.log('dismissed!')
-               break;
+       showDialogAndroid = async () => {
+           const { action } = await DialogAndroid.alert('Title', 'Message');
+           switch (action) {
+               case DialogAndroid.actionPositive:
+                   console.log('positive!')
+                   break;
+               case DialogAndroid.actionNegative:
+                   console.log('negative!')
+                   break;
+               case DialogAndroid.actionNeutral:
+                   console.log('netural!')
+                   break;
+               case DialogAndroid.actionDismiss:
+                   console.log('dismissed!')
+                   break;
+           }
        }
    }
    ```
@@ -186,18 +189,11 @@ Shows the dialog and resolves the promise with [`AlertReturn`](#type-alertreturn
 
 ##### `type AlertReturn`
 
->     {
->         action: "actionPostive" | "actionNegative" | "actioNeutral" | "actionDismiss"
->     } | {
->         action: "actionSelect",
->         selectedItem: ListItem
->     } | {
->         action: "actionPositive",
->         selectedItems: ListItem[]
->     } | {
->         action: "actionPositive",
->         text: string
->     }
+>     type AlertReturn =
+>       | { action: "actionPostive" | "actionNegative" | "actioNeutral" | "actionDismiss" }
+>       | { action: "actionSelect", selectedItem: ListItem } // When listType is "plain"/undefined or "radio" and item is pressed
+>       | { action: "actionPositive", selectedItems: ListItem[] } // When listType is "checklist" and "clear" or actionPositive is pressed
+>       | { action: "actionPositive", text: string } // When prompt
 
 ### Examples
 

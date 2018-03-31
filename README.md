@@ -422,12 +422,14 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 
 ### Examples
 
-#### Progress overlay
+#### Progress dialog
 
-    DialogAndroid.showProgress(null, 'Downloading...', {
-        style:DialogAndroid.progressHorizontal
-    });
-    setTimeout(DialogAndroid.dismiss, 5000);
+```js
+DialogAndroid.showProgress(null, 'Downloading...', {
+    style: DialogAndroid.progressHorizontal
+});
+setTimeout(DialogAndroid.dismiss, 5000);
+```
 
 #### List of radio items dismissed on press
 

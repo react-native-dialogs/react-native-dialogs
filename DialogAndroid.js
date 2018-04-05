@@ -399,7 +399,7 @@ class DialogAndroid {
                 ...finalOptions,
                 dismissListener: true
             }
-            if (content) nativeConfig.content = content.padStart(5);
+            if (content) nativeConfig.content = ' '.repeat(5) + content;
 
             processColors(nativeConfig);
 

@@ -1,254 +1,524 @@
-[![npm version](https://img.shields.io/npm/v/react-native-dialogs.svg?style=flat-square)](https://www.npmjs.com/package/react-native-dialogs)
-[![npm downloads](https://img.shields.io/npm/dm/react-native-dialogs.svg?style=flat-square)](https://www.npmjs.com/package/react-native-dialogs)
-# react-native-dialogs
-Material Design dialogs for React Native Android apps (wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs))
+## react-native-dialogs
 
-<img src="https://pbs.twimg.com/media/CSww5lhUAAAE487.png" width="240" hspace="10"><img src="https://pbs.twimg.com/media/CSww5hBUYAA7Ijo.png" width="240" hspace="10"><img src="https://pbs.twimg.com/media/CSww5pMUcAEry95.png" width="227">
+An Android only module for Material Design dialogs. This is a wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs). This module is designed for Android only with no plans to support iOS.
+
+### Table of Contents
+- [Installation](#installation)
+  - [Manual Linking](#manual-linking)
+- [Usage](#usage)
+- [API](#api)
+  - [Properties](#properties)
+    - [`defaults`](#defaults)
+    - [`actionDismiss`](#actiondismiss)
+    - [`actionNegative`](#actionnegative)
+    - [`actionNeutral`](#actionneutral)
+    - [`actionPositive`](#actionpositive)
+    - [`listPlain`](#listplain)
+    - [`listRadio`](#listradio)
+    - [`listCheckbox`](#listcheckbox)
+    - [`progressHorizontal`](#progresshorizontal)
+  - [Methods](#methods)
+    - [`alert`](#alert)
+    - [`assignDefaults`](#assigndefaults)
+    - [`dismiss`](#dismiss)
+    - [`prompt`](#prompt)
+    - [`showPicker`](#showpicker)
+    - [`showProgress`](#showprogress)
+- [Types](#types)
+  - [Internal Types](#internal-types)
+    - [`type ActionType`](#type-actiontype)
+    - [`type ListItem`](#type-listitem)
+    - [`type ListType`](#type-listtype)
+    - [`type OptionsCommon`](#type-optionscommon)
+    - [`type OptionsProgress`](#type-optionsprogress)
+    - [`type OptionsPicker`](#type-optionspicker)
+    - [`type OptionsPrompt`](#type-optionsprompt)
+    - [`type ProgressStyle`](#type-progressstyle)
+- [Examples](#examples)
+  - [Progress overlay](#progress-overlay)
+  - [List of radio items dismissed on press](#list-of-radio-items-dismissed-on-press)
+  - [Checklist with clear button](#checklist-with-clear-button)
+  - [Prompt](#prompt)
+  - [HTML](#html)
+  - [assignDefaults](#assigndefaults)
+
+### Installation
+
+1. Install:
+    - Using [npm](https://www.npmjs.com/#getting-started): `npm install react-native-dialogs --save`
+    - Using [Yarn](https://yarnpkg.com/): `yarn add react-native-dialogs`
+
+2. [Link](https://facebook.github.io/react-native/docs/linking-libraries-ios.html):
+    - `react-native link react-native-dialogs`
+    - Or if this fails, link manually using [these steps](#manual-linking)
+
+3. Compile application using `react-native run-android`
+
+#### Manual Linking
+Follow these steps if automatic linking (`react-native link`) failed.
+
+1. Include this module in `android/settings.gradle`:
+
+   ```
+   ...
+   include ':autocompletetextview' // Add this
+   project(':autocompletetextview').projectDir = file("../node_modules/autocompletetextview/android") // Add this
+
+   ...
+   include ':app'
+   ```
+
+2. In `android/app/build.gradle`, add the dependency to your app build:
+
+   ```
+   dependencies {
+       ...
+       compile project(':react-native-dialogs') // Add this
+   }
+   ```
+
+3. In `android/build.gradle`, it should already be there, but in case it is not, add Jitpack maven repository to download the library [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs):
+
+   ```
+   allprojects {
+       repositories {
+           ...
+           jcenter() // Add this if it is not already here
+           ...
+       }
+   }
+   ```
+
+4. In `android/settings.gradle`:
+
+   ```
+   rootProject.name = ...
+   ...
+   include ':react-native-dialogs' // Add this
+   project(':react-native-dialogs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-dialogs/android') // Add this
+
+   ...
+   include ':app'
+   ```
+
+5. Import and add package, in `android/app/src/main/.../MainApplication.java`:
+
+   ```java
+   ...
+   import android.app.Application;
+   ...
+
+   import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage; // Add new import
+
+   ...
+
+   public class MainApplication extends Application implements ReactApplication {
+     ...
+     @Override
+     protected List<ReactPackage> getPackages() {
+       return Arrays.<ReactPackage>asList(
+         new MainReactPackage(),
+         ...
+         new ReactNativeDialogsPackage() // Add the package here
+       );
+     }
+   }
+   ```
+
+### Usage
+
+1. Import it in your JS:
+
+   ```js
+   import DialogAndroid from 'react-native-dialogs';
+   ```
+
+2. Call API:
+
+   ```js
+   class Blah extends Component {
+       render() {
+           return <Button title="Show DialogAndroid" onPress={this.showDialogAndroid} />
+       }
+
+       showDialogAndroid = async () => {
+           const { action } = await DialogAndroid.alert('Title', 'Message');
+           switch (action) {
+               case DialogAndroid.actionPositive:
+                   console.log('positive!')
+                   break;
+               case DialogAndroid.actionNegative:
+                   console.log('negative!')
+                   break;
+               case DialogAndroid.actionNeutral:
+                   console.log('netural!')
+                   break;
+               case DialogAndroid.actionDismiss:
+                   console.log('dismissed!')
+                   break;
+           }
+       }
+   }
+   ```
+
+### API
+
+#### Properties
+
+##### `defaults`
+
+>    {
+>        positiveText: 'OK'
+>    }
+
+The default options to be used by all methods. To modify this, either directly manipulate with `DialogAndroid.defaults = { ... }` or use [`assignDefaults`](#assigndefaults)
+
+##### `actionDismiss`
+
+> static actionDismiss = "actionDismiss"
+
+##### `actionNegative`
+
+> static actionNegative = "actionNegative"
+
+##### `actionNeutral`
+
+> static actionNeutral = "actionNeutral"
+
+##### `actionPositive`
+
+> static actionPositive = "actionPositive"
+
+##### `listPlain`
+
+> static listPlain = "listPlain"
+
+##### `listRadio`
+
+> static listRadio = "listRadio"
+
+##### `listCheckbox`
+
+> static listCheckbox = "listCheckbox"
+
+##### `progressHorizontal`
+
+> static progressHorizontal = "progressHorizontal"
+
+#### Methods
+##### `alert`
+
+>     static alert(
+>         title: Title,
+>         content: Content,
+>         options: Options
+>     ): Promise<{| action: "actionDismiss" | "actionNegative" | "actionNeutral" | "actionPositive" |}>
+
+Shows a dialog.
+
+| Parameter | Type                                   | Default | Required | Description                                |
+|-----------|----------------------------------------|---------|----------|--------------------------------------------|
+| title     | `string, null, void`                   |         |          | Title of dialog                            |
+| content   | `string, null, void`                   |         |          | Message of dialog                          |
+| options   | [`OptionsCommon`](#type-optionscommon) |         |          | See [`OptionsCommon`](#type-optionscommon) |
+
+##### `assignDefaults`
+
+>     static assignDefaults({
+>         [string]: value
+>     ): void
+
+Set default colors for example, so you don't have to provide it on every method call.
+
+>    {
+>        positiveText: 'OK'
+>    }
 
 
-Installation
-------------
-### Installation using RNPM
+##### `dismiss`
 
-1 . `yarn add react-native-dialogs`
+>     static dismiss(): void
 
-or
+Hides the currently showing dialog.
 
-`npm i react-native-dialogs --save`
+##### `prompt`
 
+>     static prompt(
+>         title?: null | string,
+>         content?: null | string,
+>         options: OptionsPrompt
+>     ): Promise<
+>         {| action: "actionNegative" | "actionNeutral" | "actionDismiss" |} |
+>         {| action: "actionPositive", text: string |}
+>     >
 
+Shows a dialog with a text input field.
 
-2 . `react-native link react-native-dialogs`
+| Parameter | Type                                   | Default | Required | Description                                |
+|-----------|----------------------------------------|---------|----------|--------------------------------------------|
+| title     | `string, null, void`                   |         |          | Title of dialog                            |
+| content   | `string, null, void`                   |         |          | Message of dialog                          |
+| options   | [`OptionsPrompt`](#type-optionsprompt) |         |          | See [`OptionsPrompt`](#type-optionsprompt) |
 
-In `android/app/build.gradle`, add a dependency to `':react-native-dialogs'` and URL of the Jitpack maven repository (to download the library https://github.com/afollestad/material-dialogs) :
+##### `showPicker`
+
+>     static showProgress(
+>         title?: null | string,
+>         content?: null | string,
+>         options: OptionsPicker
+>     ): Promise<
+>         {| action: "actionNegative" | "actionNeutral" | "actionDismiss" |} |
+>         {| action: "actionSelect", selectedItem: ListItem |} |
+>         {| action: "actionSelect", selectedItems: ListItem[] |}
+>     >
+
+Shows a regular alert, but also with items that can be selected.
+
+| Parameter | Type                                     | Default | Required | Description                                |
+|-----------|------------------------------------------|---------|----------|--------------------------------------------|
+| title     | `string, null, void`                     |         |          | Title of dialog                            |
+| content   | `string, null, void`                     |         |          | Message of dialog                          |
+| options   | [`OptionsPicker`](#type-optionsprogress) |         |          | See [`OptionsPrompt`](#type-optionspicker) |
+
+##### `showProgress`
+
+>     static showProgress(
+>         content?: null | string,
+>         options: OptionsProgress
+>     ): Promise<{| action:"actionDismiss" |}>
+
+Shows a progress dialog. By default no buttons are shown, and hardware back button does not close it. You must close it with `DialogAndroid.dismiss()`.
+
+| Parameter | Type                                       | Default | Required | Description                                  |
+|-----------|--------------------------------------------|---------|----------|----------------------------------------------|
+| content   | `string, null, void`                       |         |          | Message of dialog                            |
+| options   | [`OptionsProgress`](#type-optionsprogress) |         |          | See [`OptionsPrompt`](#type-optionsprogress) |
+
+### Types
+
+[Flow](http://flow.org/) is used as the typing system.
+
+#### Internal Types
+
+##### `type ActionType`
+
+>     "actionDismiss" | "actionNegative" | "actionNeutral" | "actionPositive" | "actionSelect"
+
+##### `type ListItem`
+
+>     { label:string } | { label:string, id:any } | {}
+
+**Notes**
+
+* If `label` key does not exist, specify which key should be used as the label with `labelKey` property of [`OptionsPicker`](#type-optionspicker).
+* `id` is only required if `selectedId`/`selectedIds` needs to be used.
+  * If `id` key does not exist, specify which key should be used as the id with `idKey` property of [`OptionsPicker`](#type-optionspicker).
+
+##### `type ListType`
+
+>     "listCheckbox" | "listPlain" | "listRadio"
+
+##### `type OptionsCommon`
+
+>     {
+>         cancelable?: boolean,
+>         content?: string,
+>         contentColor?: string,
+>         contentIsHtml?: boolean,
+>         forceStacking?: boolean
+>         linkColor?: ColorValue,
+>         negativeColor?: ColorValue,
+>         negativeText?: string,
+>         neutralColor?: ColorValue,
+>         neutralText?: string,
+>         positiveColor?: ColorValue,
+>         positiveText?: string, // default "OK"
+>         title?: string,
+>         titleColor?: ColorValue,
+>     }
+
+| Key           | Type                                                                       | Default | Required | Description                                                                                                                                     |
+|---------------|----------------------------------------------------------------------------|---------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| cancelable    | `boolean`                                                                  |         |          | If tapping outside of dialog area, or hardware back button, should dismiss dialog.                                                              |
+| content       | `string`                                                                   |         |          | Dialog message                                                                                                                                  |
+| contentColor  | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of dialog message                                                                                                                         |
+| contentIsHtml | `boolean`                                                                  |         |          | If dialog message should be parsed as html. (supported tags include: `<a>`, `<img>`, etc)                                                       |
+| forceStacking | `boolean`                                                                  |         |          | If you have multiple action buttons that together are too wide to fit on one line, the dialog will stack the buttons to be vertically oriented. |
+| linkColor     | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | If `contentIsHtml` is true, and `content` contains `<a>` tags, these are colored with this color                                                |
+| negativeColor | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
+| negativeText  | `string`                                                                   |         |          | If falsy, button is not shown.                                                                                                                  |
+| neutralColor  | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
+| neutralText   | `string`                                                                   |         |          | Shows button in far left with this string as label. If falsy, button is not shown.                                                              |
+| positiveColor | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
+| positiveText  | `string`                                                                   |         |          | If falsy, button is not shown.                                                                                                                  |
+| title         | `string`                                                                   |         |          | Title of dialog                                                                                                                                 |
+| titleColor    | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of title                                                                                                                                  |
+
+##### `type OptionsProgress`
+
+>     {
+>         contentColor: $PropertyType<OptionsCommon, 'contentColor'>,
+>         contentIsHtml: $PropertyType<OptionsCommon, 'contentIsHtml'>,
+>         linkColor: $PropertyType<OptionsCommon, 'linkColor'>,
+>         style?: ProgressStyle,
+>         title: $PropertyType<OptionsCommon, 'title'>,
+>         titleColor: $PropertyType<OptionsCommon, 'titleColor'>',
+>         widgetColor: $PropertyType<OptionsCommon, 'widgetColor'>
+>         widgetColor?: ColorValue
+>     }
+
+| Key           | Type                                                                       | Default | Required | Description                                              |
+|---------------|----------------------------------------------------------------------------|---------|----------|----------------------------------------------------------|
+| contentColor  | [`OptionsCommon#contentColor`](#type-optionscommon)                        |         |          | See [`OptionsCommon#contentColor`](#type-optionscommon)  |
+| contentIsHtml | [`OptionsCommon#contentIsHtml`](#type-optionscommon)                       |         |          | See [`OptionsCommon#contentIsHtml`](#type-optionscommon) |
+| linkColor     | [`OptionsCommon#linkColor`](#type-optionscommon)                           |         |          | See [`OptionsCommon#linkColor`](#type-optionscommon)     |
+| style         | [`ProgressStyle`](#type-ProgressStyle)                                     |         |          | See [`ProgressStyle`](#type-progressstyle)               |
+| title         | [`OptionsCommon#title`](#type-optionscommon)                               |         |          | See [`OptionsCommon#title`](#type-optionscommon)         |
+| titleColor    | [`OptionsCommon#titleColor`](#type-optionscommon)                          |         |          | See [`OptionsCommon#titleColor`](#type-optionscommon)    |
+| widgetColor   | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of progress indicator                              |
+
+##### `type OptionsPicker`
+
+>     {
+>         ...OptionsCommon,
+>         idKey?: string,
+>         items: ListItem[],
+>         labelKey?: string,
+>         neutralIsClear?: boolean,
+>         selectedId?: any,
+>         selectedIds?: any[],
+>         type?: string,
+>         widgetColor?: ColorValue
+>     }
+
+| Key            | Type                                                                       | Default                   | Required | Description                                                                                                                                                                                                                            |
+|----------------|----------------------------------------------------------------------------|---------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| OptionsCommon  | [`OptionsCommon`](#type-optionscommon)                                     |                           |          | See [`OptionsCommon`](#type-optionscommon)                                                                                                                                                                                             |
+| idKey          | `string`                                                                   | "id"                      |          |                                                                                                                                                                                                                                        |
+| items          | [`ListItem`](#type-listitem)[]                                             |                           | Yes      | See [`ListItem`](#type-listitem)                                                                                                                                                                                                       |
+| labelKey       | `string`                                                                   | "label"                   |          |                                                                                                                                                                                                                                        |
+| neutralIsClear | `boolean`                                                                  |                           |          | Pressing the neutral button causes the dialog to be closed and `selectedItems` to be an empty array. Only works if `neutralText` is also supplied.                                                                                     |
+| selectedId     | `any`                                                                      |                           |          | The respective radio will be selected on dialog show. If no such id is found, then nothing is selected. Only applicable if `type` is `DialogAndroid.listRadio`. Requires that `items[]` contain key described by `idKey`.              |
+| selectedIds    | `any[]`                                                                    |                           |          | The respective checkbox will be selected on dialog show. If no such id is found, nothing is selected for that id. Only applicable if `type` is `DialogAndroid.listCheckbox`. Requires that `items[]` contain key described by `idKey`. |
+| type           | [`ListType`](#type-listtype)                                               | `DialogAndroid.listPlain` |          | See [`ListType`](#type-listtype)                                                                                                                                                                                                       |
+| widgetColor    | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |                           |          | Color of radio or checkbox                                                                                                                                                                                                             |
+
+##### `type OptionsPrompt`
+
+>     {
+>         ...OptionsCommon,
+>
+>         widgetColor?: ColorValue
+>     }
+
+| Key           | Type                                                                       | Default | Required | Description                                |
+|---------------|----------------------------------------------------------------------------|---------|----------|--------------------------------------------|
+| OptionsCommon | [`OptionsCommon`](#type-optionscommon)                                     |         |          | See [`OptionsCommon`](#type-optionscommon) |
+| widgetColor   | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of field underline and cursor        |
+
+##### `type ProgressStyle`
+
+>     "progressHorizontal"
+
+### Examples
+
+#### Progress dialog
+
+```js
+DialogAndroid.showProgress(null, 'Downloading...', {
+    style: DialogAndroid.progressHorizontal
+});
+setTimeout(DialogAndroid.dismiss, 5000);
 ```
-repositories {
-    maven { url "https://jitpack.io" }
+
+#### List of radio items dismissed on press
+
+If we want the first press on an item to close and accept the dialog, we pass `null` to `positiveText`:
+
+```js
+const { selectedItem } = await DialogAndroid.alert('Title', null, {
+    positiveText: null,
+    items: [
+        { label:'Apple', id:'apple' },
+        { label:'Orange', id:'orange' },
+        { label:'Pear', id:'pear' }
+    ],
+    selectedId: 'apple'
+});
+if (selectedItem) {
+    console.log('You selected item:', item);
 }
-
-```
-
-### Manual installation
-
-Install the npm package [`react-native-dialogs`](https://www.npmjs.com/package/react-native-dialogs). Inside your React Native project, run ([example](https://github.com/aakashns/react-native-dialogs-example/commit/e6b83bf3d2238cf7e4ec3688519f38b2544ccad5)):
-```bash
-npm install --save react-native-dialogs
 ```
 
 
-In `android/app/build.gradle`, add a dependency to `':react-native-dialogs'` and URL of the Jitpack maven repository (to download the library https://github.com/afollestad/material-dialogs) :
-```
-repositories {
-    maven { url "https://jitpack.io" }
-}
+#### Checklist with clear button
 
-```
-The changes should look like [this](https://github.com/aakashns/react-native-dialogs-example/commit/b58086d8fb9ece99f0e678dd8bf0e689a856bd43).
+We can make the neutral button be a special button. Pressing it will clear the list and close the dialog.
 
-You also need to update your ```settings.gradle``` and add:
-```
-include ':react-native-dialogs'
-project(':react-native-dialogs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-dialogs/android')
-```
-
-update your ```app.gradle``` and add:
-```
-dependencies {
-    compile project(':react-native-dialogs') // <-- Add this line
-    compile "com.android.support:appcompat-v7:23.0.1"
-    compile "com.facebook.react:react-native:+"  // From node_modules
-    //...
+```js
+const { selectedItems } = await DialogAndroid.alert('Title', null, {
+    items: [
+        { label:'Apple', id:'apple' },
+        { label:'Orange', id:'orange' },
+        { label:'Pear', id:'pear' }
+    ],
+    selectedIds: ['apple', 'orange'], // or if is not array of objects with "id" can use selectedIndices
+    neutralIsClear: true,
+    neutralText: 'Empty List'
+});
+if (selectedItems) {
+    if (!selectedItems.length) {
+        console.log('You emptied the list');
+    } else {
+        console.log('You selected items:', selectedItems);
+    }
 }
 ```
 
-Next, you need to change the `MainApplication` of your app to register `ReactNativeDialogsPackage` :
-```java
-// ... Other imports
-import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage; // <-- Add this import.
 
-    //...
-public class MainApplication extends ReactActivity {
-          //...
+#### Prompt
 
-          @Override
-          protected List<ReactPackage> getPackages() {
-            return Arrays.<ReactPackage>asList(
-                new MainReactPackage(),
-                new ReactNativeDialogsPackage() // <-- Add this package.
-            );
-          }
-}
-
-```
-See [this changelog](https://github.com/aakashns/react-native-dialogs-example/commit/52cac27756963bcd2f4fdcd039e1a78028bb0abd) for reference(Earlier versions of React native used MainActivity instead of MainApplication).
-
-Now you're finally ready to start using module in your React Native application. See [this changelog](https://github.com/aakashns/react-native-dialogs-example/commit/2d8e02c22275479d2fbbb89f99dcb846834bec9d) for an example that uses `DialogAndroid`.
-
-Usage
------
-```javascript
-import DialogAndroid from 'react-native-dialogs';
-
-let options = {
-  title: 'Hello, World!',
-  content: 'I\'m just simple Dialog',
-  positiveText: 'OK',
-  negativeText: 'Cancel'
-};
-
-let showDialog = function () {
-  var dialog = new DialogAndroid();
-  dialog.set(options);
-  dialog.show();
+```js
+const { action, text } = await DialogAndroid.prompt('Title', 'Message', {
+    isHorizontal:true
+});
+if (action === DialogAndroid.actionPositive) {
+    alert(`You submitted: ${text}`)
 }
 ```
 
-Creation of a dialog works in 3 steps :
-1. Create a new dialog using `new DialogAndroid()`.
-2. Set some options using `dialog.set(options)`. `set` can be called multiple times, and options from multiple calls will be merged.
-3. Show the dialog using `dialog.show()`.
-4. (optional) dismiss the dialog with `dialog.dismiss()`.
+#### HTML
 
-This library is a thin wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs), which provides builders for showing Material Design dialogs in Android apps. The options provided to `set` map more or less directly to the methods provided in the original library. See [its documentation](https://github.com/afollestad/material-dialogs#basic-dialog) for reference.
-
-The following options are currently supported (value type is `String` unless mentioned otherwise) :
-* [`title`](https://github.com/afollestad/material-dialogs#basic-dialog)
-* [`titleColor`](https://github.com/afollestad/material-dialogs#colors)
-* [`content`](https://github.com/afollestad/material-dialogs#basic-dialog)
-* [`contentColor`](https://github.com/afollestad/material-dialogs#colors)
-* [`positiveText`](https://github.com/afollestad/material-dialogs#basic-dialog)
-* [`positiveColor`](https://github.com/afollestad/material-dialogs#basic-dialog)
-* [`onPositive`](https://github.com/afollestad/material-dialogs#callbacks) (function with no arguments)
-* [`negativeText`](https://github.com/afollestad/material-dialogs#basic-dialog)
-* [`negativeColor`](https://github.com/afollestad/material-dialogs#basic-dialog)
-* [`onNegative`](https://github.com/afollestad/material-dialogs#callbacks) (function with no arguments)
-* [`neutralText`](https://github.com/afollestad/material-dialogs#neutral-action-button)
-* [`neutralColor`](https://github.com/afollestad/material-dialogs#neutral-action-button)
-* [`onNeutral`](https://github.com/afollestad/material-dialogs#callbacks) (function with no arguments)
-* [`onAny`](https://github.com/afollestad/material-dialogs#callbacks) (function with no arguments)
-* [`items`](https://github.com/afollestad/material-dialogs#list-dialogs) (array of strings)
-* [`itemsCallback`](https://github.com/afollestad/material-dialogs#list-dialogs) (function with 2 arguments : selectedIndex (int) and selectedItem (string))
-* [`itemsCallbackSingleChoice`](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs) (function with 2 arguments : selectedIndex (int) and selectedItem (string))
-* [`selectedIndex`](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs) (int) - set the preselected index for Single Choice List
-* [`itemsCallbackMultiChoice`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (function with 2 arguments : selected indices (array of ints) and selected items (array of strings)
-* [`selectedIndices`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (array of ints) - set the preselected indices for Multiple Choice List
-* [`widgetColor`](https://github.com/afollestad/material-dialogs#coloring-radio-buttons) - set the color of Radio Buttons and EditText
-* [`linkColor`](https://github.com/afollestad/material-dialogs#colors)
-* `multiChoiceClearButton` (boolean) - provide a 'Clear' button in Multiple Choice List
-* `autoDismiss` (boolean)
-* [`forceStacking`](https://github.com/afollestad/material-dialogs#stacked-action-buttons) (boolean)
-* [`alwaysCallSingleChoiceCallback`](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs) (boolean)
-* [`alwaysCallMultiChoiceCallback`](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs) (boolean)
-* [`cancelable`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (boolean)
-* [`showListener`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (function)
-* [`cancelListener`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (function)
-* [`dismissListener`](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks) (function)
-* [`input`](https://github.com/afollestad/material-dialogs#input-dialogs) - Object containing the following keys (all optional except callback) :
-  * [`hint`](https://github.com/afollestad/material-dialogs#input-dialogs)
-  * [`prefill`](https://github.com/afollestad/material-dialogs#input-dialogs)
-  * [`allowEmptyInput`](https://github.com/afollestad/material-dialogs#input-dialogs) (boolean)
-  * [`minLength`](https://github.com/afollestad/material-dialogs#limiting-input-length) (int)
-  * [`maxLength`](https://github.com/afollestad/material-dialogs#limiting-input-length) (int)
-  * [`type`](https://github.com/afollestad/material-dialogs#input-dialogs) (int)
-  * [`callback`](https://github.com/afollestad/material-dialogs#input-dialogs) (function with 1 argument : user provided input)
-* [`alwaysCallInputCallback`](https://github.com/afollestad/material-dialogs#input-dialogs) (boolean)
-* [`progress`](https://github.com/afollestad/material-dialogs#progress-dialogs) - Object containing following keys
-  * [`indeterminate`](https://github.com/afollestad/material-dialogs#indeterminate-progress-dialogs) (boolean) - must be true, determinate is not supported
-  * [`style`](https://github.com/afollestad/material-dialogs#make-an-indeterminate-dialog-horizontal) - (string) either 'horizontal' or undefined
-
-Examples
---------
-
-Simple example project : https://github.com/aakashns/react-native-dialogs-example
-
-Complex example project : [examples/ExampleApp](https://github.com/aakashns/react-native-dialogs/tree/54d1253213b1a6a453a3ffb1d2dcc65b8dc287fd/examples/ExampleApp)
-
-Try out the following values for option (taken from [examples/ExampleApp/dialogData.js](https://github.com/aakashns/react-native-dialogs/tree/54d1253213b1a6a453a3ffb1d2dcc65b8dc287fd/examples/ExampleApp/dialogData.js)):
-
-```javascript
-{
-  "title": "Use Google's Location Services?",
-  "content": "This app wants to access your location.",
-  "positiveText": "Agree",
-  "negativeText": "Disagree"
-}
+```js
+DialogAndroid.alert('Title', `This is a link <a href="https://www.duckduckgo.com/">DuckDuckGo</a>`, {
+    contentIsHtml: true
+});
 ```
 
-```javascript
-{
-  "title": "Use Google's Location Services?",
-  "content": "Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.",
-  "positiveText": "Agree",
-  "negativeText": "Disagree",
-  "neutralText": "More Info",
-  "onPositive": () => ToastAndroid.show("POSITIVE!", ToastAndroid.SHORT),
-  "onNegative": () => ToastAndroid.show("NEGATIVE!", ToastAndroid.SHORT),
-  "onNeutral": () => ToastAndroid.show("NEUTRAL!", ToastAndroid.SHORT),
-}
-```
+#### assignDefaults
 
-```javascript
-"data": {
-  "items": [
-    "Twitter",
-    "Google+",
-    "Instagram",
-    "Facebook"
-  ],
-  "title": "Social Networks",
-  itemsCallback: (id, text) => ToastAndroid.show(id + ": " + text, ToastAndroid.SHORT);
-}
-```
+You can set some defaults so you don't have to change it everytime.
 
-```javascript
-"data": {
-  "items": [
-    "Twitter",
-    "Google+",
-    "Instagram",
-    "Facebook"
-  ],
-  "title": "Social Networks",
-  itemsCallbackSingleChoice: (id, text) => ToastAndroid.show(id + ": " + text, ToastAndroid.SHORT);
-}
-```
-
-```javascript
-"data": {
-  "items": [
-    "Twitter",
-    "Google+",
-    "Instagram",
-    "Facebook"
-  ],
-  "title": "Social Networks",
-  "positiveText": "Choose",
-  itemsCallbackMultiChoice: (id, text) => ToastAndroid.show(id + ": " + text, ToastAndroid.SHORT);
-}
-```
-
-Progress dialog colored blue, with no buttons, disables hardware back, and dismisses after 5 seconds:
-
-```
-    const dialog = new DialogAndroid();
-    dialog.set({
-        content: 'Downloading...',
-        progress: {
-            indeterminate: true,
-            style: 'horizontal'
-        },
-        widgetColor: 'blue',
-        cancelable: false
-    })
-    dialog.show();
-    setTimeout(dialog.dismiss, 5000);
+```js
+DialogAndroid.assignDefaults({
+    title: 'Default Title',
+    contentColor: 'rgba(0, 0, 0, 0.2)',
+    widgetColor: 'blue'
+})
 ```
 
 
-Known Issues
-------------
-TODO
+Now any time you supply `undefined` to title, it will use the default assigned above.
 
-Upcoming Features
--------
-TODO
+```js
+DialogAndroid.alert(undefined, 'message here')
+```
+
+This will show title "Default Title", with no negative button, and the color of the message will be 20% black. If you did `Dialog.showProgress`, the progress indicator would be blue. etc.
+
+
+
+
+
+
+

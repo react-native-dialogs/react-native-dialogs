@@ -2,7 +2,9 @@ package com.aakashns.reactnativedialogs.modules;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.View;
+import android.os.Build;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -46,38 +48,49 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     builder.title(options.getString("title"));
                     break;
                 case "content":
-                    builder.content(options.getString("content"));
+                    if(options.hasKey("contentIsHtml") && options.getBoolean("contentIsHtml")) {
+                        // // i have no idea how to get this to work, it seems its all api level 24 stuff
+                        // // requires buildToolsVersion >= "24.0.1"
+                        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        //     builder.content(Html.fromHtml(options.getString("content"), Html.FROM_HTML_MODE_LEGACY | Html.FROM_HTML_MODE_COMPACT));
+                        // } else {
+                        //     builder.content(Html.fromHtml(options.getString("content"), Html.FROM_HTML_MODE_COMPACT));
+                        // }
+                        builder.content(Html.fromHtml(options.getString("content")));
+                    } else {
+                        builder.content(options.getString("content"));
+                    }
                     break;
                 case "positiveText":
                     builder.positiveText(options.getString("positiveText"));
                     break;
                 case "positiveColor":
-                    builder.positiveColor(Color.parseColor(options.getString("positiveColor")));
+                    builder.positiveColor(options.getInt("positiveColor"));
                     break;
                 case "negativeText":
                     builder.negativeText(options.getString("negativeText"));
                     break;
                 case "negativeColor":
-                    builder.negativeColor(Color.parseColor(options.getString("negativeColor")));
+                    builder.negativeColor(options.getInt("negativeColor"));
                     break;
                 case "neutralText":
                     builder.neutralText(options.getString("neutralText"));
                     break;
                 case "neutralColor":
-                    builder.neutralColor(Color.parseColor(options.getString("neutralColor")));
+                    builder.neutralColor(options.getInt("neutralColor"));
                     break;
                 case "titleColor":
-                    builder.titleColor(Color.parseColor(options.getString("titleColor")));
-                    break;  
+                    builder.titleColor(options.getInt("titleColor"));
+                    break;
                 case "widgetColor":
-                    builder.widgetColor(Color.parseColor(options.getString("widgetColor")));
+                    builder.widgetColor(options.getInt("widgetColor"));
                     break;
                 case "linkColor":
-                    builder.linkColor(Color.parseColor(options.getString("linkColor")));
-                    break;    
+                    builder.linkColor(options.getInt("linkColor"));
+                    break;
                 case "contentColor":
-                    builder.contentColor(Color.parseColor(options.getString("contentColor")));
-                    break;    
+                    builder.contentColor(options.getInt("contentColor"));
+                    break;
                 case "items":
                     ReadableArray arr = options.getArray("items");
                     String[] items = new String[arr.size()];
@@ -172,6 +185,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
     MaterialDialog.Builder mBuilder;
     MaterialDialog mDialog;
+    private boolean mCallbackConsumed = false;
 
     @ReactMethod
     public void show(ReadableMap options, final Callback callback) {
@@ -186,7 +200,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    callback.invoke("onPositive");
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        callback.invoke("onPositive");
+                    }
                 }
             });
         }
@@ -195,7 +212,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    callback.invoke("onNegative");
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        callback.invoke("onNegative");
+                    }
                 }
             });
         }
@@ -204,7 +224,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.onNeutral(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    callback.invoke("onNeutral");
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        callback.invoke("onNeutral");
+                    }
                 }
             });
         }
@@ -213,7 +236,16 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.onAny(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    callback.invoke("onAny");
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        if (dialogAction == DialogAction.POSITIVE) {
+                            callback.invoke("onAny", 0);
+                        } else if (dialogAction == DialogAction.NEUTRAL) {
+                            callback.invoke("onAny", 1);
+                        } else {
+                            callback.invoke("onAny", 2);
+                        }
+                    }
                 }
             });
         }
@@ -223,7 +255,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 @Override
                 public void onSelection(MaterialDialog materialDialog, View view, int i,
                                         CharSequence charSequence) {
-                    callback.invoke("itemsCallback", i, charSequence == null ? null : charSequence.toString());
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        callback.invoke("itemsCallback", i, charSequence == null ? null : charSequence.toString());
+                    }
                 }
             });
         }
@@ -237,8 +272,11 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                         @Override
                         public boolean onSelection(MaterialDialog materialDialog, View view, int i,
                                                    CharSequence charSequence) {
-                            charSequence = charSequence == null ? "" : charSequence;
-                            callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString());
+                            if (!mCallbackConsumed) {
+                                mCallbackConsumed = true;
+                                charSequence = charSequence == null ? "" : charSequence;
+                                callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString());
+                            }
                             return true;
                         }
                     });
@@ -270,7 +308,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                                 selected.append(integers[integers.length - 1]);
                             }
 
-                            callback.invoke("itemsCallbackMultiChoice", selected.toString());
+                            if (!mCallbackConsumed) {
+                                mCallbackConsumed = true;
+                                callback.invoke("itemsCallbackMultiChoice", selected.toString());
+                            }
                             return true;
                         }
                     });
@@ -278,7 +319,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             // Provide a 'Clear' button to unselect all choices
             if (options.hasKey("multiChoiceClearButton") &&
                     options.getBoolean("multiChoiceClearButton")) {
-                mBuilder.neutralText("Clear").onNeutral(new MaterialDialog.SingleButtonCallback() {
+                mBuilder.onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                         materialDialog.clearSelectedIndices();
@@ -287,20 +328,25 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             }
         }
 
-        if (options.hasKey("showListener")) {
-            mBuilder.showListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    callback.invoke("showListener");
-                }
-            });
-        }
+        mBuilder.showListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                // if (!mCallbackConsumed) {
+                //     mCallbackConsumed = true;
+                //     callback.invoke("showListener");
+                // }
+                mCallbackConsumed = false;
+            }
+        });
 
         if (options.hasKey("cancelListener")) {
             mBuilder.cancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    callback.invoke("cancelListener");
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        callback.invoke("cancelListener");
+                    }
                 }
             });
         }
@@ -309,7 +355,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.dismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    callback.invoke("dismissListener");
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        callback.invoke("dismissListener");
+                    }
                 }
             });
         }
@@ -338,7 +387,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             mBuilder.input(hint, prefill, allowEmptyInput, new MaterialDialog.InputCallback() {
                 @Override
                 public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
-                    callback.invoke("input", charSequence.toString());
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        callback.invoke("input", charSequence.toString());
+                    }
                 }
             });
         }
@@ -369,7 +421,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 .adapter(simpleListAdapter, new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        callback.invoke(which, text);
+                        if (!mCallbackConsumed) {
+                            mCallbackConsumed = true;
+                            callback.invoke(which, text);
+                        }
                         if (simple != null) {
                             simple.dismiss();
                         }

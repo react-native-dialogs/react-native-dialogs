@@ -440,7 +440,7 @@ setTimeout(DialogAndroid.dismiss, 5000);
 ![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/list.png)
 
 ```js
-const { selectedItem } = await DialogAndroid.alert('Title', null, {
+const { selectedItem } = await DialogAndroid.showPicker('Pick a fruit', null, {
     items: [
         { label:'Apple', id:'apple' },
         { label:'Orange', id:'orange' },

@@ -579,6 +579,7 @@ You can set some defaults so you don't have to change it everytime.
 ```js
 DialogAndroid.assignDefaults({
     title: 'Default Title',
+    positiveText: null,
     contentColor: 'rgba(0, 0, 0, 0.2)',
     widgetColor: 'blue'
 })
@@ -591,7 +592,7 @@ Now any time you omit or pass `undefined` to `contentColor`, `widgetColor`, or `
 DialogAndroid.alert(undefined, 'message here')
 ```
 
-This will show title "Default Title", with no negative button, and the color of the message will be 20% black. If you did `Dialog.showProgress`, the progress indicator would be blue. etc.
+This will show title "Default Title", with no positive button, and the color of the message will be 20% black. If you did `Dialog.showProgress`, the progress indicator would be blue. etc.
 
 
 

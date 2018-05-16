@@ -364,7 +364,6 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >         title: $PropertyType<OptionsCommon, 'title'>,
 >         titleColor: $PropertyType<OptionsCommon, 'titleColor'>',
 >         widgetColor: $PropertyType<OptionsCommon, 'widgetColor'>
->         widgetColor?: ColorValue
 >     }
 
 | Key           | Type                                                                       | Default | Required | Description                                              |

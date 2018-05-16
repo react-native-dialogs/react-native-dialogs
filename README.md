@@ -35,9 +35,12 @@ An Android only module for Material Design dialogs. This is a wrapper over [afol
     - [`type OptionsPrompt`](#type-optionsprompt)
     - [`type ProgressStyle`](#type-progressstyle)
 - [Examples](#examples)
-  - [Progress overlay](#progress-overlay)
-  - [List of radio items dismissed on press](#list-of-radio-items-dismissed-on-press)
-  - [Checklist with clear button](#checklist-with-clear-button)
+  - [Progress Dialog](#progress-dialog)
+  - [Basic List](#basic-list)
+  - [Radio List](#radio-list)
+    - [Without auto-dismiss](#without-auto-dismiss)
+  - [Checklist](#checklist)
+    - [With clear list button](#with-clear-list-button)
   - [Prompt](#prompt)
   - [HTML](#html)
   - [assignDefaults](#assigndefaults)
@@ -364,7 +367,6 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >         title: $PropertyType<OptionsCommon, 'title'>,
 >         titleColor: $PropertyType<OptionsCommon, 'titleColor'>',
 >         widgetColor: $PropertyType<OptionsCommon, 'widgetColor'>
->         widgetColor?: ColorValue
 >     }
 
 | Key           | Type                                                                       | Default | Required | Description                                              |
@@ -407,7 +409,6 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 
 >     {
 >         ...OptionsCommon,
->
 >         widgetColor?: ColorValue
 >     }
 
@@ -422,72 +423,148 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 
 ### Examples
 
-#### Progress dialog
+#### Progress Dialog
+
+![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/progress-bar.png)
+![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/progress-circle.png)
 
 ```js
-DialogAndroid.showProgress(null, 'Downloading...', {
-    style: DialogAndroid.progressHorizontal
+DialogAndroid.showProgress('Downloading...', {
+    style: DialogAndroid.progressHorizontal // omit this to get circular
 });
 setTimeout(DialogAndroid.dismiss, 5000);
 ```
 
-#### List of radio items dismissed on press
+#### Basic List
 
-If we want the first press on an item to close and accept the dialog, we pass `null` to `positiveText`:
+![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/list.png)
 
 ```js
 const { selectedItem } = await DialogAndroid.alert('Title', null, {
-    positiveText: null,
     items: [
         { label:'Apple', id:'apple' },
         { label:'Orange', id:'orange' },
         { label:'Pear', id:'pear' }
-    ],
-    selectedId: 'apple'
+    ]
 });
 if (selectedItem) {
+    // when negative button is clicked, selectedItem is not present, so it doesn't get here
     console.log('You selected item:', item);
 }
 ```
 
+#### Radio List
 
-#### Checklist with clear button
+![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/radiolist-autodismiss.gif)
 
-We can make the neutral button be a special button. Pressing it will clear the list and close the dialog.
+Set `positiveText` to `null` for auto-dismiss behavior on press of a radio button item.
 
 ```js
-const { selectedItems } = await DialogAndroid.alert('Title', null, {
+const { selectedItem } = await DialogAndroid.showPicker('Pick a fruit', null, {
+    // positiveText: null, // if positiveText is null, then on select of item, it dismisses dialog
+    negativeText: 'Cancel',
+    type: DialogAndroid.listRadio,
+    selectedId: 'apple',
     items: [
         { label:'Apple', id:'apple' },
         { label:'Orange', id:'orange' },
         { label:'Pear', id:'pear' }
-    ],
-    selectedIds: ['apple', 'orange'], // or if is not array of objects with "id" can use selectedIndices
-    neutralIsClear: true,
-    neutralText: 'Empty List'
+    ]
+});
+if (selectedItem) {
+    // when negative button is clicked, selectedItem is not present, so it doesn't get here
+    console.log('You picked:', selectedItem);
+}
+```
+
+##### Without auto-dismiss
+
+![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/radiolist-nodismiss.gif)
+
+Here we pass in a string to `positiveText`, this prevents the auto-dismiss on select of a radio item.
+
+```js
+const { selectedItem } = await DialogAndroid.showPicker('Pick a fruit', null, {
+    positiveText: 'OK', // this is what makes disables auto dismiss
+    negativeText: 'Cancel',
+    type: DialogAndroid.listRadio,
+    selectedId: 'apple',
+    items: [
+        { label:'Apple', id:'apple' },
+        { label:'Orange', id:'orange' },
+        { label:'Pear', id:'pear' }
+    ]
+});
+if (selectedItem) {
+    // when negative button is clicked, selectedItem is not present, so it doesn't get here
+    console.log('You picked:', selectedItem);
+}
+```
+
+#### Checklist
+
+![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/checklist.png)
+
+```js
+const { selectedItems } = await DialogAndroid.showPicker('Select multiple fruits', null, {
+    type: DialogAndroid.listCheckbox,
+    selectedIds: ['apple', 'orange'],
+    items: [
+        { label:'Apple', id:'apple' },
+        { label:'Orange', id:'orange' },
+        { label:'Pear', id:'pear' }
+    ]
 });
 if (selectedItems) {
     if (!selectedItems.length) {
-        console.log('You emptied the list');
+        console.log('You selected no items.');
     } else {
         console.log('You selected items:', selectedItems);
     }
 }
 ```
 
+##### With clear list button
+
+![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/checklist-clear.png)
+
+We can make the neutral button be a special button. Pressing it will clear the list and close the dialog. If you want this behavior, set `neutralIsClear` to `true` and also set `neutralText` to a string. Both of these properties must be set.
+
+```js
+const { selectedItems } = await DialogAndroid.showPicker('Select multiple fruits', null, {
+    type: DialogAndroid.listCheckbox,
+    selectedIds: ['apple', 'orange'],
+    neutralIsClear: true, /////// added this
+    neutralText: 'Clear', /////// added this
+    items: [
+        { label:'Apple', id:'apple' },
+        { label:'Orange', id:'orange' },
+        { label:'Pear', id:'pear' }
+    ]
+});
+if (selectedItems) {
+    if (!selectedItems.length) {
+        console.log('You selected no items.');
+    } else {
+        console.log('You selected items:', selectedItems);
+    }
+}
+```
 
 #### Prompt
 
+![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/prompt.png)
+
 ```js
-const { action, text } = await DialogAndroid.prompt('Title', 'Message', {
-    isHorizontal:true
-});
+const { action, text } = await DialogAndroid.prompt('Title - optional', 'Message - optional');
 if (action === DialogAndroid.actionPositive) {
-    alert(`You submitted: ${text}`)
+    console.log(`You submitted: "${text}"`);
 }
 ```
 
 #### HTML
+
+![](https://github.com/aakashns/react-native-dialogs/blob/master/screenshots/html.png)
 
 ```js
 DialogAndroid.alert('Title', `This is a link <a href="https://www.duckduckgo.com/">DuckDuckGo</a>`, {
@@ -502,19 +579,20 @@ You can set some defaults so you don't have to change it everytime.
 ```js
 DialogAndroid.assignDefaults({
     title: 'Default Title',
+    positiveText: null,
     contentColor: 'rgba(0, 0, 0, 0.2)',
     widgetColor: 'blue'
 })
 ```
 
 
-Now any time you supply `undefined` to title, it will use the default assigned above.
+Now any time you omit or pass `undefined` to `contentColor`, `widgetColor`, or `title`, it will use the defaults we assigned here.
 
 ```js
 DialogAndroid.alert(undefined, 'message here')
 ```
 
-This will show title "Default Title", with no negative button, and the color of the message will be 20% black. If you did `Dialog.showProgress`, the progress indicator would be blue. etc.
+This will show title "Default Title", with no positive button, and the color of the message will be 20% black. If you did `Dialog.showProgress`, the progress indicator would be blue. etc.
 
 
 

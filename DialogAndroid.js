@@ -332,22 +332,20 @@ class DialogAndroid {
                         return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
                     }
                     case 'itemsCallbackMultiChoice': {
-                        const selectedIndices = rest[0].split(',');
+                        const selectedIndicesString = rest[0]; // blank string when nothing selected
+                        const selectedItems = selectedIndicesString === '' ? [] : selectedIndicesString.split(',').map(index => items[index]);
 
-                        let selectedItems;
-                        if (selectedIndices.length === 1 && isNaN(selectedIndices[0])) {
-                            // the case of empty selection
-                            selectedItems = [];
-                        } else {
-                            selectedItems = selectedIndices.map(index => items[index]);
-                        }
                         return resolve({ action:DialogAndroid.actionPositive, selectedItems });
                     }
                     case 'itemsCallback':
                     case 'itemsCallbackSingleChoice': {
-                        const [ selectedIndex ] = rest;
+                        const [ selectedIndex, selectedLabel, isPromptCheckBoxChecked ] = rest;
                         const selectedItem = items[selectedIndex];
-                        return resolve({ action:DialogAndroid.actionSelect, selectedItem });
+                        return resolve({
+                          action: DialogAndroid.actionSelect,
+                          selectedItem,
+                          isPromptCheckBoxChecked
+                        });
                     }
                     case 'onAny': {
                         const [ dialogAction ] = rest;
@@ -399,8 +397,8 @@ class DialogAndroid {
                 ...finalOptions,
                 dismissListener: true
             }
-            if (content) nativeConfig.content = ' '.repeat(5) + content;
-
+            if (content) nativeConfig.content = content;
+            if (content && style !== DialogAndroid.progressHorizontal) nativeConfig.content = '     ' + content;
             processColors(nativeConfig);
 
             NativeModules.DialogAndroid.show(nativeConfig, (kind: string, ...rest) => {

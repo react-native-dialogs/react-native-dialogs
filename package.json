@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/aakashns/react-native-dialogs/issues"
   },
-  "homepage": "https://github.com/aakashns/react-native-dialogs#readme"
+  "homepage": "https://github.com/aakashns/react-native-dialogs#readme",
+  "devDependencies": {
+    "all-contributors-cli": "^4.11.1"
+  }
 }

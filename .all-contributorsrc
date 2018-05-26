@@ -10,18 +10,6 @@
   "commit": false,
   "contributors": [
     {
-      "login": "Noitidart",
-      "name": "Noitidart",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/6372489?v=4",
-      "profile": "http://noitidart.github.io/",
-      "contributions": [
-        "code",
-        "doc",
-        "example",
-        "ideas"
-      ]
-    },
-    {
       "login": "vonovak",
       "name": "Vojtech Novak",
       "avatar_url": "https://avatars1.githubusercontent.com/u/1566403?v=4",
@@ -31,6 +19,18 @@
         "code",
         "ideas",
         "review"
+      ]
+    },
+    {
+      "login": "Noitidart",
+      "name": "Noitidart",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6372489?v=4",
+      "profile": "http://noitidart.github.io/",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "ideas"
       ]
     },
     {

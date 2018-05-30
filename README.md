@@ -451,7 +451,7 @@ const { selectedItem } = await DialogAndroid.showPicker('Pick a fruit', null, {
 });
 if (selectedItem) {
     // when negative button is clicked, selectedItem is not present, so it doesn't get here
-    console.log('You selected item:', item);
+    console.log('You selected item:', selectedItem);
 }
 ```
 

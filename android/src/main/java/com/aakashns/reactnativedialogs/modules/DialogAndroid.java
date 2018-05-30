@@ -163,6 +163,12 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                         builder.btnStackedGravity(GravityEnum.START);
                     }
                     break;
+                case "checkBoxPrompt":
+                    ReadableMap checkBoxPrompt = options.getMap("checkBoxPrompt");
+                    boolean initiallyChecked = checkBoxPrompt.hasKey("initiallyChecked") &&
+                            checkBoxPrompt.getBoolean("initiallyChecked");
+                    builder.checkBoxPrompt(checkBoxPrompt.getString("text"), initiallyChecked, null);
+                    break;
                 case "progress":
                     ReadableMap progress = options.getMap("progress");
                     boolean indeterminate = progress.hasKey("indeterminate") &&
@@ -275,7 +281,8 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                             if (!mCallbackConsumed) {
                                 mCallbackConsumed = true;
                                 charSequence = charSequence == null ? "" : charSequence;
-                                callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString());
+                                boolean isPromptCheckBoxChecked = materialDialog.isPromptCheckBoxChecked();
+                                callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString(), isPromptCheckBoxChecked);
                             }
                             return true;
                         }
@@ -407,7 +414,18 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
     MaterialDialog simple;
     @ReactMethod
     public void list(ReadableMap options, final Callback callback) {
-        final MaterialSimpleListAdapter simpleListAdapter = new MaterialSimpleListAdapter(getCurrentActivity());
+        final MaterialSimpleListAdapter simpleListAdapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+            @Override
+            public void onMaterialListItemSelected(int index, MaterialSimpleListItem item) {
+                if (!mCallbackConsumed) {
+                    mCallbackConsumed = true;
+                    callback.invoke(index, item.getContent());
+                }
+                if (simple != null) {
+                    simple.dismiss();
+                }
+            }
+        });
 
         ReadableArray arr = options.getArray("items");
         for(int i = 0; i < arr.size(); i++){
@@ -418,18 +436,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
         final MaterialDialog.Builder adapter = new MaterialDialog.Builder(getCurrentActivity())
                 .title(options.hasKey("title") ? options.getString("title") : "")
-                .adapter(simpleListAdapter, new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        if (!mCallbackConsumed) {
-                            mCallbackConsumed = true;
-                            callback.invoke(which, text);
-                        }
-                        if (simple != null) {
-                            simple.dismiss();
-                        }
-                    }
-                })
+                .adapter(simpleListAdapter, null)
                 .autoDismiss(true);
 
         UiThreadUtil.runOnUiThread(new Runnable() {

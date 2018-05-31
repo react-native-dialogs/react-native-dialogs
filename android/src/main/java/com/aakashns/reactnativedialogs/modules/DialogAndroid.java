@@ -29,16 +29,12 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         return "DialogAndroid";
     }
 
-
     public DialogAndroid(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
     /* Apply the options to the provided builder */
-    private MaterialDialog.Builder applyOptions(
-            MaterialDialog.Builder builder,
-            ReadableMap options
-    ) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    private MaterialDialog.Builder applyOptions(MaterialDialog.Builder builder, ReadableMap options) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         ReadableMapKeySetIterator iterator = options.keySetIterator();
         while(iterator.hasNextKey()) {
             String key = iterator.nextKey();
@@ -103,6 +99,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     builder.autoDismiss(options.getBoolean("autoDismiss"));
                     break;
                 case "forceStacking":
+                    // should change to StackingBehavior? forceStacking is deprecated?
                     builder.forceStacking(options.getBoolean("forceStacking"));
                     break;
                 case "alwaysCallSingleChoiceCallback":
@@ -124,8 +121,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     builder.cancelable(options.getBoolean("cancelable"));
                     break;
                 case "progressIndeterminateStyle": // true for horizontal, DO NOT USE
-                    builder.progressIndeterminateStyle(
-                            options.getBoolean("progressIndeterminateStyle"));
+                    builder.progressIndeterminateStyle(options.getBoolean("progressIndeterminateStyle"));
                     break;
                 case "buttonsGravity":
                     String bg = options.getString("buttonsGravity");
@@ -163,15 +159,17 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                         builder.btnStackedGravity(GravityEnum.START);
                     }
                     break;
+                case "checkboxLabel":
+                    boolean defaultValue = options.hasKey("checkboxDefaultValue") && options.getBoolean("checkboxDefaultValue");
+                    builder.checkBoxPrompt(options.getString("checkboxLabel"), defaultValue, null);
+                    break;
                 case "progress":
                     ReadableMap progress = options.getMap("progress");
-                    boolean indeterminate = progress.hasKey("indeterminate") &&
-                            progress.getBoolean("indeterminate");
+                    boolean indeterminate = progress.hasKey("indeterminate") && progress.getBoolean("indeterminate");
 
                     if (indeterminate) {
                         builder.progress(true, 0);
-                        boolean horizontal = progress.hasKey("style") &&
-                                progress.getString("style").equals("horizontal");
+                        boolean horizontal = progress.hasKey("style") && progress.getString("style").equals("horizontal");
                         if (horizontal) builder.progressIndeterminateStyle(horizontal);
                     } else {
                         // Determinate progress bar not supported currently
@@ -239,11 +237,11 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     if (!mCallbackConsumed) {
                         mCallbackConsumed = true;
                         if (dialogAction == DialogAction.POSITIVE) {
-                            callback.invoke("onAny", 0);
+                            callback.invoke("onAny", 0, materialDialog.isPromptCheckBoxChecked());
                         } else if (dialogAction == DialogAction.NEUTRAL) {
-                            callback.invoke("onAny", 1);
+                            callback.invoke("onAny", 1, materialDialog.isPromptCheckBoxChecked());
                         } else {
-                            callback.invoke("onAny", 2);
+                            callback.invoke("onAny", 2, materialDialog.isPromptCheckBoxChecked());
                         }
                     }
                 }
@@ -253,11 +251,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         if (options.hasKey("itemsCallback")) {
             mBuilder.itemsCallback(new MaterialDialog.ListCallback() {
                 @Override
-                public void onSelection(MaterialDialog materialDialog, View view, int i,
-                                        CharSequence charSequence) {
+                public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
                     if (!mCallbackConsumed) {
                         mCallbackConsumed = true;
-                        callback.invoke("itemsCallback", i, charSequence == null ? null : charSequence.toString());
+                        callback.invoke("itemsCallback", i, materialDialog.isPromptCheckBoxChecked());
                     }
                 }
             });
@@ -265,21 +262,18 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
         if (options.hasKey("itemsCallbackSingleChoice")) {
             // Check if there is a preselected index
-            int selectedIndex = options.hasKey("selectedIndex") ?
-                    options.getInt("selectedIndex") : -1;
-            mBuilder.itemsCallbackSingleChoice(selectedIndex,
-                    new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override
-                        public boolean onSelection(MaterialDialog materialDialog, View view, int i,
-                                                   CharSequence charSequence) {
-                            if (!mCallbackConsumed) {
-                                mCallbackConsumed = true;
-                                charSequence = charSequence == null ? "" : charSequence;
-                                callback.invoke("itemsCallbackSingleChoice", i, charSequence.toString());
-                            }
-                            return true;
-                        }
-                    });
+            int selectedIndex = options.hasKey("selectedIndex") ? options.getInt("selectedIndex") : -1;
+            mBuilder.itemsCallbackSingleChoice(selectedIndex, new MaterialDialog.ListCallbackSingleChoice() {
+                @Override
+                public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        charSequence = charSequence == null ? "" : charSequence;
+                        callback.invoke("itemsCallbackSingleChoice", i, materialDialog.isPromptCheckBoxChecked());
+                    }
+                    return true;
+                }
+            });
         }
 
         if (options.hasKey("itemsCallbackMultiChoice")) {
@@ -293,32 +287,29 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 }
             }
 
-            mBuilder.itemsCallbackMultiChoice(selectedIndices,
-                    new MaterialDialog.ListCallbackMultiChoice() {
-                        @Override
-                        public boolean onSelection(MaterialDialog materialDialog,
-                                                   Integer[] integers, CharSequence[] charSequences) {
+            mBuilder.itemsCallbackMultiChoice(selectedIndices, new MaterialDialog.ListCallbackMultiChoice() {
+                @Override
+                public boolean onSelection(MaterialDialog materialDialog, Integer[] integers, CharSequence[] charSequences) {
 
-                            // Concatenate selected IDs into a string
-                            StringBuilder selected = new StringBuilder("");
-                            for (int i = 0; i < integers.length - 1; i++) {
-                                selected.append(integers[i]).append(",");
-                            }
-                            if (integers.length > 0) {
-                                selected.append(integers[integers.length - 1]);
-                            }
+                    // Concatenate selected IDs into a string
+                    StringBuilder selected = new StringBuilder("");
+                    for (int i = 0; i < integers.length - 1; i++) {
+                        selected.append(integers[i]).append(",");
+                    }
+                    if (integers.length > 0) {
+                        selected.append(integers[integers.length - 1]);
+                    }
 
-                            if (!mCallbackConsumed) {
-                                mCallbackConsumed = true;
-                                callback.invoke("itemsCallbackMultiChoice", selected.toString());
-                            }
-                            return true;
-                        }
-                    });
+                    if (!mCallbackConsumed) {
+                        mCallbackConsumed = true;
+                        callback.invoke("itemsCallbackMultiChoice", selected.toString(), materialDialog.isPromptCheckBoxChecked());
+                    }
+                    return true;
+                }
+            });
 
             // Provide a 'Clear' button to unselect all choices
-            if (options.hasKey("multiChoiceClearButton") &&
-                    options.getBoolean("multiChoiceClearButton")) {
+            if (options.hasKey("multiChoiceClearButton") && options.getBoolean("multiChoiceClearButton")) {
                 mBuilder.onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
@@ -371,8 +362,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             String prefill = input.hasKey("prefill") ? input.getString("prefill") : null;
 
             // Check if empty input is allowed
-            boolean allowEmptyInput = !input.hasKey("allowEmptyInput") ||
-                    input.getBoolean("allowEmptyInput");
+            boolean allowEmptyInput = !input.hasKey("allowEmptyInput") || input.getBoolean("allowEmptyInput");
 
             // TODO : Provide pre-selected input types in Javascript
             if (input.hasKey("type")) {
@@ -389,7 +379,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
                     if (!mCallbackConsumed) {
                         mCallbackConsumed = true;
-                        callback.invoke("input", charSequence.toString());
+                        callback.invoke("input", charSequence.toString(), materialDialog.isPromptCheckBoxChecked());
                     }
                 }
             });
@@ -407,7 +397,18 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
     MaterialDialog simple;
     @ReactMethod
     public void list(ReadableMap options, final Callback callback) {
-        final MaterialSimpleListAdapter simpleListAdapter = new MaterialSimpleListAdapter(getCurrentActivity());
+        final MaterialSimpleListAdapter simpleListAdapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+            @Override
+            public void onMaterialListItemSelected(int index, MaterialSimpleListItem item) {
+                if (!mCallbackConsumed) {
+                    mCallbackConsumed = true;
+                    callback.invoke(index, item.getContent());
+                }
+                if (simple != null) {
+                    simple.dismiss();
+                }
+            }
+        });
 
         ReadableArray arr = options.getArray("items");
         for(int i = 0; i < arr.size(); i++){
@@ -418,18 +419,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
         final MaterialDialog.Builder adapter = new MaterialDialog.Builder(getCurrentActivity())
                 .title(options.hasKey("title") ? options.getString("title") : "")
-                .adapter(simpleListAdapter, new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        if (!mCallbackConsumed) {
-                            mCallbackConsumed = true;
-                            callback.invoke(which, text);
-                        }
-                        if (simple != null) {
-                            simple.dismiss();
-                        }
-                    }
-                })
+                .adapter(simpleListAdapter, null)
                 .autoDismiss(true);
 
         UiThreadUtil.runOnUiThread(new Runnable() {

@@ -30,6 +30,8 @@ An Android only module for Material Design dialogs. This is a wrapper over [afol
     - [`type ActionType`](#type-actiontype)
     - [`type ListItem`](#type-listitem)
     - [`type ListType`](#type-listtype)
+    - [`type OptionsAlert`](#type-optionsalert)
+    - [`type OptionsCheckbox`](#type-optionscheckbox)
     - [`type OptionsCommon`](#type-optionscommon)
     - [`type OptionsProgress`](#type-optionsprogress)
     - [`type OptionsPicker`](#type-optionspicker)
@@ -458,6 +460,8 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >     "progressHorizontal"
 
 ### Examples
+
+To see the examples redone with `checkboxLabel` see this PR - [Github :: aakashns/react-native-dialogs - #86](https://github.com/aakashns/react-native-dialogs/pull/86#issuecomment-393408317)
 
 #### Progress Dialog
 

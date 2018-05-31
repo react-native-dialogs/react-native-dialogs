@@ -8,6 +8,16 @@ type IdKey = string | 'id';
 type LabelKey = string | 'label';
 type ListItem = { label:string, id?:any };
 
+type OptionsAlert = {|
+    ...OptionsCheckbox,
+    ...OptionsCommon
+|}
+
+type OptionsCheckbox = {|
+    checkboxLabel?: string,
+    checkboxDefaultValue?: boolean
+|}
+
 type OptionsCommon = {|
     title?: null | string,
     titleColor?: ColorValue,
@@ -222,10 +232,9 @@ class DialogAndroid {
         Object.assign(DialogAndroid.defaults, defaults);
     }
 
-    static alert(title: Title, content: Content, options?: OptionsCommon = {}): Promise<
-        {|
-            action: typeof DialogAndroid.actionPositive | typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral | typeof DialogAndroid.actionDismiss
-        |}
+    static alert(title: Title, content: Content, options?: OptionsAlert = {}): Promise<
+        {| action: typeof DialogAndroid.actionPositive | typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral | typeof DialogAndroid.actionDismiss |} |
+        {| action: typeof DialogAndroid.actionPositive | typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral, checked: boolean |}
     > {
         return new Promise((resolve, reject) => {
             const nativeConfig: NativeConfig = {
@@ -249,11 +258,11 @@ class DialogAndroid {
                         return resolve({ action:DialogAndroid.actionDismiss });
                     }
                     case 'onAny': {
-                        const [ dialogAction ] = rest;
+                        const [ dialogAction, checked ] = rest;
                         switch (dialogAction) {
-                            case 0: return resolve({ action:DialogAndroid.actionPositive });
-                            case 1: return resolve({ action:DialogAndroid.actionNeutral });
-                            case 2: return resolve({ action:DialogAndroid.actionNegative });
+                            case 0: return resolve({ action:DialogAndroid.actionPositive, ...getChecked(nativeConfig, checked) });
+                            case 1: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
+                            case 2: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
                         }
                     }
                     default: {
@@ -265,15 +274,12 @@ class DialogAndroid {
     }
 
     static showPicker(title: Title, content: Content, options: OptionsPicker): Promise<
-        {|
-            action: typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral | typeof DialogAndroid.actionDismiss
-        |} | {|
-            action: typeof DialogAndroid.actionSelect,
-            selectedItem: ListItem
-        |} | {|
-            action: typeof DialogAndroid.actionSelect,
-            selectedItems: ListItem[]
-        |}
+        {| action: typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral | typeof DialogAndroid.actionDismiss |} |
+        {| action: typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral, checked: boolean |} |
+        {| action: typeof DialogAndroid.actionSelect, selectedItem: ListItem |} |
+        {| action: typeof DialogAndroid.actionSelect, selectedItem: ListItem, checked: boolean |} |
+        {| action: typeof DialogAndroid.actionSelect, selectedItems: ListItem[] |} |
+        {| action: typeof DialogAndroid.actionSelect, selectedItems: ListItem[], checked: boolean |}
     > {
         // options is required, must defined items
 
@@ -332,27 +338,23 @@ class DialogAndroid {
                         return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
                     }
                     case 'itemsCallbackMultiChoice': {
-                        const selectedIndicesString = rest[0]; // blank string when nothing selected
+                        const [selectedIndicesString, checked] = rest; // blank string when nothing selected
                         const selectedItems = selectedIndicesString === '' ? [] : selectedIndicesString.split(',').map(index => items[index]);
 
-                        return resolve({ action:DialogAndroid.actionPositive, selectedItems });
+                        return resolve({ action:DialogAndroid.actionPositive, selectedItems, ...getChecked(nativeConfig, checked) });
                     }
                     case 'itemsCallback':
                     case 'itemsCallbackSingleChoice': {
-                        const [ selectedIndex, selectedLabel, isPromptCheckBoxChecked ] = rest;
+                        const [ selectedIndex, checked ] = rest;
                         const selectedItem = items[selectedIndex];
-                        return resolve({
-                          action: DialogAndroid.actionSelect,
-                          selectedItem,
-                          isPromptCheckBoxChecked
-                        });
+                        return resolve({ action:DialogAndroid.actionSelect, selectedItem, ...getChecked(nativeConfig, checked) });
                     }
                     case 'onAny': {
-                        const [ dialogAction ] = rest;
+                        const [ dialogAction, checked ] = rest;
                         switch (dialogAction) {
-                            case 0: return resolve({ action:DialogAndroid.actionPositive });
-                            case 1: return resolve({ action:DialogAndroid.actionNeutral });
-                            case 2: return resolve({ action:DialogAndroid.actionNegative });
+                            case 0: return resolve({ action:DialogAndroid.actionPositive, ...getChecked(nativeConfig, checked) });
+                            case 1: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
+                            case 2: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
                         }
                     }
                     case 'dismissListener': {
@@ -416,12 +418,10 @@ class DialogAndroid {
     }
 
     static prompt(title: Title, content: Content, options?: OptionsPrompt = {}): Promise<
-        {|
-            action: typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral | typeof DialogAndroid.actionDismiss
-        |} | {|
-            action: typeof DialogAndroid.actionPositive,
-            text: string
-        |}
+        {| action: typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral | typeof DialogAndroid.actionDismiss |} |
+        {| action: typeof DialogAndroid.actionNegative | typeof DialogAndroid.actionNeutral, checked: boolean |} |
+        {| action: typeof DialogAndroid.actionPositive, text: string |} |
+        {| action: typeof DialogAndroid.actionPositive, text: string, checked: boolean |}
     > {
         return new Promise((resolve, reject) => {
 
@@ -462,15 +462,15 @@ class DialogAndroid {
                         return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
                     }
                     case 'onAny': {
-                        const [ dialogAction ] = rest;
+                        const [ dialogAction, checked ] = rest;
                         switch (dialogAction) {
-                            case 1: return resolve({ action:DialogAndroid.actionNeutral });
-                            case 2: return resolve({ action:DialogAndroid.actionNegative });
+                            case 1: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
+                            case 2: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
                         }
                     }
                     case 'input': {
-                        const [ text ] = rest;
-                        return resolve({ action:DialogAndroid.actionPositive, text });
+                        const [ text, checked ] = rest;
+                        return resolve({ action:DialogAndroid.actionPositive, text, ...getChecked(nativeConfig, checked) });
                     }
                     case 'dismissListener': {
                         return resolve({ action:DialogAndroid.actionDismiss });
@@ -487,6 +487,10 @@ class DialogAndroid {
 
         })
     }
+}
+
+function getChecked(nativeConfig, checked) {
+    return nativeConfig.checkboxLabel ? { checked } : {};
 }
 
 export default DialogAndroid

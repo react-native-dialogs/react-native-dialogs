@@ -1,6 +1,6 @@
 {
   "name": "react-native-dialogs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Native wrappers for https://github.com/afollestad/material-dialogs ",
   "main": "index.js",
   "scripts": {

@@ -52,8 +52,8 @@ An Android only module for Material Design dialogs. This is a wrapper over [afol
 ### Installation
 
 1. Install:
-    - Using [npm](https://www.npmjs.com/#getting-started): `npm install react-native-dialogs@next --save`
-    - Using [Yarn](https://yarnpkg.com/): `yarn add react-native-dialogs@next`
+    - Using [npm](https://www.npmjs.com/#getting-started): `npm install react-native-dialogs --save`
+    - Using [Yarn](https://yarnpkg.com/): `yarn add react-native-dialogs`
 
 2. [Link](https://facebook.github.io/react-native/docs/linking-libraries-ios.html):
     - `react-native link react-native-dialogs`

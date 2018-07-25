@@ -64,18 +64,7 @@ An Android only module for Material Design dialogs. This is a wrapper over [afol
 #### Manual Linking
 Follow these steps if automatic linking (`react-native link`) failed.
 
-1. Include this module in `android/settings.gradle`:
-
-   ```
-   ...
-   include ':autocompletetextview' // Add this
-   project(':autocompletetextview').projectDir = file("../node_modules/autocompletetextview/android") // Add this
-
-   ...
-   include ':app'
-   ```
-
-2. In `android/app/build.gradle`, add the dependency to your app build:
+1. In `android/app/build.gradle`, add the dependency to your app build:
 
    ```
    dependencies {
@@ -84,7 +73,7 @@ Follow these steps if automatic linking (`react-native link`) failed.
    }
    ```
 
-3. In `android/build.gradle`, it should already be there, but in case it is not, add Jitpack maven repository to download the library [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs):
+2. In `android/build.gradle`, it should already be there, but in case it is not, add Jitpack maven repository to download the library [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs):
 
    ```
    allprojects {
@@ -96,7 +85,7 @@ Follow these steps if automatic linking (`react-native link`) failed.
    }
    ```
 
-4. In `android/settings.gradle`:
+3. In `android/settings.gradle`:
 
    ```
    rootProject.name = ...
@@ -108,7 +97,7 @@ Follow these steps if automatic linking (`react-native link`) failed.
    include ':app'
    ```
 
-5. Import and add package, in `android/app/src/main/.../MainApplication.java`:
+4. Import and add package, in `android/app/src/main/.../MainApplication.java`:
 
    ```java
    ...

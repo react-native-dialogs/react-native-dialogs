@@ -185,6 +185,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
     MaterialDialog mDialog;
     private boolean mCallbackConsumed = false;
 
+    private int FLAG_POSITIVE = 0;
+    private int FLAG_NEUTRAL = 1;
+    private int FLAG_NEGATIVE = 2;
+
     @ReactMethod
     public void show(ReadableMap options, final Callback callback) {
         mBuilder = new MaterialDialog.Builder(getCurrentActivity());
@@ -194,54 +198,19 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             callback.invoke("error", e.getMessage(), options.toString());
         }
 
-        if (options.hasKey("onPositive")) {
-            mBuilder.onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    if (!mCallbackConsumed) {
-                        mCallbackConsumed = true;
-                        callback.invoke("onPositive");
-                    }
-                }
-            });
-        }
-
-        if (options.hasKey("onNegative")) {
-            mBuilder.onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    if (!mCallbackConsumed) {
-                        mCallbackConsumed = true;
-                        callback.invoke("onNegative");
-                    }
-                }
-            });
-        }
-
-        if (options.hasKey("onNeutral")) {
-            mBuilder.onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                    if (!mCallbackConsumed) {
-                        mCallbackConsumed = true;
-                        callback.invoke("onNeutral");
-                    }
-                }
-            });
-        }
-
         if (options.hasKey("onAny")) {
+            // onAny is required, unless it is progress dialog - which I disallow to have buttons
             mBuilder.onAny(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                     if (!mCallbackConsumed) {
                         mCallbackConsumed = true;
                         if (dialogAction == DialogAction.POSITIVE) {
-                            callback.invoke("onAny", 0, materialDialog.isPromptCheckBoxChecked());
+                            callback.invoke("onAny", FLAG_POSITIVE, materialDialog.isPromptCheckBoxChecked());
                         } else if (dialogAction == DialogAction.NEUTRAL) {
-                            callback.invoke("onAny", 1, materialDialog.isPromptCheckBoxChecked());
+                            callback.invoke("onAny", FLAG_NEUTRAL, materialDialog.isPromptCheckBoxChecked());
                         } else {
-                            callback.invoke("onAny", 2, materialDialog.isPromptCheckBoxChecked());
+                            callback.invoke("onAny", FLAG_NEGATIVE, materialDialog.isPromptCheckBoxChecked());
                         }
                     }
                 }
@@ -319,16 +288,16 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             }
         }
 
-        mBuilder.showListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                // if (!mCallbackConsumed) {
-                //     mCallbackConsumed = true;
-                //     callback.invoke("showListener");
-                // }
-                mCallbackConsumed = false;
-            }
-        });
+        // mBuilder.showListener(new DialogInterface.OnShowListener() {
+        //     @Override
+        //     public void onShow(DialogInterface dialog) {
+        //         // if (!mCallbackConsumed) {
+        //         //     mCallbackConsumed = true;
+        //         //     callback.invoke("showListener");
+        //         // }
+        //         mCallbackConsumed = false;
+        //     }
+        // });
 
         if (options.hasKey("cancelListener")) {
             mBuilder.cancelListener(new DialogInterface.OnCancelListener() {
@@ -390,45 +359,6 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     mDialog.dismiss();
                 mDialog = mBuilder.build();
                 mDialog.show();
-            }
-        });
-    }
-
-    MaterialDialog simple;
-    @ReactMethod
-    public void list(ReadableMap options, final Callback callback) {
-        final MaterialSimpleListAdapter simpleListAdapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
-            @Override
-            public void onMaterialListItemSelected(int index, MaterialSimpleListItem item) {
-                if (!mCallbackConsumed) {
-                    mCallbackConsumed = true;
-                    callback.invoke(index, item.getContent());
-                }
-                if (simple != null) {
-                    simple.dismiss();
-                }
-            }
-        });
-
-        ReadableArray arr = options.getArray("items");
-        for(int i = 0; i < arr.size(); i++){
-            simpleListAdapter.add(new MaterialSimpleListItem.Builder(getCurrentActivity())
-                    .content(arr.getString(i))
-                    .build());
-        }
-
-        final MaterialDialog.Builder adapter = new MaterialDialog.Builder(getCurrentActivity())
-                .title(options.hasKey("title") ? options.getString("title") : "")
-                .adapter(simpleListAdapter, null)
-                .autoDismiss(true);
-
-        UiThreadUtil.runOnUiThread(new Runnable() {
-            public void run() {
-                if (simple != null) {
-                    simple.dismiss();
-                }
-                simple = adapter.build();
-                simple.show();
             }
         });
     }

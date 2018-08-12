@@ -191,6 +191,10 @@ type NativeConfig = {|
     }
 |}
 
+const FLAG_POSITIVE = 0;
+const FLAG_NEUTRAL = 1;
+const FLAG_NEGATIVE = 2;
+
 function processColors(nativeConfig: {}) {
     for (const prop of Object.keys(nativeConfig)) {
         if (prop.endsWith('Color')) {
@@ -260,9 +264,9 @@ class DialogAndroid {
                     case 'onAny': {
                         const [ dialogAction, checked ] = rest;
                         switch (dialogAction) {
-                            case 0: return resolve({ action:DialogAndroid.actionPositive, ...getChecked(nativeConfig, checked) });
-                            case 1: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
-                            case 2: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
+                            case FLAG_POSITIVE: return resolve({ action:DialogAndroid.actionPositive, ...getChecked(nativeConfig, checked) });
+                            case FLAG_NEUTRAL: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
+                            case FLAG_NEGATIVE: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
                         }
                     }
                     default: {
@@ -352,9 +356,9 @@ class DialogAndroid {
                     case 'onAny': {
                         const [ dialogAction, checked ] = rest;
                         switch (dialogAction) {
-                            case 0: return resolve({ action:DialogAndroid.actionPositive, ...getChecked(nativeConfig, checked) });
-                            case 1: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
-                            case 2: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
+                            case FLAG_POSITIVE: return resolve({ action:DialogAndroid.actionPositive, ...getChecked(nativeConfig, checked) });
+                            case FLAG_NEUTRAL: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
+                            case FLAG_NEGATIVE: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
                         }
                     }
                     case 'dismissListener': {
@@ -464,8 +468,9 @@ class DialogAndroid {
                     case 'onAny': {
                         const [ dialogAction, checked ] = rest;
                         switch (dialogAction) {
-                            case 1: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
-                            case 2: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
+                            // case positive never fires for input type - the input will fire
+                            case FLAG_NEUTRAL: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
+                            case FLAG_NEGATIVE: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
                         }
                     }
                     case 'input': {

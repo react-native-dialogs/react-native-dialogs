@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/aakashns/react-native-dialogs#readme",
   "devDependencies": {
-    "all-contributors-cli": "^4.11.1"
+    "all-contributors-cli": "^4.11.2"
   }
 }

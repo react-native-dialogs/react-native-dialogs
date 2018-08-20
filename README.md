@@ -263,7 +263,7 @@ Shows a dialog with a text input field.
 
 ##### `showPicker`
 
->     static showProgress(
+>     static showPicker(
 >         title?: null | string,
 >         content?: null | string,
 >         options: OptionsPicker

@@ -317,8 +317,10 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
         }
         UiThreadUtil.runOnUiThread(new Runnable() {
             public void run() {
-                if (mDialog != null)
+                if (mDialog != null) {
                     mDialog.dismiss();
+                    mDialog = null;
+                }
                 mDialog = mBuilder.build();
                 mDialog.show();
             }
@@ -330,8 +332,9 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void dismiss() {
-        if(mDialog != null)
+        if(mDialog != null) {
             mDialog.dismiss();
+            mDialog = null;
+        }
     }
-
 }

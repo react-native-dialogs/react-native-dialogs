@@ -240,25 +240,18 @@ class DialogAndroid {
             const nativeConfig: NativeConfig = {
                 ...DialogAndroid.defaults,
                 ...options,
-                onAny: true,
-                dismissListener: true
+                onAny: true
             };
             if (title) nativeConfig.title = title;
             if (content) nativeConfig.content = content;
 
             processColors(nativeConfig);
 
-            NativeModules.DialogAndroid.show(nativeConfig, (kind: string, ...rest) => {
+            NativeModules.DialogAndroid.show(nativeConfig).then(result => {
+                const kind = result.kind
                 switch (kind) {
-                    case 'error': {
-                        const [ error, nativeConfig ] = rest;
-                        return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
-                    }
-                    case 'dismissListener': {
-                        return resolve({ action:DialogAndroid.actionDismiss });
-                    }
                     case 'onAny': {
-                        const [ dialogAction, checked ] = rest;
+                        const { dialogAction, checked } = result;
                         switch (dialogAction) {
                             case 0: return resolve({ action:DialogAndroid.actionPositive, ...getChecked(nativeConfig, checked) });
                             case 1: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
@@ -269,7 +262,9 @@ class DialogAndroid {
                         return reject(`Unknown callback kind: "${kind}"`);
                     }
                 }
-            });
+            }).catch(error => {
+                return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
+            })
         });
     }
 
@@ -299,8 +294,7 @@ class DialogAndroid {
             const nativeConfig: NativeConfig = {
                 ...DialogAndroid.defaults,
                 ...filteredOptions,
-                onAny: true,
-                dismissListener: true
+                onAny: true
             };
             if (title) nativeConfig.title = title;
             if (content) nativeConfig.content = content;
@@ -331,40 +325,36 @@ class DialogAndroid {
 
             processColors(nativeConfig);
 
-            NativeModules.DialogAndroid.show(nativeConfig, (kind: string, ...rest) => {
+            NativeModules.DialogAndroid.show(nativeConfig).then(result => {
+                const kind = result.kind
                 switch (kind) {
-                    case 'error': {
-                        const [ error, nativeConfig ] = rest;
-                        return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
-                    }
                     case 'itemsCallbackMultiChoice': {
-                        const [selectedIndicesString, checked] = rest; // blank string when nothing selected
+                        const { selectedIndicesString, checked } = result
                         const selectedItems = selectedIndicesString === '' ? [] : selectedIndicesString.split(',').map(index => items[index]);
 
                         return resolve({ action:DialogAndroid.actionPositive, selectedItems, ...getChecked(nativeConfig, checked) });
                     }
                     case 'itemsCallback':
                     case 'itemsCallbackSingleChoice': {
-                        const [ selectedIndex, checked ] = rest;
+                        const { selectedIndex, checked } = result;
                         const selectedItem = items[selectedIndex];
                         return resolve({ action:DialogAndroid.actionSelect, selectedItem, ...getChecked(nativeConfig, checked) });
                     }
                     case 'onAny': {
-                        const [ dialogAction, checked ] = rest;
+                        const { dialogAction, checked } = result;
                         switch (dialogAction) {
                             case 0: return resolve({ action:DialogAndroid.actionPositive, ...getChecked(nativeConfig, checked) });
                             case 1: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
                             case 2: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
                         }
                     }
-                    case 'dismissListener': {
-                        return resolve({ action:DialogAndroid.actionDismiss });
-                    }
                     default: {
                         return reject(`Unknown callback kind: "${kind}"`);
                     }
                 }
-            });
+            }).catch(error => {
+                return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
+            })
         })
     }
 
@@ -396,24 +386,22 @@ class DialogAndroid {
                     style: style === DialogAndroid.progressHorizontal ? 'horizontal' : undefined
                 },
                 cancelable: false,
-                ...finalOptions,
-                dismissListener: true
+                ...finalOptions
             }
             if (content) nativeConfig.content = content;
             if (content && style !== DialogAndroid.progressHorizontal) nativeConfig.content = '     ' + content;
             processColors(nativeConfig);
 
-            NativeModules.DialogAndroid.show(nativeConfig, (kind: string, ...rest) => {
+            NativeModules.DialogAndroid.show(nativeConfig).then(result => {
+                const kind = result.kind
                 switch (kind) {
-                    case 'error': {
-                        const [ error, nativeConfig ] = rest;
-                        return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
-                    }
-                    case 'dismissListener': {
-                        return resolve({ action:DialogAndroid.actionDismiss });
+                    default: {
+                        return reject(`Unknown callback kind: "${kind}"`);
                     }
                 }
-            });
+            }).catch(error => {
+                return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
+            })
         })
     }
 
@@ -447,44 +435,34 @@ class DialogAndroid {
                 ...DialogAndroid.defaults,
                 input: inputConfig,
                 ...finalOptions,
-                onAny: true,
-                dismissListener: true
+                onAny: true
             }
             if (title) nativeConfig.title = title;
             if (content) nativeConfig.content = content;
 
             processColors(nativeConfig);
 
-            NativeModules.DialogAndroid.show(nativeConfig, (kind: string, ...rest) => {
+            NativeModules.DialogAndroid.show(nativeConfig).then(result => {
+                const kind = result.kind
                 switch (kind) {
-                    case 'error': {
-                        const [ error, nativeConfig ] = rest;
-                        return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
-                    }
                     case 'onAny': {
-                        const [ dialogAction, checked ] = rest;
+                        const { dialogAction, checked } = result;
                         switch (dialogAction) {
                             case 1: return resolve({ action:DialogAndroid.actionNeutral, ...getChecked(nativeConfig, checked) });
                             case 2: return resolve({ action:DialogAndroid.actionNegative, ...getChecked(nativeConfig, checked) });
                         }
                     }
                     case 'input': {
-                        const [ text, checked ] = rest;
+                        const { text, checked } = result;
                         return resolve({ action:DialogAndroid.actionPositive, text, ...getChecked(nativeConfig, checked) });
-                    }
-                    case 'dismissListener': {
-                        return resolve({ action:DialogAndroid.actionDismiss });
-                    }
-                    case 'cancelListener': {
-                        // fires when input text field is there and hit back or in back to dismiss
-                        return resolve({ action:DialogAndroid.actionDismiss });
                     }
                     default: {
                         return reject(`Unknown callback kind: "${kind}"`);
                     }
                 }
-            });
-
+            }).catch(error => {
+                return reject(`DialogAndroid ${error}. nativeConfig: ${nativeConfig}`);
+            })
         })
     }
 }

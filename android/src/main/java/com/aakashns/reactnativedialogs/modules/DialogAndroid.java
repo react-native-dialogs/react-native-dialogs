@@ -9,6 +9,7 @@ import android.os.Build;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.StackingBehavior;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.facebook.react.bridge.Callback;
@@ -99,8 +100,8 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                     builder.autoDismiss(options.getBoolean("autoDismiss"));
                     break;
                 case "forceStacking":
-                    // should change to StackingBehavior? forceStacking is deprecated?
-                    builder.forceStacking(options.getBoolean("forceStacking"));
+                    builder.stackingBehavior(
+                        options.getBoolean("forceStacking") ? StackingBehavior.ALWAYS : StackingBehavior.ADAPTIVE);
                     break;
                 case "alwaysCallSingleChoiceCallback":
                     if (options.getBoolean("alwaysCallSingleChoiceCallback")) {
@@ -399,7 +400,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
     public void list(ReadableMap options, final Callback callback) {
         final MaterialSimpleListAdapter simpleListAdapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
             @Override
-            public void onMaterialListItemSelected(int index, MaterialSimpleListItem item) {
+            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
                 if (!mCallbackConsumed) {
                     mCallbackConsumed = true;
                     callback.invoke(index, item.getContent());

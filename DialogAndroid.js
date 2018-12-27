@@ -32,7 +32,8 @@ type OptionsCommon = {|
     neutralColor?: ColorValue,
     cancelable?: boolean,
     linkColor?: ColorValue, // applies if contentIsHtml is true, and there are <a> elements in content string
-    forceStacking?: boolean
+    forceStacking?: boolean,
+    maxNumberOfItems?: int
 |}
 
 type ListItemJustLabel = { label:string };
@@ -41,10 +42,12 @@ type ListItemFull = { label:string, id:any };
 type ListItemBare = {};
 
 type OptionsRadio = {|
+    maxNumberOfItems?: int,
     type: typeof ListType.listRadio,
     widgetColor?: ColorValue // radio color
 |}
 type OptionsCheckbox = {|
+    maxNumberOfItems?: int,
     type: typeof ListType.listCheckbox,
     neutralIsClear?: boolean,
     widgetColor?: ColorValue // checkbox color
@@ -53,10 +56,12 @@ type OptionsCheckbox = {|
 type OptionsPicker = {|
     ...OptionsCommon,
     type?: typeof ListType.listPlain,
+    maxNumberOfItems?: int,
     items: ListItemJustLabel[],
 |} | {|
     ...OptionsCommon,
     type?: typeof ListType.listPlain,
+    maxNumberOfItems?: int,
     items: ListItemBare[],
     labelKey: string
 |} | {|

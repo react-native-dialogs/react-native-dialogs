@@ -3,9 +3,12 @@ package com.aakashns.reactnativedialogs.modules;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.View;
 import android.os.Build;
+import android.view.WindowManager;
 
+import com.aakashns.reactnativedialogs.R;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -384,11 +387,37 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 }
             });
         }
+
+        final int numberOfItems;
+        if (options.hasKey("maxNumberOfItems")) {
+            numberOfItems = options.getInt("maxNumberOfItems");
+        }else{
+            numberOfItems = -1;
+        }
+
         UiThreadUtil.runOnUiThread(new Runnable() {
             public void run() {
                 if (mDialog != null)
                     mDialog.dismiss();
                 mDialog = mBuilder.build();
+
+                if(numberOfItems > 0) {
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.copyFrom(mDialog.getWindow().getAttributes());
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                    int dp = (int) (getReactApplicationContext().getResources().getDimension(R.dimen.md_listitem_height)
+                            / getReactApplicationContext().getResources().getDisplayMetrics().density);
+
+
+                    float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp * (numberOfItems +3), getReactApplicationContext().getResources().getDisplayMetrics());
+
+
+                    lp.height = (int) pixels;
+                    mDialog.getWindow().setAttributes(lp);
+                }
+
+
                 mDialog.show();
             }
         });

@@ -353,7 +353,7 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >         content?: string,
 >         contentColor?: string,
 >         contentIsHtml?: boolean,
->         forceStacking?: boolean
+>         forceStacking?: boolean,
 >         linkColor?: ColorValue,
 >         negativeColor?: ColorValue,
 >         negativeText?: string,
@@ -363,6 +363,7 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >         positiveText?: string, // default "OK"
 >         title?: string,
 >         titleColor?: ColorValue,
+>         maxNumberOfItems?: boolean,
 >     }
 
 | Key           | Type                                                                     | Default | Required | Description                                                                                                                                     |
@@ -381,6 +382,7 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 | positiveText  | `string`                                                                 |         |          | If falsy, button is not shown.                                                                                                                  |
 | title         | `string`                                                                 |         |          | Title of dialog                                                                                                                                 |
 | titleColor    | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of title                                                                                                                                  |
+| maxNumberOfItems | `int`                                                                 |         |          | If you want to set a max amount of visible items in a list                                                       |
 
 ##### `type OptionsProgress`
 

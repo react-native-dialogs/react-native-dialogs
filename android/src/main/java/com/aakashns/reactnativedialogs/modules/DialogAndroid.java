@@ -367,9 +367,43 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
             // Check if empty input is allowed
             boolean allowEmptyInput = !input.hasKey("allowEmptyInput") || input.getBoolean("allowEmptyInput");
 
-            // TODO : Provide pre-selected input types in Javascript
-            if (input.hasKey("type")) {
-                mBuilder.inputType(input.getInt("type"));
+            if (input.hasKey("keyboardType")) {
+                switch (input.getString("keyboardType")) {
+                    case "phone-pad":
+                        mBuilder.inputType(InputType.TYPE_CLASS_PHONE);
+                        break;
+
+                    case "number-pad":
+                        mBuilder.inputType(InputType.TYPE_CLASS_NUMBER);
+                        break;
+
+                    case "decimal-pad":
+                        mBuilder.inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                        break;
+
+                    case "numeric":
+                        mBuilder.inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                        break;
+
+                    case "numeric-password":
+                        mBuilder.inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                        break;
+
+                    case "email-address":
+                        mBuilder.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                        break;
+
+                    case "password":
+                        mBuilder.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        break;
+
+                    case "url":
+                        mBuilder.inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_URI);
+                        break;
+
+                    default:
+                        mBuilder.inputType(InputType.TYPE_CLASS_TEXT);
+                }
             }
 
             int minLength = input.hasKey("minLength") ? input.getInt("minLength") : 0;

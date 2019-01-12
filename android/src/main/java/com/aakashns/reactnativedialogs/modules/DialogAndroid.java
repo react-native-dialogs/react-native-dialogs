@@ -3,6 +3,7 @@ package com.aakashns.reactnativedialogs.modules;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.Html;
+import android.text.InputType;
 import android.util.TypedValue;
 import android.view.View;
 import android.os.Build;

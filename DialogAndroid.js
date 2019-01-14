@@ -172,7 +172,7 @@ type ProgressStyle = typeof DialogAndroid.progressHorizontal;
 
 type OptionsPrompt = {|
     ...OptionsCommon,
-    keyboardType?: 'numeric' | 'numbers-and-punctuation' | 'numeric-password' | 'email-address' | 'password' | 'phone-pad' | 'decimal-pad',
+    keyboardType?: 'numeric' | 'number-pad' | 'decimal-pad' | 'numeric-password' | 'email-address' | 'password' | 'phone-pad' | 'url',
     defaultValue?: string,
     placeholder?: string,
     allowEmptyInput?: boolean,
@@ -446,7 +446,7 @@ class DialogAndroid {
             if (allowEmptyInput !== undefined) inputConfig.allowEmptyInput = allowEmptyInput;
             if (minLength) inputConfig.minLength = minLength;
             if (maxLength) inputConfig.maxLength = maxLength;
-            // if (keyboardType) inputConfig.keyboardType = keyboardType; // TODO: support this on native side - https://github.com/aakashns/react-native-dialogs/pull/55
+            if (keyboardType) inputConfig.keyboardType = keyboardType;
 
             const nativeConfig = {
                 ...DialogAndroid.defaults,

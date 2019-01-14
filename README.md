@@ -4,49 +4,49 @@
 An Android only module for Material Design dialogs. This is a wrapper over [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs). This module is designed for Android only with no plans to support iOS.
 
 ### Table of Contents
-- [Installation](#installation)
-  - [Manual Linking](#manual-linking)
-- [Usage](#usage)
-- [API](#api)
-  - [Properties](#properties)
-    - [`defaults`](#defaults)
-    - [`actionDismiss`](#actiondismiss)
-    - [`actionNegative`](#actionnegative)
-    - [`actionNeutral`](#actionneutral)
-    - [`actionPositive`](#actionpositive)
-    - [`listPlain`](#listplain)
-    - [`listRadio`](#listradio)
-    - [`listCheckbox`](#listcheckbox)
-    - [`progressHorizontal`](#progresshorizontal)
-  - [Methods](#methods)
-    - [`alert`](#alert)
-    - [`assignDefaults`](#assigndefaults)
-    - [`dismiss`](#dismiss)
-    - [`prompt`](#prompt)
-    - [`showPicker`](#showpicker)
-    - [`showProgress`](#showprogress)
-- [Types](#types)
-  - [Internal Types](#internal-types)
-    - [`type ActionType`](#type-actiontype)
-    - [`type ListItem`](#type-listitem)
-    - [`type ListType`](#type-listtype)
-    - [`type OptionsAlert`](#type-optionsalert)
-    - [`type OptionsCheckbox`](#type-optionscheckbox)
-    - [`type OptionsCommon`](#type-optionscommon)
-    - [`type OptionsProgress`](#type-optionsprogress)
-    - [`type OptionsPicker`](#type-optionspicker)
-    - [`type OptionsPrompt`](#type-optionsprompt)
-    - [`type ProgressStyle`](#type-progressstyle)
-- [Examples](#examples)
-  - [Progress Dialog](#progress-dialog)
-  - [Basic List](#basic-list)
-  - [Radio List](#radio-list)
-    - [Without auto-dismiss](#without-auto-dismiss)
-  - [Checklist](#checklist)
-    - [With clear list button](#with-clear-list-button)
-  - [Prompt](#prompt)
-  - [HTML](#html)
-  - [assignDefaults](#assigndefaults)
+  - [Installation](#installation)
+    - [Manual Linking](#manual-linking)
+  - [Usage](#usage)
+  - [API](#api)
+    - [Properties](#properties)
+      - [`defaults`](#defaults)
+      - [`actionDismiss`](#actiondismiss)
+      - [`actionNegative`](#actionnegative)
+      - [`actionNeutral`](#actionneutral)
+      - [`actionPositive`](#actionpositive)
+      - [`listPlain`](#listplain)
+      - [`listRadio`](#listradio)
+      - [`listCheckbox`](#listcheckbox)
+      - [`progressHorizontal`](#progresshorizontal)
+    - [Methods](#methods)
+      - [`alert`](#alert)
+      - [`assignDefaults`](#assigndefaults)
+      - [`dismiss`](#dismiss)
+      - [`prompt`](#prompt)
+      - [`showPicker`](#showpicker)
+      - [`showProgress`](#showprogress)
+  - [Types](#types)
+    - [Internal Types](#internal-types)
+      - [`type ActionType`](#type-actiontype)
+      - [`type ListItem`](#type-listitem)
+      - [`type ListType`](#type-listtype)
+      - [`type OptionsAlert`](#type-optionsalert)
+      - [`type OptionsCheckbox`](#type-optionscheckbox)
+      - [`type OptionsCommon`](#type-optionscommon)
+      - [`type OptionsProgress`](#type-optionsprogress)
+      - [`type OptionsPicker`](#type-optionspicker)
+      - [`type OptionsPrompt`](#type-optionsprompt)
+      - [`type ProgressStyle`](#type-progressstyle)
+  - [Examples](#examples)
+    - [Progress Dialog](#progress-dialog)
+    - [Basic List](#basic-list)
+    - [Radio List](#radio-list)
+      - [Without auto-dismiss](#without-auto-dismiss)
+    - [Checklist](#checklist)
+      - [With clear list button](#with-clear-list-button)
+    - [Prompt](#prompt)
+    - [HTML](#html)
+    - [assignDefaults](#assigndefaults)
 - [Contributors](#contributors)
 
 ### Installation
@@ -437,6 +437,20 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 
 >     {
 >         ...OptionsCommon,
+>         keyboardType?:
+>           | 'numeric'
+>           | 'number-pad'
+>           | 'numeric-password'
+>           | 'decimal-pad'
+>           | 'email-address'
+>           | 'password'
+>           | 'phone-pad'
+>           | 'url',
+>         defaultValue?: string,
+>         placeholder?: string,
+>         allowEmptyInput?: boolean,
+>         minLength?: number,
+>         maxLength?: number,
 >         widgetColor?: ColorValue
 >     }
 

@@ -11,12 +11,12 @@ buildscript {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.3"
+    compileSdkVersion rootProject.properties.get('compileSdkVersion', 26)
+    buildToolsVersion rootProject.properties.get('buildToolsVersion', '26.0.3')
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion rootProject.properties.get('targetSdkVersion', 26)
         versionCode 1
         versionName "1.0"
     }
@@ -28,8 +28,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.afollestad.material-dialogs:commons:0.9.6.0'
+    implementation 'com.facebook.react:react-native:+'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 }

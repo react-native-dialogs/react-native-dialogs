@@ -464,7 +464,7 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
     public void list(ReadableMap options, final Callback callback) {
         final MaterialSimpleListAdapter simpleListAdapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
             @Override
-            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
+            public void onMaterialListItemSelected(int index, MaterialSimpleListItem item) {
                 if (!mCallbackConsumed) {
                     mCallbackConsumed = true;
                     callback.invoke(index, item.getContent());

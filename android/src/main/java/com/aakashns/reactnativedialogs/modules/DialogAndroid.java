@@ -92,6 +92,9 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
                 case "contentColor":
                     builder.contentColor(options.getInt("contentColor"));
                     break;
+                case "backgroundColor":
+                    builder.backgroundColor(options.getInt("backgroundColor"));
+                    break;
                 case "items":
                     ReadableArray arr = options.getArray("items");
                     String[] items = new String[arr.size()];

@@ -24,6 +24,7 @@ type OptionsCommon = {|
     positiveColor?: ColorValue,
     negativeColor?: ColorValue,
     neutralColor?: ColorValue,
+    backgroundColor?: ColorValue,
     cancelable?: boolean,
     linkColor?: ColorValue, // applies if contentIsHtml is true, and there are <a> elements in content string
     forceStacking?: boolean,

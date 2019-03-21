@@ -31,7 +31,6 @@ An Android only module for Material Design dialogs. This is a wrapper over [afol
       - [`type ListItem`](#type-listitem)
       - [`type ListType`](#type-listtype)
       - [`type OptionsAlert`](#type-optionsalert)
-      - [`type OptionsCheckbox`](#type-optionscheckbox)
       - [`type OptionsCommon`](#type-optionscommon)
       - [`type OptionsProgress`](#type-optionsprogress)
       - [`type OptionsPicker`](#type-optionspicker)
@@ -325,31 +324,19 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 ##### `type OptionsAlert`
 
 >     {
->         ...OptionsCommon,
->         ...OptionsAlert
+>         ...OptionsCommon
 >     }
 
-| Key                | Type                                       | Default | Required | Description                                    |
-|--------------------|--------------------------------------------|---------|----------|------------------------------------------------|
-| ...OptionsCheckbox | [`OptionsCheckbox`](#type-optionscheckbox) |         |          | See [`OptionsCheckbox`](#type-optionscheckbox) |
-| ...OptionsCommon   | [`OptionsCommon`](#type-optionscommon)     |         |          | See [`OptionsCommon`](#type-optionscommon)     |
-
-##### `type OptionsCheckbox`
-
->     {
->         checkboxLabel?: string,
->         checkboxDefaultValue?: boolean
->     }
-
-| Key                  | Type      | Default | Required | Description                                                                        |
-|----------------------|-----------|---------|----------|------------------------------------------------------------------------------------|
-| checkboxLabel        | `string`  |         |          | If set, then there is a checkbox shown at the bottom of the dialog with this label |
-| checkboxDefaultValue | `boolean` | `false` |          | The initial state of the checkbox. Does nothing if `checkboxLabel` is not set      |
+| Key              | Type                                   | Default | Required | Description                                |
+|------------------|----------------------------------------|---------|----------|--------------------------------------------|
+| ...OptionsCommon | [`OptionsCommon`](#type-optionscommon) |         |          | See [`OptionsCommon`](#type-optionscommon) |
 
 ##### `type OptionsCommon`
 
 >     {
 >         cancelable?: boolean,
+>         checkboxDefaultValue?: boolean
+>         checkboxLabel?: string,
 >         content?: string,
 >         contentColor?: string,
 >         contentIsHtml?: boolean,
@@ -363,26 +350,26 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >         positiveText?: string, // default "OK"
 >         title?: string,
 >         titleColor?: ColorValue,
->         maxNumberOfItems?: boolean,
 >     }
 
-| Key           | Type                                                                     | Default | Required | Description                                                                                                                                     |
-|---------------|--------------------------------------------------------------------------|---------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| cancelable    | `boolean`                                                                |         |          | If tapping outside of dialog area, or hardware back button, should dismiss dialog.                                                              |
-| content       | `string`                                                                 |         |          | Dialog message                                                                                                                                  |
-| contentColor  | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of dialog message                                                                                                                         |
-| contentIsHtml | `boolean`                                                                |         |          | If dialog message should be parsed as html. (supported tags include: `<a>`, `<img>`, etc)                                                       |
-| forceStacking | `boolean`                                                                |         |          | If you have multiple action buttons that together are too wide to fit on one line, the dialog will stack the buttons to be vertically oriented. |
-| linkColor     | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | If `contentIsHtml` is true, and `content` contains `<a>` tags, these are colored with this color                                                |
-| negativeColor | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
-| negativeText  | `string`                                                                 |         |          | If falsy, button is not shown.                                                                                                                  |
-| neutralColor  | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
-| neutralText   | `string`                                                                 |         |          | Shows button in far left with this string as label. If falsy, button is not shown.                                                              |
-| positiveColor | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
-| positiveText  | `string`                                                                 |         |          | If falsy, button is not shown.                                                                                                                  |
-| title         | `string`                                                                 |         |          | Title of dialog                                                                                                                                 |
-| titleColor    | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of title                                                                                                                                  |
-| maxNumberOfItems | `int`                                                                 |         |          | If you want to set a max amount of visible items in a list                                                       |
+| Key                  | Type                                                                     | Default | Required | Description                                                                                                                                     |
+|----------------------|--------------------------------------------------------------------------|---------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| cancelable           | `boolean`                                                                |         |          | If tapping outside of dialog area, or hardware back button, should dismiss dialog.                                                              |
+| checkboxDefaultValue | `boolean`                                                                | `false` |          | The initial state of the checkbox. Does nothing if `checkboxLabel` is not set.                                                                  |
+| checkboxLabel        | `string`                                                                 |         |          | If set, then there is a checkbox shown at the bottom of the dialog with this label                                                              |
+| content              | `string`                                                                 |         |          | Dialog message                                                                                                                                  |
+| contentColor         | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of dialog message                                                                                                                         |
+| contentIsHtml        | `boolean`                                                                |         |          | If dialog message should be parsed as html. (supported tags include: `<a>`, `<img>`, etc)                                                       |
+| forceStacking        | `boolean`                                                                |         |          | If you have multiple action buttons that together are too wide to fit on one line, the dialog will stack the buttons to be vertically oriented. |
+| linkColor            | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | If `contentIsHtml` is true, and `content` contains `<a>` tags, these are colored with this color                                                |
+| negativeColor        | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
+| negativeText         | `string`                                                                 |         |          | If falsy, button is not shown.                                                                                                                  |
+| neutralColor         | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
+| neutralText          | `string`                                                                 |         |          | Shows button in far left with this string as label. If falsy, button is not shown.                                                              |
+| positiveColor        | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
+| positiveText         | `string`                                                                 |         |          | If falsy, button is not shown.                                                                                                                  |
+| title                | `string`                                                                 |         |          | Title of dialog                                                                                                                                 |
+| titleColor           | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of title                                                                                                                                  |
 
 ##### `type OptionsProgress`
 
@@ -408,30 +395,127 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 
 ##### `type OptionsPicker`
 
->     {
->         ...OptionsCommon,
->         idKey?: string,
->         items: ListItem[],
->         labelKey?: string,
->         neutralIsClear?: boolean,
->         selectedId?: any,
->         selectedIds?: any[],
->         type?: string,
->         widgetColor?: ColorValue
->     }
+>    {|
+>        ...OptionsCommon,
+>        type?: typeof ListType.listPlain,
+>        maxNumberOfItems?: number,
+>        items: ListItemJustLabel[],
+>    |} | {|
+>        ...OptionsCommon,
+>        type?: typeof ListType.listPlain,
+>        maxNumberOfItems?: number,
+>        items: ListItemBare[],
+>        labelKey: string
+>    |} | {|
+>        // radio - no preselected
+>        ...OptionsCommon,
+>        type: typeof ListType.listRadio,
+>        widgetColor?: ColorValue // radio color
+>        items: ListItemJustLabel[],
+>    |} | {|
+>        // radio - no preselected
+>        ...OptionsCommon,
+>        type: typeof ListType.listRadio,
+>        widgetColor?: ColorValue // radio color
+>        items: ListItemBare[],
+>        labelKey: string
+>    |} | {|
+>        // radio - preselected - ListItemFull
+>        ...OptionsCommon,
+>        type: typeof ListType.listRadio,
+>        widgetColor?: ColorValue // radio color
+>        items: ListItemFull[],
+>        selectedId: any
+>    |} | {|
+>        // radio - preselected - ListItemJustlabel
+>        ...OptionsCommon,
+>        type: typeof ListType.listRadio,
+>        widgetColor?: ColorValue // radio color
+>        items: ListItemJustLabel[],
+>        idKey: string,
+>        selectedId: any
+>    |} | {|
+>        // radio - preselected - ListItemJustId
+>        ...OptionsCommon,
+>        type: typeof ListType.listRadio,
+>        widgetColor?: ColorValue // radio color
+>        items: ListItemJustId[],
+>        labelKey: string,
+>        selectedId: any
+>    |} | {|
+>        // radio - preselected - ListItemBare
+>        ...OptionsCommon,
+>        type: typeof ListType.listRadio,
+>        widgetColor?: ColorValue // radio color
+>        items: ListItemBare[],
+>        idKey: string,
+>        labelKey: string,
+>        selectedId: any
+>    |} | {|
+>        // checklist - no preselected - ListItemJustLabel
+>        ...OptionsCommon,
+>        type: typeof ListType.listCheckbox,
+>        neutralIsClear?: boolean,
+>        widgetColor?: ColorValue, // checkbox color
+>        items: ListItemJustLabel[]
+>    |} | {|
+>        // checklist - no preselected - ListItemBare
+>        ...OptionsCommon,
+>        type: typeof ListType.listCheckbox,
+>        neutralIsClear?: boolean,
+>        widgetColor?: ColorValue, // checkbox color
+>        items: ListItemBare[],
+>        labelKey: string
+>    |} | {|
+>        // checklist - preselected - ListItemFull
+>        ...OptionsCommon,
+>        type: typeof ListType.listCheckbox,
+>        neutralIsClear?: boolean,
+>        widgetColor?: ColorValue, // checkbox color
+>        items: ListItemFull[],
+>        selectedIds: any[]
+>    |} | {|
+>        // checklist - preselected - ListItemJustlabel
+>        ...OptionsCommon,
+>        type: typeof ListType.listCheckbox,
+>        neutralIsClear?: boolean,
+>        widgetColor?: ColorValue, // checkbox color
+>        items: ListItemJustLabel[],
+>        idKey: string,
+>        selectedIds: any
+>    |} | {|
+>        // checklist - preselected - ListItemJustId
+>        ...OptionsCommon,
+>        type: typeof ListType.listCheckbox,
+>        neutralIsClear?: boolean,
+>        widgetColor?: ColorValue, // checkbox color
+>        items: ListItemJustId[],
+>        labelKey: string,
+>        selectedIds: any
+>    |} | {|
+>        // checklist - preselected - ListItemBare
+>        ...OptionsCommon,
+>        type: typeof ListType.listCheckbox,
+>        neutralIsClear?: boolean,
+>        widgetColor?: ColorValue, // checkbox color
+>        items: ListItemBare[],
+>        idKey: string,
+>        labelKey: string,
+>        selectedIds: any
+>    |}
 
-| Key             | Type                                                                     | Default                   | Required | Description                                                                                                                                                                                                                            |
-|-----------------|--------------------------------------------------------------------------|---------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| OptionsCheckbox | [`OptionsCheckbox`](#type-optionscheckbox)                               |                           |          | See [`OptionsCheckbox`](#type-optionscheckbox)                                                                                                                                                                                         |
-| OptionsCommon   | [`OptionsCommon`](#type-optionscommon)                                   |                           |          | See [`OptionsCommon`](#type-optionscommon)                                                                                                                                                                                             |
-| idKey           | `string`                                                                 | "id"                      |          |                                                                                                                                                                                                                                        |
-| items           | [`ListItem`](#type-listitem)[]                                           |                           | Yes      | See [`ListItem`](#type-listitem)                                                                                                                                                                                                       |
-| labelKey        | `string`                                                                 | "label"                   |          |                                                                                                                                                                                                                                        |
-| neutralIsClear  | `boolean`                                                                |                           |          | Pressing the neutral button causes the dialog to be closed and `selectedItems` to be an empty array. Only works if `neutralText` is also supplied.                                                                                     |
-| selectedId      | `any`                                                                    |                           |          | The respective radio will be selected on dialog show. If no such id is found, then nothing is selected. Only applicable if `type` is `DialogAndroid.listRadio`. Requires that `items[]` contain key described by `idKey`.              |
-| selectedIds     | `any[]`                                                                  |                           |          | The respective checkbox will be selected on dialog show. If no such id is found, nothing is selected for that id. Only applicable if `type` is `DialogAndroid.listCheckbox`. Requires that `items[]` contain key described by `idKey`. |
-| type            | [`ListType`](#type-listtype)                                             | `DialogAndroid.listPlain` |          | See [`ListType`](#type-listtype)                                                                                                                                                                                                       |
-| widgetColor     | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |                           |          | Color of radio or checkbox                                                                                                                                                                                                             |
+| Key              | Type                                                                     | Default                   | Required | Description                                                                                                                                                                                                                            |
+|------------------|--------------------------------------------------------------------------|---------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| OptionsCommon    | [`OptionsCommon`](#type-optionscommon)                                   |                           |          | See [`OptionsCommon`](#type-optionscommon)                                                                                                                                                                                             |
+| idKey            | `string`                                                                 | "id"                      |          |                                                                                                                                                                                                                                        |
+| items            | [`ListItem`](#type-listitem)[]                                           |                           | Yes      | See [`ListItem`](#type-listitem)                                                                                                                                                                                                       |
+| labelKey         | `string`                                                                 | "label"                   |          |                                                                                                                                                                                                                                        |
+| maxNumberOfItems | `number`                                                                 |                           |          | If you want to set a max amount of visible items in a list                                                                                                                                                                             |
+| neutralIsClear   | `boolean`                                                                |                           |          | Pressing the neutral button causes the dialog to be closed and `selectedItems` to be an empty array. Only works if `neutralText` is also supplied.                                                                                     |
+| selectedId       | `any`                                                                    |                           |          | The respective radio will be selected on dialog show. If no such id is found, then nothing is selected. Only applicable if `type` is `DialogAndroid.listRadio`. Requires that `items[]` contain key described by `idKey`.              |
+| selectedIds      | `any[]`                                                                  |                           |          | The respective checkbox will be selected on dialog show. If no such id is found, nothing is selected for that id. Only applicable if `type` is `DialogAndroid.listCheckbox`. Requires that `items[]` contain key described by `idKey`. |
+| type             | [`ListType`](#type-listtype)                                             | `DialogAndroid.listPlain` |          | See [`ListType`](#type-listtype)                                                                                                                                                                                                       |
+| widgetColor      | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |                           |          | Color of radio or checkbox                                                                                                                                                                                                             |
 
 ##### `type OptionsPrompt`
 
@@ -454,11 +538,10 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >         widgetColor?: ColorValue
 >     }
 
-| Key             | Type                                                                     | Default | Required | Description                                    |
-|-----------------|--------------------------------------------------------------------------|---------|----------|------------------------------------------------|
-| OptionsCheckbox | [`OptionsCheckbox`](#type-optionscheckbox)                               |         |          | See [`OptionsCheckbox`](#type-optionscheckbox) |
-| OptionsCommon   | [`OptionsCommon`](#type-optionscommon)                                   |         |          | See [`OptionsCommon`](#type-optionscommon)     |
-| widgetColor     | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of field underline and cursor            |
+| Key           | Type                                                                     | Default | Required | Description                                |
+|---------------|--------------------------------------------------------------------------|---------|----------|--------------------------------------------|
+| OptionsCommon | [`OptionsCommon`](#type-optionscommon)                                   |         |          | See [`OptionsCommon`](#type-optionscommon) |
+| widgetColor   | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of field underline and cursor        |
 
 ##### `type ProgressStyle`
 

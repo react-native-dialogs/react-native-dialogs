@@ -9,13 +9,7 @@ type LabelKey = string | 'label';
 type ListItem = { label:string, id?:any };
 
 type OptionsAlert = {|
-    ...OptionsCheckbox,
-    ...OptionsCommon
-|}
-
-type OptionsCheckbox = {|
-    checkboxLabel?: string,
-    checkboxDefaultValue?: boolean
+    ...OptionsCommon,
 |}
 
 type OptionsCommon = {|
@@ -33,7 +27,8 @@ type OptionsCommon = {|
     cancelable?: boolean,
     linkColor?: ColorValue, // applies if contentIsHtml is true, and there are <a> elements in content string
     forceStacking?: boolean,
-    maxNumberOfItems?: int
+    checkboxLabel?: string,
+    checkboxDefaultValue?: boolean
 |}
 
 type ListItemJustLabel = { label:string };
@@ -41,13 +36,13 @@ type ListItemJustId = { id:string };
 type ListItemFull = { label:string, id:any };
 type ListItemBare = {};
 
-type OptionsRadio = {|
-    maxNumberOfItems?: int,
+type OptionsRadioList = {|
+    maxNumberOfItems?: number,
     type: typeof ListType.listRadio,
     widgetColor?: ColorValue // radio color
 |}
-type OptionsCheckbox = {|
-    maxNumberOfItems?: int,
+type OptionsCheckboxList = {|
+    maxNumberOfItems?: number,
     type: typeof ListType.listCheckbox,
     neutralIsClear?: boolean,
     widgetColor?: ColorValue // checkbox color
@@ -56,49 +51,49 @@ type OptionsCheckbox = {|
 type OptionsPicker = {|
     ...OptionsCommon,
     type?: typeof ListType.listPlain,
-    maxNumberOfItems?: int,
+    maxNumberOfItems?: number,
     items: ListItemJustLabel[],
 |} | {|
     ...OptionsCommon,
     type?: typeof ListType.listPlain,
-    maxNumberOfItems?: int,
+    maxNumberOfItems?: number,
     items: ListItemBare[],
     labelKey: string
 |} | {|
     // radio - no preselected
     ...OptionsCommon,
-    ...OptionsRadio,
+    ...OptionsRadioList,
     items: ListItemJustLabel[],
 |} | {|
     // radio - no preselected
     ...OptionsCommon,
-    ...OptionsRadio,
+    ...OptionsRadioList,
     items: ListItemBare[],
     labelKey: string
 |} | {|
     // radio - preselected - ListItemFull
     ...OptionsCommon,
-    ...OptionsRadio,
+    ...OptionsRadioList,
     items: ListItemFull[],
     selectedId: any
 |} | {|
     // radio - preselected - ListItemJustlabel
     ...OptionsCommon,
-    ...OptionsRadio,
+    ...OptionsRadioList,
     items: ListItemJustLabel[],
     idKey: string,
     selectedId: any
 |} | {|
     // radio - preselected - ListItemJustId
     ...OptionsCommon,
-    ...OptionsRadio,
+    ...OptionsRadioList,
     items: ListItemJustId[],
     labelKey: string,
     selectedId: any
 |} | {|
     // radio - preselected - ListItemBare
     ...OptionsCommon,
-    ...OptionsRadio,
+    ...OptionsRadioList,
     items: ListItemBare[],
     idKey: string,
     labelKey: string,
@@ -106,38 +101,38 @@ type OptionsPicker = {|
 |} | {|
     // checklist - no preselected - ListItemJustLabel
     ...OptionsCommon,
-    ...OptionsCheckbox,
+    ...OptionsCheckboxList,
     items: ListItemJustLabel[]
 |} | {|
     // checklist - no preselected - ListItemBare
     ...OptionsCommon,
-    ...OptionsCheckbox,
+    ...OptionsCheckboxList,
     items: ListItemBare[],
     labelKey: string
 |} | {|
     // checklist - preselected - ListItemFull
     ...OptionsCommon,
-    ...OptionsCheckbox,
+    ...OptionsCheckboxList,
     items: ListItemFull[],
     selectedIds: any[]
 |} | {|
     // checklist - preselected - ListItemJustlabel
     ...OptionsCommon,
-    ...OptionsCheckbox,
+    ...OptionsCheckboxList,
     items: ListItemJustLabel[],
     idKey: string,
     selectedIds: any
 |} | {|
     // checklist - preselected - ListItemJustId
     ...OptionsCommon,
-    ...OptionsCheckbox,
+    ...OptionsCheckboxList,
     items: ListItemJustId[],
     labelKey: string,
     selectedIds: any
 |} | {|
     // checklist - preselected - ListItemBare
     ...OptionsCommon,
-    ...OptionsCheckbox,
+    ...OptionsCheckboxList,
     items: ListItemBare[],
     idKey: string,
     labelKey: string,
@@ -156,7 +151,7 @@ type ActionType =
   | typeof DialogAndroid.actionPositive
   | typeof DialogAndroid.actionSelect;
 
-type Options = OptionsCommon | OptionsPicker | OptionsProgress | OptionsPrompt;
+type Options = OptionsAlert | OptionsPicker | OptionsProgress | OptionsPrompt;
 
 type OptionsProgress = {|
     contentColor?: $PropertyType<OptionsCommon, 'contentColor'>,

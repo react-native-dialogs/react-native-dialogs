@@ -43,9 +43,9 @@ An Android only module for Material Design dialogs. This is a wrapper over [afol
       - [Without auto-dismiss](#without-auto-dismiss)
     - [Checklist](#checklist)
       - [With clear list button](#with-clear-list-button)
-    - [Prompt](#prompt)
+    - [Prompt](#prompt-1)
     - [HTML](#html)
-    - [assignDefaults](#assigndefaults)
+    - [assignDefaults](#assigndefaults-1)
 - [Contributors](#contributors)
 
 ### Installation
@@ -146,7 +146,7 @@ Follow these steps if automatic linking (`react-native link`) failed.
                    console.log('negative!')
                    break;
                case DialogAndroid.actionNeutral:
-                   console.log('netural!')
+                   console.log('neutral!')
                    break;
                case DialogAndroid.actionDismiss:
                    console.log('dismissed!')

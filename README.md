@@ -348,6 +348,7 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 >         neutralText?: string,
 >         positiveColor?: ColorValue,
 >         positiveText?: string, // default "OK"
+>         backgroundColor?: ColorValue,
 >         title?: string,
 >         titleColor?: ColorValue,
 >     }
@@ -368,6 +369,7 @@ Shows a progress dialog. By default no buttons are shown, and hardware back butt
 | neutralText          | `string`                                                                 |         |          | Shows button in far left with this string as label. If falsy, button is not shown.                                                              |
 | positiveColor        | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
 | positiveText         | `string`                                                                 |         |          | If falsy, button is not shown.                                                                                                                  |
+| backgroundColor      | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          |                                                                                                                                                 |
 | title                | `string`                                                                 |         |          | Title of dialog                                                                                                                                 |
 | titleColor           | [`ColorValue`](https://facebook.github.io/react-native/docs/colors.html) |         |          | Color of title                                                                                                                                  |
 

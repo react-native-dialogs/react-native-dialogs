@@ -24,14 +24,18 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.UiThreadUtil;
+import com.facebook.react.module.annotations.ReactModule;
 
 import java.lang.reflect.InvocationTargetException;
 
+@ReactModule(name = DialogAndroid.NAME)
 public class DialogAndroid extends ReactContextBaseJavaModule {
+
+    public static final String NAME = "DialogAndroid";
 
     @Override
     public String getName() {
-        return "DialogAndroid";
+        return NAME;
     }
 
     public DialogAndroid(ReactApplicationContext reactContext) {

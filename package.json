@@ -8,7 +8,8 @@
     "DialogAndroid.js"
   ],
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "lint": "eslint --ext .js,.ts,.tsx ."
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,19 @@
   },
   "homepage": "https://github.com/aakashns/react-native-dialogs#readme",
   "devDependencies": {
-    "all-contributors-cli": "^4.11.1"
+    "@react-native-community/eslint-config": "^0.0.7",
+    "all-contributors-cli": "^4.11.1",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@react-native-community",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": "error"
+    }
   }
 }

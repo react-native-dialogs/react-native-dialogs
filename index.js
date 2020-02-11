@@ -1,3 +1,3 @@
-var DialogAndroid = require('./DialogAndroid');
+const DialogAndroid = require('./DialogAndroid');
 
 module.exports = DialogAndroid;

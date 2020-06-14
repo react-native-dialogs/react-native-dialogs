@@ -199,11 +199,16 @@ public class DialogAndroid extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void show(ReadableMap options, final Callback callback) {
+        if (getCurrentActivity() == null) {
+            callback.invoke("error", "React Native Activity is null", options.toString());
+            return;
+        }
         mBuilder = new MaterialDialog.Builder(getCurrentActivity());
         try {
             applyOptions(mBuilder, options);
         } catch (Exception e) {
             callback.invoke("error", e.getMessage(), options.toString());
+            return;
         }
 
         if (options.hasKey("onPositive")) {

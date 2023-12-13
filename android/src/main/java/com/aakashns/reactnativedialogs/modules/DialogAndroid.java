@@ -9,7 +9,7 @@ import android.view.View;
 import android.os.Build;
 import android.view.WindowManager;
 
-import com.aakashns.reactnativedialogs.R;
+import com.afollestad.materialdialogs.R;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
